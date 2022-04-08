@@ -25,6 +25,8 @@ function App() {
           <Route path="/write/:id" exact component={WritePost} />
           <Route path="/profile/:id" exact component={Profile} />
         </ConnectedRouter>
+
+        <input></input>
       </div>
     </>
   );
