@@ -12,6 +12,7 @@ import {
   WritePost,
 } from "./pages";
 
+// 분기?
 function App() {
   return (
     <>
