@@ -1,8 +1,8 @@
-import { ConnectedRouter } from "connected-react-router";
-import React from "react";
-import { history } from "./redux/configureStore";
-import { Route } from "react-router-dom";
-import "./App.css";
+import { ConnectedRouter } from 'connected-react-router'
+import React from 'react'
+import { history } from './redux/configureStore'
+import { Route } from 'react-router-dom'
+import './App.css'
 import {
   CategoryList,
   Login,
@@ -10,8 +10,7 @@ import {
   Profile,
   Register,
   WritePost,
-} from "./pages";
-
+} from './pages'
 // 분기?
 function App() {
   return (
@@ -28,7 +27,7 @@ function App() {
         </ConnectedRouter>
       </div>
     </>
-  );
+  )
 }
 
-export default App;
+export default App

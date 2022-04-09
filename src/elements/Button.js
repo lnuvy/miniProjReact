@@ -1,26 +1,26 @@
-import React from "react";
-import styled from "styled-components";
+import React from 'react'
+import styled from 'styled-components'
 
 const Button = (props) => {
-  const { children, _id, _onClick, ...styles } = props;
+  const { children, _id, _onClick, ...styles } = props
 
   return (
     <ElButton id={_id} {...styles}>
       {children}
     </ElButton>
-  );
-};
+  )
+}
 
 Button.defaultProps = {
-  _id: "",
+  _id: '',
   children: null,
   _onClick: () => {},
   isFloat: false,
   margin: false,
-  width: "100%",
-  padding: "12px 0px",
+  width: '100%',
+  padding: '12px 0px',
   _color: false,
-};
+}
 
 const ElButton = styled.button`
   cursor: pointer;
@@ -32,9 +32,10 @@ const ElButton = styled.button`
   box-sizing: border-box;
   padding: ${(props) => props.padding};
   border: none;
-  ${(props) => (props.margin ? `margin: ${props.margin};` : "")}
-`;
+  border-radius: 30px;
+  ${(props) => (props.margin ? `margin: ${props.margin};` : '')}
+`
 
-export default Button;
+export default Button
 
 //브랜치 체크

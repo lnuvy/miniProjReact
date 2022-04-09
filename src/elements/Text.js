@@ -1,10 +1,15 @@
-import React from "react";
-import styled from "styled-components";
+import React from 'react'
+import styled from 'styled-components'
 
 const Text = (props) => {
-  return <></>;
-};
+  const { children } = props
+  return (
+    <>
+      <Text>{children}</Text>
+    </>
+  )
+}
 
-Text.defaultProps = {};
+Text.defaultProps = {}
 
-export default Text;
+export default Text
