@@ -3,7 +3,7 @@ import React from "react";
 const CommentWrite = (props) => {
   return (
     <>
-      <h2>ㅎㅇㅎㅇ</h2>
+      <h2>댓글 작성</h2>
     </>
   );
 };

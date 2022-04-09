@@ -38,6 +38,13 @@ const InputWrap = styled.div`
   display: flex;
   align-items: center;
 
+  @media only screen and (min-width: 699px) {
+    width: 699px;
+  }
+  @media only screen and (min-width: 1199px) {
+    width: 1199px;
+  }
+
   & label {
     z-index: 3;
     padding: 0 5px;
@@ -67,6 +74,12 @@ const InputBar = styled.input`
   background-color: transparent;
   box-sizing: border-box;
   font-size: 24px;
+  @media only screen and (min-width: 699px) {
+    width: 699px;
+  }
+  @media only screen and (min-width: 1199px) {
+    width: 1199px;
+  }
 `;
 
 export default Input;

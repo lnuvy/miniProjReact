@@ -12,7 +12,7 @@ const Grid = (props) => {
 };
 
 Grid.defaultProps = {
-  _id: "",
+  _id: false,
   children: null,
   isFlex: false,
   isFlex_center: false,

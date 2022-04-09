@@ -4,6 +4,11 @@ import { useParams } from "react-router-dom";
 import { Grid, Image, Text } from "../../elements";
 import CommentList from "./CommentList";
 
+// Font Awesome Icon
+import { FaCommentAlt } from "react-icons/fa";
+import { FaHeart } from "react-icons/fa";
+import { FaRegHeart } from "react-icons/fa";
+
 // 게시글 하나에 대한 컴포넌트
 const Post = (props) => {
   const dispatch = useDispatch();
@@ -23,7 +28,7 @@ const Post = (props) => {
     // 컨테이너
     <Grid width="100%">
       <Grid isFlex_center>
-        <Grid width="50%" padding="30px">
+        <Grid width="50%" padding="10px">
           <Image src={item?.imageUrl} />
         </Grid>
         <Grid>
@@ -31,8 +36,19 @@ const Post = (props) => {
             {item?.itemName}
           </Text>
           <Text size="20px">{item?.writer?.userId}</Text>
-          <Text size="15px">댓글 {item.commentCnt}개</Text>
-          <Text size="15px">좋아요 {item.likeCnt}개</Text>
+          <Grid isFlex_start>
+            <FaCommentAlt size={36} />
+            <Text margin="0" size="30px">
+              {item.commentCnt}개
+            </Text>
+          </Grid>
+          {/* 여기서 좋아요가 눌렸는지 아닌지 체크해야할듯? */}
+          <Grid isFlex_start>
+            <FaRegHeart size={36} />
+            <Text margin="0" size="30px">
+              {item.likeCnt}개
+            </Text>
+          </Grid>
         </Grid>
       </Grid>
     </Grid>

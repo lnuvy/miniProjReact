@@ -7,6 +7,7 @@ import { actionCreators as postActions } from "../redux/modules/post";
 import { useParams } from "react-router-dom";
 import { history } from "../redux/configureStore";
 import _ from "lodash";
+import styled from "styled-components";
 
 // 카테고리 선택 후의 리스트입니다
 const CategoryList = () => {
@@ -14,7 +15,6 @@ const CategoryList = () => {
   const { category } = useParams();
   const categoryList = useSelector((state) => state.post.list);
 
-  console.log(categoryList);
   useEffect(() => {
     dispatch(postActions.getCategoryList(category));
   }, [category]);
@@ -35,37 +35,21 @@ const CategoryList = () => {
     setQuery(value);
   };
 
-  const searchList = categoryList
-    .filter((item) => {
-      const { itemName } = item;
-      const q = query;
-      console.log(itemName, q);
-      return itemName.includes(q);
-    })
-    .map((l) => {
-      return (
-        <Grid
-          key={l.postId}
-          padding="16px"
-          bg="green"
-          _onClick={() => history.push(`/${category}/${l.postId}`)}
-        >
-          <Post {...l} />
-        </Grid>
-      );
-    });
+  // query 로 필터링 한 후의 리스트
+  const searchList = categoryList.filter((item) => {
+    const { itemName } = item;
+    const q = query;
 
-  console.log(searchList);
+    return itemName.includes(q);
+  });
 
   return (
     <>
       <Grid>
-        <Grid isFlex_center padding="16px">
-          <Grid>
-            <Text bold margin="0">
-              카테고리: {category}
-            </Text>
-          </Grid>
+        <ResDiv>
+          <Text bold size="24px" margin="0">
+            카테고리: {category}
+          </Text>
           <Grid isFlex>
             <Input
               id="search"
@@ -74,17 +58,33 @@ const CategoryList = () => {
               _onChange={queryChange}
             />
           </Grid>
-        </Grid>
+        </ResDiv>
+
         <Grid>
           {query !== ""
-            ? { searchList }
+            ? searchList.map((l) => {
+                return (
+                  <Grid
+                    key={l.postId}
+                    padding="16px"
+                    bg="green"
+                    _onClick={() =>
+                      history.push(`/list/${category}/${l.postId}`)
+                    }
+                  >
+                    <Post {...l} />
+                  </Grid>
+                );
+              })
             : categoryList.map((l) => {
                 return (
                   <Grid
                     key={l.postId}
                     padding="16px"
                     bg="tomato"
-                    _onClick={() => history.push(`/${category}/${l.postId}`)}
+                    _onClick={() =>
+                      history.push(`/list/${category}/${l.postId}`)
+                    }
                   >
                     <Post {...l} />
                     <Post {...l} />
@@ -98,5 +98,22 @@ const CategoryList = () => {
     </>
   );
 };
+
+// 최상단 카테고리, 필터, 검색어 화면에 따라 flex-column 으로 변경되게
+const ResDiv = styled.div`
+  height: 20vh;
+  flex-wrap: wrap;
+  /* padding: 30px; */
+  gap: 20px;
+  width: 100%;
+  margin: 10px auto;
+
+  @media only screen and (min-width: 699px) {
+    width: 699px;
+  }
+  @media only screen and (min-width: 1199px) {
+    width: 1199px;
+  }
+`;
 
 export default CategoryList;

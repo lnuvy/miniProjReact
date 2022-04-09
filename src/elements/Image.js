@@ -17,7 +17,7 @@ Image.defaultProps = {
 
 const AspectOutter = styled.div`
   width: 100%;
-  min-width: 200px;
+  min-width: 120px;
   /* box-shadow: 2px 2px 2px gray; */
 `;
 

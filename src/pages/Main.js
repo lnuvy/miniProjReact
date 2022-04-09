@@ -7,7 +7,7 @@ const Main = (props) => {
   const handleClick = (e) => {
     const categoryValue = e.target.id;
     console.log(categoryValue);
-    history.push(`/${categoryValue}`);
+    history.push(`/list/${categoryValue}`);
   };
 
   return (
