@@ -7,7 +7,6 @@ const BASE_URL =
 // 카테고리 선택 후의 리스트입니다
 const CategoryList = () => {
   const [data, setData] = useState("");
-
   useEffect(async () => {
     const res = await axios.get(BASE_URL + "artists");
     console.log(res);

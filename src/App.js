@@ -1,5 +1,5 @@
 import { ConnectedRouter } from "connected-react-router";
-import React from "react";
+import React, { useEffect } from "react";
 import { history } from "./redux/configureStore";
 import { Route } from "react-router-dom";
 import "./App.css";
@@ -11,9 +11,17 @@ import {
   Register,
   WritePost,
 } from "./pages";
+import { useDispatch } from "react-redux";
+import { actionCreators as postActions } from "./redux/modules/post";
 
 // 분기?
 function App() {
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(postActions.setPost());
+  });
+
   return (
     <>
       <div className="App">

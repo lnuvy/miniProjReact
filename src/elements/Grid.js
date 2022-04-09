@@ -5,7 +5,7 @@ const Grid = (props) => {
   const { children, _onClick, ...styles } = props;
 
   return (
-    <GridBox id="_id" {...styles}>
+    <GridBox onClick={_onClick} id="_id" {...styles}>
       {children}
     </GridBox>
   );
