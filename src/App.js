@@ -19,10 +19,6 @@ import { actionCreators as postActions } from "./redux/modules/post";
 function App() {
   const dispatch = useDispatch();
 
-  useEffect(() => {
-    dispatch(postActions.setPost());
-  });
-
   return (
     <>
       <div className="App">

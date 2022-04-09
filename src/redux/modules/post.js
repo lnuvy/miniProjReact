@@ -41,7 +41,7 @@ const initialPost2 = {
 };
 
 const initialState = {
-  list: [{ ...initialPost }, { ...initialPost2 }],
+  list: [],
   isLoading: false,
 };
 
@@ -69,15 +69,15 @@ const loading = createAction(LOADING, (isLoading) => ({ isLoading }));
 // 카테고리별 아이템을 가져오기
 const getCategoryList = (category = null) => {
   return async function (dispatch, getState, { history }) {
+    // 물어볼거 (이렇게해도되는지)
+    // 이걸 추가하지 않으면 리덕스에 데이터가 있을때도 계속해서 카테고리 리스트에서 디스패치를 함
+    if (getState().post.list.length !== 0) return;
     // 비동기작업때 로딩 true 주기
     // dispatch(loading(true));
 
     // 가독성을 위해 BASE_URL 주소의 마지막에 /을 뺐습니다
     const response = await axios.get(`${BASE_URL}/posts/category`);
     const data = response.data;
-
-    console.log("미들웨어", ...data);
-
     dispatch(setPost(data));
   };
 };
