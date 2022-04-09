@@ -20,11 +20,28 @@ const initialPost = {
   content: "개발자들은 역시 커피죠",
   imageUrl: "http://via.placeholder.com/400x300",
   category: "etc",
-  likeCnt: 0,
+  likeCnt: 5,
   commentCnt: 0,
 };
+const initialPost2 = {
+  postId: 2,
+  itemName: "아카펠라 아메리카노",
+  writer: {
+    userId: "nanuser",
+    password: "1234",
+    userNickname: "하이",
+    userAge: "20대",
+  },
+  createdAt: moment().format("YYYY-MM-DD HH:mm:ss"),
+  content: "조지아보다 이게 맛있음",
+  imageUrl: "http://via.placeholder.com/400x300",
+  category: "etc",
+  likeCnt: 2,
+  commentCnt: 1,
+};
+
 const initialState = {
-  list: [{ ...initialPost }],
+  list: [{ ...initialPost }, { ...initialPost2 }],
   isLoading: false,
 };
 
@@ -51,23 +68,17 @@ const loading = createAction(LOADING, (isLoading) => ({ isLoading }));
 //// middlewares
 // 카테고리별 아이템을 가져오기
 const getCategoryList = (category = null) => {
-  return function (dispatch, getState, { history }) {
+  return async function (dispatch, getState, { history }) {
     // 비동기작업때 로딩 true 주기
-    dispatch(loading(true));
-
-    dispatch(setPost());
+    // dispatch(loading(true));
 
     // 가독성을 위해 BASE_URL 주소의 마지막에 /을 뺐습니다
-    // const response = axios.get(`${BASE_URL}/${category}`);
-    // console.log(response);
-    // const data = response.data;
+    const response = await axios.get(`${BASE_URL}/posts/category`);
+    const data = response.data;
 
-    // api 테스트가 끝나면 아래 코드로 바꿔도됩니다
-    // axios.get(`${BASE_URL}/${category}`).then((res) => {
+    console.log("미들웨어", ...data);
 
-    // }).catch((err) => {
-    //   console.log("getCategoryList 에러 : ", err);
-    // })
+    dispatch(setPost(data));
   };
 };
 
@@ -75,8 +86,7 @@ export default handleActions(
   {
     [SET_POST]: (state, action) =>
       produce(state, (draft) => {
-        // draft.list = action.payload.list;
-        console.log(state);
+        draft.list = action.payload.list;
       }),
     [ADD_POST]: (state, action) =>
       produce(state, (draft) => {

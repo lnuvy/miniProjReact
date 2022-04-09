@@ -10,6 +10,7 @@ import {
   Profile,
   Register,
   WritePost,
+  Detail,
 } from "./pages";
 import { useDispatch } from "react-redux";
 import { actionCreators as postActions } from "./redux/modules/post";
@@ -30,6 +31,7 @@ function App() {
           <Route path="/login" exact component={Login} />
           <Route path="/register" exact component={Register} />
           <Route path="/:category" exact component={CategoryList} />
+          <Route path="/:category/:id" exact component={Detail} />
           <Route path="/write" exact component={WritePost} />
           <Route path="/write/:id" exact component={WritePost} />
           <Route path="/profile/:id" exact component={Profile} />

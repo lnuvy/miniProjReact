@@ -1,23 +1,39 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-
-const BASE_URL =
-  "https://virtserver.swaggerhub.com/myteam84866/Api-Example/1.0.0/";
+import { useDispatch, useSelector } from "react-redux";
+import { Grid, Text } from "../elements";
+import { Post } from "../components/posts";
+import { actionCreators as postActions } from "../redux/modules/post";
+import { useParams } from "react-router-dom";
 
 // 카테고리 선택 후의 리스트입니다
-const CategoryList = () => {
-  const [data, setData] = useState("");
-  useEffect(async () => {
-    const res = await axios.get(BASE_URL + "artists");
-    console.log(res);
-    const data = res.data;
-    console.log(data);
-    setData(data);
-  });
+const CategoryList = (props) => {
+  const dispatch = useDispatch();
+  const { category } = useParams();
+  const categoryList = useSelector((state) => state.post.list);
+
+  useEffect(() => {
+    dispatch(postActions.getCategoryList(category));
+  }, [category]);
 
   return (
     <>
-      <h1>CategoryList</h1>
+      <Grid>
+        <Grid>
+          <Text bold margin="0">
+            카테고리: {category}
+          </Text>
+        </Grid>
+        <Grid>
+          {categoryList?.map((l) => {
+            return (
+              <Grid key={l.postId}>
+                <Post {...l} />
+              </Grid>
+            );
+          })}
+        </Grid>
+      </Grid>
     </>
   );
 };

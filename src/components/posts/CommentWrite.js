@@ -1,6 +1,6 @@
 import React from "react";
 
-const Post = (props) => {
+const CommentWrite = (props) => {
   return (
     <>
       <h2>ㅎㅇㅎㅇ</h2>
@@ -8,4 +8,4 @@ const Post = (props) => {
   );
 };
 
-export default Post;
+export default CommentWrite;
