@@ -1,22 +1,119 @@
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import axios from 'axios'
-
-const BASE_URL =
-  'https://virtserver.swaggerhub.com/myteam84866/Api-Example/1.0.0/'
+import { useDispatch, useSelector } from 'react-redux'
+import { Grid, Input, Text } from '../elements'
+import { Post } from '../components/posts'
+import { actionCreators as postActions } from '../redux/modules/post'
+import { useParams } from 'react-router-dom'
+import { history } from '../redux/configureStore'
+import _ from 'lodash'
+import styled from 'styled-components'
 
 // 카테고리 선택 후의 리스트입니다
 const CategoryList = () => {
-  // const [data, setData] = useState('')
+  const dispatch = useDispatch()
+  const { category } = useParams()
+  const categoryList = useSelector((state) => state.post.list)
 
-  // useEffect(async () => {
-  //   const res = await axios.get(BASE_URL + 'artists')
-  //   console.log(res)
-  //   const data = res.data
-  //   console.log(data)
-  //   setData(data)
-  // })
+  useEffect(() => {
+    dispatch(postActions.getCategoryList(category))
+  }, [category])
 
-  return <>{/* <h1>CategoryList</h1> */}</>
+  // 정렬
+  const [mostLike, setMostLike] = useState(true)
+  const [sorted, SetSorted] = useState(false)
+
+  // 검색
+  const [query, setQuery] = useState('')
+
+  const debounce = _.debounce((k) => k, 300)
+  const keyPress = useCallback(debounce, [])
+
+  const queryChange = (e) => {
+    const { value } = e.target
+    keyPress(value)
+    setQuery(value)
+  }
+
+  // query 로 필터링 한 후의 리스트
+  const searchList = categoryList.filter((item) => {
+    const { itemName } = item
+    const q = query
+
+    return itemName.includes(q)
+  })
+
+  return (
+    <>
+      <Grid>
+        <ResDiv>
+          <Text bold size="24px" margin="0">
+            카테고리: {category}
+          </Text>
+          <Grid isFlex>
+            <Input
+              id="search"
+              label={`#${category} 의 꿀템을 검색해보세요...`}
+              value={query}
+              _onChange={queryChange}
+            />
+          </Grid>
+        </ResDiv>
+
+        <Grid>
+          {query !== ''
+            ? searchList.map((l) => {
+                return (
+                  <Grid
+                    key={l.postId}
+                    padding="16px"
+                    bg="green"
+                    _onClick={() =>
+                      history.push(`/list/${category}/${l.postId}`)
+                    }
+                  >
+                    <Post {...l} />
+                  </Grid>
+                )
+              })
+            : categoryList.map((l) => {
+                return (
+                  <Grid
+                    key={l.postId}
+                    padding="16px"
+                    bg="tomato"
+                    _onClick={() =>
+                      history.push(`/list/${category}/${l.postId}`)
+                    }
+                  >
+                    <Post {...l} />
+                    <Post {...l} />
+                    <Post {...l} />
+                    <Post {...l} />
+                  </Grid>
+                )
+              })}
+        </Grid>
+      </Grid>
+    </>
+  )
 }
+
+// 최상단 카테고리, 필터, 검색어 화면에 따라 flex-column 으로 변경되게
+const ResDiv = styled.div`
+  height: 20vh;
+  flex-wrap: wrap;
+  /* padding: 30px; */
+  gap: 20px;
+  width: 100%;
+  margin: 10px auto;
+
+  @media only screen and (min-width: 699px) {
+    width: 699px;
+  }
+  @media only screen and (min-width: 1199px) {
+    width: 1199px;
+  }
+`
 
 export default CategoryList

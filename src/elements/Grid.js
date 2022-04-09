@@ -2,17 +2,17 @@ import React from "react";
 import styled from "styled-components";
 
 const Grid = (props) => {
-  const { children, _onClick, ...styles } = props;
+  const { children, _onClick, _id, ...styles } = props;
 
   return (
-    <GridBox id="_id" {...styles}>
+    <GridBox onClick={_onClick} id={_id} {...styles}>
       {children}
     </GridBox>
   );
 };
 
 Grid.defaultProps = {
-  _id: "",
+  _id: false,
   children: null,
   isFlex: false,
   isFlex_center: false,
