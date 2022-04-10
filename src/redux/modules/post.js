@@ -82,6 +82,41 @@ const getCategoryList = (category = null) => {
   };
 };
 
+const addPostAxios = (post = null) => {
+  return async function (dispatch, getState, { history }) {
+    if (!post) return;
+    // 현재 작성한 유저의 정보 먼저 가져오기
+    // const userInfo = getState().user.user;
+    // console.log(userInfo)
+
+    // 작성부분 ID 어떻게 하실건지 ? 우리가 넣어줘도 되나? 백에서 하는게 좋은가?
+    const requestData = {
+      // 일단 우리쪽에서 넣어주기
+      postId: new Date().getTime() + "",
+      itemName: post.itemName,
+      // userInfo,
+      createdAt: moment().format("YYYY-MM-DD HH:mm:ss"),
+      content: post.content,
+      imageUrl: post.imageUrl,
+      category: post.category,
+      likeCnt: 0,
+      commentCnt: 0,
+    };
+    // 요청!
+    axios
+      .post(`/posts/${post.category}/add`, requestData)
+      .then((res) => {
+        console.log("포스팅 추가 완료했습니다", res);
+      })
+      .catch((err) => {
+        console.log("포스팅 추가중 에러났네요", err);
+      });
+
+    dispatch(addPost(requestData));
+    history.replace(`/list/${post.category}`);
+  };
+};
+
 export default handleActions(
   {
     [SET_POST]: (state, action) =>
@@ -91,9 +126,10 @@ export default handleActions(
     [ADD_POST]: (state, action) =>
       produce(state, (draft) => {
         console.log("hi");
+        draft.list.unshift(action.payload.post);
       }),
   },
   initialState
 );
 
-export const actionCreators = { setPost, getCategoryList };
+export const actionCreators = { setPost, getCategoryList, addPostAxios };

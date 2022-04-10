@@ -26,6 +26,9 @@ const AspectInner = styled.div`
   padding-top: 75%;
   overflow: hidden;
   background-image: url("${(props) => props.src}");
+  /* background-size: cover; */
+  background-repeat: no-repeat;
+  background-position: center;
   background-size: cover;
 `;
 

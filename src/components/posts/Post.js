@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import { Grid, Image, Text } from "../../elements";
 import CommentList from "./CommentList";
+import styled from "styled-components";
 
 // Font Awesome Icon
 import { FaCommentAlt } from "react-icons/fa";
@@ -26,33 +27,50 @@ const Post = (props) => {
 
   return (
     // 컨테이너
-    <Grid width="100%">
-      <Grid isFlex_center>
-        <Grid width="50%" padding="10px">
-          <Image src={item?.imageUrl} />
-        </Grid>
-        <Grid>
-          <Text bold size="24px">
-            {item?.itemName}
+    <Container>
+      <Grid width="50%" padding="10px">
+        <Image src={item?.imageUrl} />
+      </Grid>
+
+      <h2>{item?.itemName}</h2>
+
+      <h4>{item?.writer?.userId}</h4>
+
+      <Grid isFlex_start>
+        <Grid isFlex_end padding="10px">
+          <FaCommentAlt size={24} /> &nbsp;
+          <Text margin="0" size="22px">
+            {item.commentCnt}개
           </Text>
-          <Text size="20px">{item?.writer?.userId}</Text>
-          <Grid isFlex_start>
-            <FaCommentAlt size={36} />
-            <Text margin="0" size="30px">
-              {item.commentCnt}개
-            </Text>
-          </Grid>
-          {/* 여기서 좋아요가 눌렸는지 아닌지 체크해야할듯? */}
-          <Grid isFlex_start>
-            <FaRegHeart size={36} />
-            <Text margin="0" size="30px">
-              {item.likeCnt}개
-            </Text>
-          </Grid>
+        </Grid>
+        {/* 여기서 좋아요가 눌렸는지 아닌지 체크해야할듯? */}
+        <Grid isFlex_start padding="10px">
+          <FaRegHeart size={24} /> &nbsp;
+          <Text margin="0" size="22px">
+            {item.likeCnt}개
+          </Text>
         </Grid>
       </Grid>
-    </Grid>
+    </Container>
   );
 };
+
+const Container = styled.div`
+  position: relative;
+  border: 1px solid #ddd;
+  box-shadow: 2px 2px 2px #ddd;
+  padding: 20px;
+  margin: 10px auto;
+  text-align: center;
+  /* min-width: 300px; */
+  width: 300px;
+
+  @media only screen and (min-width: 699px) {
+    width: calc((100% - 200px) / 2);
+  }
+  @media only screen and (min-width: 1199px) {
+    width: calc((100% - 40px) / 3);
+  }
+`;
 
 export default Post;

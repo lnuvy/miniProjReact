@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useState } from "react";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { Grid, Input, Text } from "../elements";
-import { Post } from "../components/posts";
+import { FixedButton, Post } from "../components/posts";
 import { actionCreators as postActions } from "../redux/modules/post";
 import { useParams } from "react-router-dom";
 import { history } from "../redux/configureStore";
@@ -45,6 +45,7 @@ const CategoryList = () => {
 
   return (
     <>
+      <FixedButton _onClick={() => history.push(`/write/${category}`)} />
       <Grid>
         <ResDiv>
           <Text bold size="24px" margin="0">
@@ -53,7 +54,7 @@ const CategoryList = () => {
           <Grid isFlex>
             <Input
               id="search"
-              label={`#${category} 의 꿀템을 검색해보세요...`}
+              placeholder={`#${category} 의 제목을 검색하세요...`}
               value={query}
               _onChange={queryChange}
             />
@@ -86,6 +87,7 @@ const CategoryList = () => {
                       history.push(`/list/${category}/${l.postId}`)
                     }
                   >
+                    <Post {...l} />
                     <Post {...l} />
                     <Post {...l} />
                     <Post {...l} />

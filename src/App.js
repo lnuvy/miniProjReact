@@ -28,8 +28,8 @@ function App() {
           <Route path="/register" exact component={Register} />
           <Route path="/list/:category" exact component={CategoryList} />
           <Route path="/list/:category/:id" exact component={Detail} />
-          <Route path="/write" exact component={WritePost} />
-          <Route path="/write/:id" exact component={WritePost} />
+          <Route path="/write/:category" exact component={WritePost} />
+          <Route path="/write/:category/:id" exact component={WritePost} />
           <Route path="/profile/:id" exact component={Profile} />
         </ConnectedRouter>
       </div>

@@ -2,10 +2,20 @@ import React from "react";
 import styled from "styled-components";
 
 const Input = (props) => {
-  const { label, placeholder, _onChange, type, value, autoComplete } = props;
+  const {
+    label,
+    placeholder,
+    _onChange,
+    type = "text",
+    value,
+    autoComplete,
+    id,
+  } = props;
+
   return (
     <>
       <InputField
+        id={id}
         type={type}
         placeholder={placeholder}
         onChange={_onChange}
@@ -23,6 +33,7 @@ Input.defaultProps = {
   type: "text",
   value: "",
   autoComplete: "on",
+  id: null,
 };
 
 const InputField = styled.input`
@@ -32,10 +43,8 @@ const InputField = styled.input`
   color: #555;
   margin: 15px 0px;
   box-sizing: border-box;
-  left: 50%;
   padding: 10px 0px;
   position: relative;
-  top: 50%;
   ${(props) => (props.width ? `width: ${props.width};` : `width: 100%;`)};
 
   &:focus {
