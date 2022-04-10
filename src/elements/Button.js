@@ -5,7 +5,7 @@ const Button = (props) => {
   const { children, _id, _onClick, ...styles } = props
 
   return (
-    <ElButton id={_id} {...styles}>
+    <ElButton onClick={_onClick} id={_id} {...styles}>
       {children}
     </ElButton>
   )

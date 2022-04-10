@@ -2,61 +2,54 @@ import React from 'react'
 import styled from 'styled-components'
 import { history } from '../redux/configureStore'
 import { Grid, Input, Text, Button } from '../elements/index'
+import { useDispatch } from 'react-redux'
+import { actionCreators as userActions } from '../redux/modules/user'
 
 const Login = (props) => {
+  const dispatch = useDispatch()
   const [id, setId] = React.useState('')
   const [pwd, setPwd] = React.useState('')
 
   const login = () => {
+    dispatch(userActions.loginAction({ userId: 'jina' }))
     // if (id === '' || pwd === '') {
     //   window.alert('빈칸을 채워주세요!')
     //   return
     // }
   }
 
-  const onSubmitHandler = (e) => {
-    e.prevnetDefault()
-  }
-
   return (
     <Container>
-      <h1>로그인</h1>
       <Grid>
-        <Text>로그인</Text>
-        <form onSubmit={onSubmitHandler}>
-          <Grid>
-            <Input
-              label="id"
-              value={id}
-              placeholder="🔑    아이디를 입력해주세요"
-              _onChange={(e) => {
-                setId(e.target.value)
-              }}
-            />
-          </Grid>
-          <Grid>
-            <Input
-              label="password"
-              value={pwd}
-              type="password"
-              placeholder="🔒    비밀번호를 입력해주세요"
-              _onChange={(e) => {
-                setPwd(e.target.value)
-              }}
-            />
-          </Grid>
-          <Grid>
-            <Button
-              margin="20px"
-              width="250px"
-              type="submit"
-              text="로그인"
-              _onClick={login}
-            >
-              로그인
-            </Button>
-          </Grid>
-        </form>
+        <Text size="32px" bold>
+          Login
+        </Text>
+        <Grid>
+          <Input
+            label="id"
+            value={id}
+            placeholder="🔑    아이디를 입력해주세요"
+            _onChange={(e) => {
+              setId(e.target.value)
+            }}
+          />
+        </Grid>
+        <Grid>
+          <Input
+            label="password"
+            value={pwd}
+            type="password"
+            placeholder="🔒    비밀번호를 입력해주세요"
+            _onChange={(e) => {
+              setPwd(e.target.value)
+            }}
+          />
+        </Grid>
+        <Grid>
+          <Button margin="20px" width="250px" text="로그인" _onClick={login}>
+            로그인
+          </Button>
+        </Grid>
 
         <TextBox>
           <p>

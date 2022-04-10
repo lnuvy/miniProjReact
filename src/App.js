@@ -12,29 +12,39 @@ import {
   WritePost,
   Detail,
 } from './pages'
+import Header from './shared/Header'
 import { useDispatch } from 'react-redux'
+import { useSelector } from 'react-redux'
 import { actionCreators as postActions } from './redux/modules/post'
 
-// 분기?
 function App() {
   const dispatch = useDispatch()
 
-  return (
-    <>
+  // 토큰 있을때만 메인 이외의 페이지 보이기 (요렇게 하는게 맞나..?)
+  const is_login = useSelector((state) => state.user.is_login)
+
+  if (is_login) {
+    return (
+      <ConnectedRouter history={history}>
+        <Header />
+        <Route path="/" exact component={Main} />
+        <Route path="/list/:category" exact component={CategoryList} />
+        <Route path="/list/:category/:id" exact component={Detail} />
+        <Route path="/write" exact component={WritePost} />
+        <Route path="/write/:id" exact component={WritePost} />
+        <Route path="/profile/:id" exact component={Profile} />
+      </ConnectedRouter>
+    )
+  } else {
+    return (
       <div className="App">
         <ConnectedRouter history={history}>
-          <Route path="/" exact component={Main} />
           <Route path="/login" exact component={Login} />
           <Route path="/register" exact component={Register} />
-          <Route path="/list/:category" exact component={CategoryList} />
-          <Route path="/list/:category/:id" exact component={Detail} />
-          <Route path="/write" exact component={WritePost} />
-          <Route path="/write/:id" exact component={WritePost} />
-          <Route path="/profile/:id" exact component={Profile} />
         </ConnectedRouter>
       </div>
-    </>
-  )
+    )
+  }
 }
 
 export default App

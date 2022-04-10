@@ -1,15 +1,18 @@
 import React from 'react'
 import styled from 'styled-components'
+import { useDispatch } from 'react-redux'
 import { Grid, Input, Text, Button } from '../elements/index'
 
 const Register = (props) => {
+  const dispatch = useDispatch()
+
   const [id, setId] = React.useState('')
   const [pwd, setPwd] = React.useState('')
   const [pwd_check, setPwdCheck] = React.useState('')
   const [user_name, setUserName] = React.useState('')
 
-  const onSubmitHandler = (e) => {
-    e.preventDefault()
+  const onSubmitHandler = () => {
+    console.log('welcome!')
     if (pwd === pwd_check) {
       alert('가입이 정상적으로 완료되었습니다!')
       props.history.push('/login')
@@ -22,55 +25,59 @@ const Register = (props) => {
     <Container>
       <h1>Sign Up</h1>
       <Grid>
-        <form onSubmit={onSubmitHandler}>
-          <Grid>
-            <Input
-              label="id"
-              value={id}
-              _onChange={(e) => {
-                setId(e.target.value)
-              }}
-              placeholder="아이디를 입력해주세요"
-            />
-          </Grid>
-          <Grid>
-            <Input
-              label="user_name"
-              value={user_name}
-              _onChange={(e) => {
-                setUserName(e.target.value)
-              }}
-              placeholder="닉네임을 입력해주세요"
-            />
-          </Grid>
-          <Grid>
-            <Input
-              label="pwd"
-              value={pwd}
-              _onChange={(e) => {
-                setPwd(e.target.value)
-              }}
-              type="password"
-              placeholder="비밀번호를 입력해주세요"
-            />
-          </Grid>
-          <Grid>
-            <Input
-              label="pwd_check"
-              value={pwd_check}
-              _onChange={(e) => {
-                setPwdCheck(e.target.value)
-              }}
-              type="password"
-              placeholder="비밀번호를 다시 입력해주세요"
-            />
-          </Grid>
-          <Grid>
-            <Button margin="20px" width="250px" text="회원가입" type="submit">
-              회원가입
-            </Button>
-          </Grid>
-        </form>
+        <Grid>
+          <Input
+            label="id"
+            value={id}
+            _onChange={(e) => {
+              setId(e.target.value)
+            }}
+            placeholder="아이디를 입력해주세요"
+          />
+        </Grid>
+        <Grid>
+          <Input
+            label="user_name"
+            value={user_name}
+            _onChange={(e) => {
+              setUserName(e.target.value)
+            }}
+            placeholder="닉네임을 입력해주세요"
+          />
+        </Grid>
+        <Grid>
+          <Input
+            label="pwd"
+            value={pwd}
+            _onChange={(e) => {
+              setPwd(e.target.value)
+            }}
+            type="password"
+            placeholder="비밀번호를 입력해주세요"
+          />
+        </Grid>
+        <Grid>
+          <Input
+            label="pwd_check"
+            value={pwd_check}
+            _onChange={(e) => {
+              setPwdCheck(e.target.value)
+            }}
+            type="password"
+            placeholder="비밀번호를 다시 입력해주세요"
+          />
+        </Grid>
+        <Grid>
+          <Button
+            margin="20px"
+            width="250px"
+            text="회원가입"
+            type="submit"
+            _onClick={onSubmitHandler}
+          >
+            회원가입
+          </Button>
+        </Grid>
       </Grid>
     </Container>
   )

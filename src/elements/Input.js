@@ -32,10 +32,8 @@ const InputField = styled.input`
   color: #555;
   margin: 15px 0px;
   box-sizing: border-box
-  left: 50%;
   padding: 10px 0px;
   position: relative;
-  top: 50%;
     ${(props) => (props.width ? `width: ${props.width};` : `width: 100%;`)};
 
   &:focus {

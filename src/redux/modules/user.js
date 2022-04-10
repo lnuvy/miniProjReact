@@ -1,6 +1,6 @@
 import { createAction, handleActions } from 'redux-actions'
-import { setCookie, deleteCookie } from '../../shared/Cookies'
-import produce from 'immer'
+import { getCookie, setCookie, deleteCookie } from '../../shared/Cookies'
+import { produce } from 'immer'
 import axios from 'axios'
 
 // base_url + url
@@ -20,29 +20,45 @@ import axios from 'axios'
 //initialState
 const initialState = {
   user: null,
-  userId: 'iamuser',
-  password: '1234',
-  passwordChcek: '1234',
-  userNickname: '꿀렁',
-  userAge: '20대',
+  // userId: 'iamuser',
+  // password: '1234',
+  // passwordChcek: '1234',
+  // userNickname: '꿀렁',
+  // userAge: '20대',
   is_login: false,
 }
 
-//action type
+//actions
 const LOG_IN = 'LOG_IN'
 const LOG_OUT = 'LOG_OUT'
 const SIGN_UP = 'SIGN_UP'
 const USER_INFO = 'USER_INFO'
 
-//action Creator
+//action Creators
 const logIn = createAction(LOG_IN, (user) => ({ user }))
 const signUp = createAction(SIGN_UP, (user) => ({ user }))
 const logOut = createAction(LOG_OUT, (user) => ({ user }))
 const userInfo = createAction(USER_INFO, (user) => ({ user }))
 
-// Middle wares function
+// Middle wares actions
+const loginAction = (user) => {
+  return function (dispatch, getState, { history }) {
+    console.log(history)
+    dispatch(logIn(user))
+    history.push('/')
+  }
+}
 
-//reducer
+const logoutAction = (user) => {
+  return function (dispatch, getStaet, { history }) {
+    console.log(history)
+    dispatch(logOut(user))
+    history.push('/login')
+  }
+}
+
+//reducer (handleActions)
+
 export default handleActions(
   {
     [LOG_IN]: (state, action) =>
@@ -67,3 +83,13 @@ export default handleActions(
   },
   initialState,
 )
+
+const actionCreators = {
+  logIn,
+  logOut,
+  signUp,
+  loginAction,
+  logoutAction,
+}
+
+export { actionCreators }

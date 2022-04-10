@@ -1,11 +1,14 @@
 // //키값 기준으로 쿠키 저장된 값 가져오기
-// const getCookie = (name) => {
-//     let value = ';' + document.cookie
-//     let parts = value.split(';' + name " '=")
-//     if (parts.length === 2){
-//         return parts.pop().split(';').shift()
-//     }
-// }
+const getCookie = (name) => {
+  // 쿠키 값을 가져옵니다.
+  let value = '; ' + document.cookie
+  // 키 값을 기준으로 파싱합니다.
+  let parts = value.split('; ' + name + '=')
+  // value를 return!
+  if (parts.length === 2) {
+    return parts.pop().split(';').shift()
+  }
+}
 
 //쿠키 굽기
 const setCookie = (name, value, exp = 5) => {
@@ -20,4 +23,4 @@ const deleteCookie = (name) => {
   document.cookie = name + '=; expires' + date
 }
 
-export { setCookie, deleteCookie }
+export { getCookie, setCookie, deleteCookie }
