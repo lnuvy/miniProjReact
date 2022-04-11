@@ -4,7 +4,7 @@ import { history } from "../redux/configureStore";
 import { Grid, Input, Text, Button } from "../elements/index";
 import { useDispatch } from "react-redux";
 import { actionCreators as userActions } from "../redux/modules/user";
-import { values } from "lodash";
+// import { values } from "lodash";
 
 const Login = (props) => {
   const dispatch = useDispatch();
@@ -16,7 +16,7 @@ const Login = (props) => {
       window.alert("빈칸을 채워주세요!");
       return;
     }
-    dispatch(userActions.loginDB({ id, pwd }));
+    dispatch(userActions.loginDB(id, pwd));
   };
 
   return (
@@ -42,6 +42,7 @@ const Login = (props) => {
               value={id}
               placeholder="🔑    아이디를 입력해주세요"
               _onChange={(e) => {
+                console.log(id);
                 setId(e.target.value);
               }}
             />
@@ -54,6 +55,7 @@ const Login = (props) => {
               type="password"
               placeholder="🔒    비밀번호를 입력해주세요"
               _onChange={(e) => {
+                console.log(pwd);
                 setPwd(e.target.value);
               }}
             />

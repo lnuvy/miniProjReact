@@ -17,12 +17,14 @@ const WritePost = (props) => {
   // 수정시에는 id 가 들어오고 아니면 "write"
   const nowCategory = props.match.params.category || null;
   const postId = props.match.params.id || "write";
+
   const isEdit = postId !== "write" ? true : false;
   // 수정이라면 현재 포스트의 정보들이 담김
   let nowPost = isEdit ? postList.find((p) => p.postId === postId) : null;
 
   // const [itemName, setItemName] = useState(nowPost ? nowPost.itemName : "");
   // const [content, setContent] = useState(nowPost ? nowPost.content : "");
+  // const [preview]
 
   const [inputs, setInputs] = useState(
     nowPost ? { itemName: nowPost.itemName, content: nowPost.content } : {}

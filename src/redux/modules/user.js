@@ -82,8 +82,8 @@ const loginDB = (id, pwd) => {
   return async function (dispatch, getState, { history }) {
     axios
       .post(`${BASE_URL}/login/reqLogin`, {
-        userID: "id",
-        password: "pwd",
+        userID: id,
+        password: pwd,
       })
       .then((res) => {
         console.log(res.data);
@@ -101,23 +101,27 @@ const loginDB = (id, pwd) => {
 
 // const loginDB = (id, pwd) => {
 //   return async function (dispatch, getState, { history }) {
-//     axios
-//       .post('https://reqres.in/api/login', {
-//         email: 'id',
-//         password: 'pwd',
+//     console.log(id, pwd);
+
+//     await axios
+//       .post("https://reqres.in/api/login", {
+//         email: id,
+//         password: pwd,
 //       })
 //       .then((response) => {
-//         console.log(response)
-//         const accessToken = response.data.token
-//         // dispatch(logIn(accessToken))
-//         history.push('/')
+//         console.log(response);
+//         const accessToken = response.data.token;
+//         console.log(accessToken);
+//         dispatch(logIn(accessToken));
+//         history.push("/");
 //       })
 //       .catch(function (error) {
-//         console.log(error)
-//         window.alert('없는 회원정보입니다,,,')
-//       })
-//   }
-// }
+//         console.log(error);
+//         window.alert("없는 회원정보입니다,,,");
+//       });
+//     // dispatch(logIn())
+//   };
+// };
 
 const signupDB = () => {
   return async function (dispatch, getStaet, { history }) {};

@@ -103,14 +103,14 @@ const addPostAxios = (post = null) => {
       commentCnt: 0,
     };
     // 요청!
-    axios
-      .post(`/posts/${post.category}/add`, requestData)
-      .then((res) => {
-        console.log("포스팅 추가 완료했습니다", res);
-      })
-      .catch((err) => {
-        console.log("포스팅 추가중 에러났네요", err);
-      });
+    // axios
+    // .post(`/posts/${post.category}/add`, requestData)
+    // .then((res) => {
+    //   console.log("포스팅 추가 완료했습니다", res);
+    // })
+    // .catch((err) => {
+    //   console.log("포스팅 추가중 에러났네요", err);
+    // });
 
     dispatch(addPost(requestData));
     history.replace(`/list/${post.category}`);
