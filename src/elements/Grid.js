@@ -19,7 +19,7 @@ const Grid = (props) => {
 };
 
 Grid.defaultProps = {
-  _id: false,
+  _id: "",
   children: null,
   isFlex: false,
   isFlex_center: false,
@@ -34,6 +34,8 @@ Grid.defaultProps = {
   _cursor: false,
   isSticky: false,
   zIndexTop: false,
+  felxColumn: false,
+  float: false,
 };
 
 const GridBox = styled.div`
@@ -55,15 +57,18 @@ const GridBox = styled.div`
       ? `display: flex; align-items: center; justify-content: end;`
       : null}
   ${(props) => (props.isSticky ? `position: sticky; top: 0;` : null)};
+  ${(props) =>
+    props.felxColumn ? `display: felx; flex-direction: column;` : null};
   ${(props) => (props.zIndexTop ? `z-index: 998;` : null)};
 
   height: 100%;
   box-sizing: border-box;
-  width: ${(props) => props.width};
+  width: ${(props) => (props.width ? `margin: ${props.width};` : ")")};
   ${(props) => (props.padding ? `padding: ${props.padding};` : null)}
   ${(props) => (props.margin ? `margin: ${props.margin};` : null)}
   ${(props) => (props.bg ? `background: ${props.bg};` : null)}
   ${(props) => (props.center ? `text-align: center;` : "")}
+  ${(props) => (props.float ? `float: left` : null)}
 `;
 
 export default Grid;
