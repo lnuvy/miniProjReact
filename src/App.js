@@ -20,26 +20,28 @@ import { actionCreators as postActions } from './redux/modules/post'
 function App() {
   const dispatch = useDispatch()
 
-  // 토큰 있을때만 메인 이외의 페이지 보이기 (요렇게 하는게 맞나..?)
-  const is_login = useSelector((state) => state.user.is_login)
+  // 토큰 있을때만 메인 이외의 페이지 보이기 (요렇게 하는게 맞나..?) => 따로 permit
+  const is_login = localStorage.getItem('token')
 
   if (is_login) {
     return (
-      <ConnectedRouter history={history}>
+      <div className="App">
         <Header />
-        <Route path="/" exact component={Main} />
-        <Route path="/list/:category" exact component={CategoryList} />
-        <Route path="/list/:category/:id" exact component={Detail} />
-        <Route path="/write" exact component={WritePost} />
-        <Route path="/write/:id" exact component={WritePost} />
-        <Route path="/profile/:id" exact component={Profile} />
-      </ConnectedRouter>
+        <ConnectedRouter history={history}>
+          <Route path="/" exact component={Main} />
+          <Route path="/list/:category" exact component={CategoryList} />
+          <Route path="/list/:category/:id" exact component={Detail} />
+          <Route path="/write/:category" exact component={WritePost} />
+          <Route path="/write/:categoty/:id" exact component={WritePost} />
+          <Route path="/profile/:id" exact component={Profile} />
+        </ConnectedRouter>
+      </div>
     )
   } else {
     return (
       <div className="App">
         <ConnectedRouter history={history}>
-          <Route path="/login" exact component={Login} />
+          <Route path="/" exact component={Login} />
           <Route path="/register" exact component={Register} />
         </ConnectedRouter>
       </div>

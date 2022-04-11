@@ -4,7 +4,6 @@ import { history } from '../redux/configureStore'
 import { Grid, Input, Text, Button } from '../elements/index'
 import { useDispatch } from 'react-redux'
 import { actionCreators as userActions } from '../redux/modules/user'
-import { values } from 'lodash'
 
 const Login = (props) => {
   const dispatch = useDispatch()
@@ -16,7 +15,7 @@ const Login = (props) => {
       window.alert('빈칸을 채워주세요!')
       return
     }
-    dispatch(userActions.loginDB({ id, pwd }))
+    dispatch(userActions.loginDB(id, pwd))
   }
 
   return (

@@ -8,7 +8,7 @@ const BASE_URL =
   "https://virtserver.swaggerhub.com/myteam84866/Api-Example/1.0.0";
 
 const initialPost = {
-  postId: 1,
+  postId: "12345678",
   itemName: "조지아 크래프트",
   writer: {
     userId: "iamuser",
@@ -19,12 +19,12 @@ const initialPost = {
   createdAt: moment().format("YYYY-MM-DD HH:mm:ss"),
   content: "개발자들은 역시 커피죠",
   imageUrl: "http://via.placeholder.com/400x300",
-  category: "etc",
+  category: "chair",
   likeCnt: 5,
   commentCnt: 0,
 };
 const initialPost2 = {
-  postId: 2,
+  postId: "12341234",
   itemName: "아카펠라 아메리카노",
   writer: {
     userId: "nanuser",
@@ -41,7 +41,7 @@ const initialPost2 = {
 };
 
 const initialState = {
-  list: [],
+  list: [initialPost, initialPost2],
   isLoading: false,
 };
 
@@ -82,18 +82,140 @@ const getCategoryList = (category = null) => {
   };
 };
 
+const addPostAxios = (post = null) => {
+  return async function (dispatch, getState, { history }) {
+    if (!post) return;
+    // 현재 작성한 유저의 정보 먼저 가져오기
+    // const userInfo = getState().user.user;
+    // console.log(userInfo)
+
+    // 작성부분 ID 어떻게 하실건지 ? 우리가 넣어줘도 되나? 백에서 하는게 좋은가?
+    const requestData = {
+      // 일단 우리쪽에서 넣어주기
+      postId: new Date().getTime() + "",
+      itemName: post.itemName,
+      // userInfo,
+      createdAt: moment().format("YYYY-MM-DD HH:mm:ss"),
+      content: post.content,
+      imageUrl: post.imageUrl,
+      category: post.category,
+      likeCnt: 0,
+      commentCnt: 0,
+    };
+    // 요청!
+    axios
+      .post(`/posts/${post.category}/add`, requestData)
+      .then((res) => {
+        console.log("포스팅 추가 완료했습니다", res);
+      })
+      .catch((err) => {
+        console.log("포스팅 추가중 에러났네요", err);
+      });
+
+    dispatch(addPost(requestData));
+    history.replace(`/list/${post.category}`);
+  };
+};
+
+// 당장은 글 내용물만 바꿀수있음
+const editPostDB = (postId, content) => {
+  return async function (dispatch, getState, { history }) {
+    if (!postId) return;
+
+    // formData 로 바꿔야함
+    // const preview = getState().image.preview;
+
+    const postIndex = getState().post.list.findIndex(
+      (p) => p.postId === postId
+    );
+    let data = getState().post.list[postIndex];
+
+    // 지금은 컨텐츠만 수정하지만 확장성을 위해 형식 맞춤
+    data = { ...data, content };
+
+    // axios
+    // await axios({
+    //   method: "PUT",
+    //   url: `/posts/edit/${postId}`,
+    //   data: { postId, content },
+    //   // headers: {},
+    // })
+    //   .then((res) => {
+    //     console.log("수정 성공", res);
+    //   })
+    //   .catch((err) => {
+    //     console.log("글 수정시 에러", err);
+    //   });
+
+    dispatch(editPost(postId, data));
+    console.log(`${data.category}`);
+    history.replace(`/list/${data.category}/${postId}`);
+  };
+};
+
+const deletePostDB = (postId) => {
+  return async function (dispatch, getState, { history }) {
+    if (!postId) return;
+
+    // postId 와 일치하는 댓글들 모두 지우는 프로세스 있어야함
+
+    // axios
+    // await axios({
+    //   method: "DELETE",
+    //   url: `/posts/delete/${postId}`,
+    //   data: {postId},
+    // }).then((res) => {
+    //   console.log("게시글 삭제 성공", res);
+    // }).catch((err) => {
+    //   console.log("게시글 삭제 에러", err);
+    // })
+
+    dispatch(deletePost(postId));
+    history.replace(`/`);
+  };
+};
+
 export default handleActions(
   {
     [SET_POST]: (state, action) =>
       produce(state, (draft) => {
-        draft.list = action.payload.list;
+        // draft.list = action.payload.list;
       }),
     [ADD_POST]: (state, action) =>
       produce(state, (draft) => {
         console.log("hi");
+        draft.list.unshift(action.payload.post);
+      }),
+    [EDIT_POST]: (state, action) =>
+      produce(state, (draft) => {
+        const newContent = action.payload.post.content;
+        let index = draft.list.findIndex(
+          (p) => p.postId === action.payload.postId
+        );
+        console.log(state.list[index]);
+        draft.list[index] = {
+          ...draft.list[index],
+          content: newContent,
+        };
+      }),
+    [DELETE_POST]: (state, action) =>
+      produce(state, (draft) => {
+        let newList = draft.list.filter(
+          (l) => l.postId !== action.payload.postId
+        );
+        draft.list = newList;
       }),
   },
   initialState
 );
 
-export const actionCreators = { setPost, getCategoryList };
+export const actionCreators = {
+  setPost,
+  getCategoryList,
+  addPost,
+  addPostAxios,
+  editPost,
+  editPostDB,
+  deletePost,
+  deletePostDB,
+};

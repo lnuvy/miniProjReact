@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useState } from 'react'
 import axios from 'axios'
 import { useDispatch, useSelector } from 'react-redux'
 import { Grid, Input, Text } from '../elements'
-import { Post } from '../components/posts'
+import { FixedButton, Post } from '../components/posts'
 import { actionCreators as postActions } from '../redux/modules/post'
 import { useParams } from 'react-router-dom'
 import { history } from '../redux/configureStore'
@@ -13,11 +13,12 @@ import styled from 'styled-components'
 const CategoryList = () => {
   const dispatch = useDispatch()
   const { category } = useParams()
+  console.log(category)
   const categoryList = useSelector((state) => state.post.list)
 
-  useEffect(() => {
-    dispatch(postActions.getCategoryList(category))
-  }, [category])
+  // useEffect(() => {
+  //   dispatch(postActions.getCategoryList(category));
+  // }, [category]);
 
   // 정렬
   const [mostLike, setMostLike] = useState(true)
@@ -45,6 +46,7 @@ const CategoryList = () => {
 
   return (
     <>
+      <FixedButton _onClick={() => history.push(`/write/${category}`)} />
       <Grid>
         <ResDiv>
           <Text bold size="24px" margin="0">
@@ -53,7 +55,7 @@ const CategoryList = () => {
           <Grid isFlex>
             <Input
               id="search"
-              label={`#${category} 의 꿀템을 검색해보세요...`}
+              placeholder={`#${category} 의 제목을 검색하세요...`}
               value={query}
               _onChange={queryChange}
             />
@@ -62,7 +64,7 @@ const CategoryList = () => {
 
         <Grid>
           {query !== ''
-            ? searchList.map((l) => {
+            ? searchList.map((l, i) => {
                 return (
                   <Grid
                     key={l.postId}
@@ -76,19 +78,16 @@ const CategoryList = () => {
                   </Grid>
                 )
               })
-            : categoryList.map((l) => {
+            : categoryList.map((l, i) => {
                 return (
                   <Grid
                     key={l.postId}
                     padding="16px"
-                    bg="tomato"
                     _onClick={() =>
                       history.push(`/list/${category}/${l.postId}`)
                     }
                   >
-                    <Post {...l} />
-                    <Post {...l} />
-                    <Post {...l} />
+                    <Text bold>{i}</Text>
                     <Post {...l} />
                   </Grid>
                 )

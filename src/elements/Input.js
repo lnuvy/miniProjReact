@@ -10,11 +10,13 @@ const Input = (props) => {
     value,
     autoComplete,
     height,
+    id = '',
   } = props
   return (
     <>
       <SmallText>{label}</SmallText>
       <InputField
+        id={id}
         type={type}
         placeholder={placeholder}
         onChange={_onChange}
@@ -34,6 +36,7 @@ Input.defaultProps = {
   autoComplete: 'on',
   height: '',
   clickColor: '',
+  id: '',
 }
 
 const SmallText = styled.small`
@@ -49,15 +52,15 @@ const InputField = styled.input`
   border-bottom: 1px solid #ccc;
   color: #555;
   margin: 10px 0px;
-  box-sizing: border-box
+  box-sizing: border-box;
   padding: 10px 0px;
   position: relative;
-    ${(props) => (props.width ? `width: ${props.width};` : `width: 100%;`)};
-    ${(props) => (props.height ? `height: ${props.height};` : `height: 30px;`)};
+  ${(props) => (props.width ? `width: ${props.width};` : `width: 100%;`)};
+  ${(props) => (props.height ? `height: ${props.height};` : `height: 30px;`)};
 
   &:focus {
     outline: none;
-    color: #98DDCA;
+    color: #98ddca;
     ${(props) => (props.clickColor ? `color: ${props.clickColor};` : '')};
   }
 `
