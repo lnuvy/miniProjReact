@@ -10,7 +10,7 @@ const Input = (props) => {
     value,
     autoComplete,
     height,
-    id,
+    id = "",
   } = props;
   return (
     <>

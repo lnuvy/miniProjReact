@@ -55,21 +55,23 @@ const loginAction = (user) => {
 const logoutAction = (user) => {
   return async function (dispatch, getStaet, { history }) {
     console.log(history);
+    localStorage.removeItem("token");
     dispatch(logOut(user));
+    // window.location.href = '/login'
     history.push("/login");
   };
 };
 
 //API랑 연동
-const registerDB = (id, pwd, pwd_check, user_name) => {
+const registerDB = (id, pwd, pwd_check, user_name, user_age) => {
   return function (dispatch, getState, { history }) {
     axios
       .post(`${BASE_URL}/login/signUp`, {
-        userId: "id",
-        password: "pwd",
-        passwordChcek: "pwd_check",
-        userNickname: "user_kname",
-        userAge: "userAge",
+        userId: id,
+        password: pwd,
+        passwordChcek: pwd_check,
+        userNickname: user_name,
+        userAge: user_age,
       })
       .then(function (res) {
         console.log(res.data);
@@ -78,42 +80,19 @@ const registerDB = (id, pwd, pwd_check, user_name) => {
   };
 };
 
-const loginDB = (id, pwd) => {
-  return async function (dispatch, getState, { history }) {
-    axios
-      .post(`${BASE_URL}/login/reqLogin`, {
-        userID: id,
-        password: pwd,
-      })
-      .then((res) => {
-        console.log(res.data);
-        console.log(res.data.token);
-        const accessToken = res.data.token;
-        dispatch(logIn());
-        history.push("/");
-      })
-      .catch(function (error) {
-        console.log(error);
-        window.alert("없는 회원정보입니다,,,");
-      });
-  };
-};
-
 // const loginDB = (id, pwd) => {
 //   return async function (dispatch, getState, { history }) {
-//     console.log(id, pwd);
-
-//     await axios
-//       .post("https://reqres.in/api/login", {
-//         email: id,
-//         password: pwd,
+//     axios
+//       .post(`${BASE_URL}/login/reqLogin`, {
+//         userID: 'id',
+//         password: 'pwd',
 //       })
-//       .then((response) => {
-//         console.log(response);
-//         const accessToken = response.data.token;
-//         console.log(accessToken);
-//         dispatch(logIn(accessToken));
-//         history.push("/");
+//       .then((res) => {
+//         console.log(res.data)
+//         console.log(res.data.token)
+//         const accessToken = res.data.token
+//         dispatch(logIn())
+//         history.push('/')
 //       })
 //       .catch(function (error) {
 //         console.log(error);
@@ -122,6 +101,33 @@ const loginDB = (id, pwd) => {
 //     // dispatch(logIn())
 //   };
 // };
+
+// 로그인 테스트
+const loginDB = (id, pwd) => {
+  return async function (dispatch, getState, { history }) {
+    await axios
+      .post("https://reqres.in/api/login", {
+        // eve.holt@reqres.in
+        // cityslicka
+        email: id,
+        password: pwd,
+      })
+      .then((response) => {
+        if (response.data.token) {
+          const accessToken = response.data.token;
+          let token = window.localStorage.setItem("token", accessToken);
+          console.log(token);
+          dispatch(logIn(accessToken));
+          history.push("/");
+          // window.location.href = '/'
+        }
+      })
+      .catch(function (error) {
+        console.log(error);
+        window.alert("없는 회원정보입니다,,,");
+      });
+  };
+};
 
 const signupDB = () => {
   return async function (dispatch, getStaet, { history }) {};
@@ -142,7 +148,7 @@ export default handleActions(
   {
     [LOG_IN]: (state, action) =>
       produce(state, (draft) => {
-        setCookie("is_login", "success");
+        // localStorage.setItem('is_login', 'success')
         draft.user = action.payload.user;
         draft.is_login = true;
       }),
@@ -150,7 +156,7 @@ export default handleActions(
 
     [LOG_OUT]: (state, action) =>
       produce(state, (draft) => {
-        deleteCookie("is_login");
+        // localStorage.clear('is_login')
         draft.user = null;
         draft.is_login = false;
       }),
