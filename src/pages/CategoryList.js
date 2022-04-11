@@ -13,11 +13,12 @@ import styled from "styled-components";
 const CategoryList = () => {
   const dispatch = useDispatch();
   const { category } = useParams();
+  console.log(category);
   const categoryList = useSelector((state) => state.post.list);
 
-  useEffect(() => {
-    dispatch(postActions.getCategoryList(category));
-  }, [category]);
+  // useEffect(() => {
+  //   dispatch(postActions.getCategoryList(category));
+  // }, [category]);
 
   // 정렬
   const [mostLike, setMostLike] = useState(true);
@@ -63,7 +64,7 @@ const CategoryList = () => {
 
         <Grid>
           {query !== ""
-            ? searchList.map((l) => {
+            ? searchList.map((l, i) => {
                 return (
                   <Grid
                     key={l.postId}
@@ -77,20 +78,16 @@ const CategoryList = () => {
                   </Grid>
                 );
               })
-            : categoryList.map((l) => {
+            : categoryList.map((l, i) => {
                 return (
                   <Grid
                     key={l.postId}
                     padding="16px"
-                    bg="tomato"
                     _onClick={() =>
                       history.push(`/list/${category}/${l.postId}`)
                     }
                   >
-                    <Post {...l} />
-                    <Post {...l} />
-                    <Post {...l} />
-                    <Post {...l} />
+                    <Text bold>{i}</Text>
                     <Post {...l} />
                   </Grid>
                 );

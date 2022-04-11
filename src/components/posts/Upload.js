@@ -3,23 +3,50 @@ import { useDispatch, useSelector } from "react-redux";
 import { Button, Grid, Input } from "../../elements";
 import { imageActions } from "../../redux/modules/image";
 
+import axios from "axios";
+
 const Upload = (props) => {
   const dispatch = useDispatch();
-  const isUploading = useSelector((state) => state.image.uploading);
+  // const isUploading = useSelector((state) => state.image.uploading);
   const fileInput = useRef();
 
-  const [fileName, setFileName] = useState("");
+  const { propsfile } = props;
+
+  const [fileName, setFileName] = useState(propsfile ? propsfile : " ");
+
+  const [selectedFile, setSelectedFile] = useState(null);
 
   const selectFile = (e) => {
-    const reader = new FileReader();
-    const file = fileInput.current.files[0];
+    const uploadFile = e.target.files[0];
+    console.log(uploadFile);
 
-    reader.readAsDataURL(file);
+    // FileReader 프리뷰
+    const reader = new FileReader();
+    const preview = fileInput.current.files[0];
+
+    reader.readAsDataURL(preview);
+    console.log(preview);
 
     reader.onloadend = () => {
       dispatch(imageActions.setPreview(reader.result));
-      setFileName(e.target.value);
+      setFileName(preview.name);
+      setSelectedFile(uploadFile);
     };
+  };
+
+  const handleSubmit = async (e) => {
+    const formData = new FormData();
+    formData.append("selectedFile", selectedFile);
+
+    // 테스트코드
+    const response = await axios({
+      method: "post",
+      url: "http://127.0.0.1:5000/upload",
+      data: formData,
+      headers: { "Content-Type": "multipart/form-data" },
+    }).catch((err) => {
+      console.log(err);
+    });
   };
 
   return (
@@ -42,6 +69,7 @@ const Upload = (props) => {
         ref={fileInput}
         // disabled={isUploading}
       />
+      <button onClick={handleSubmit}>테스트</button>
     </Grid>
   );
 };

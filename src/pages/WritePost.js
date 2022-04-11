@@ -19,7 +19,7 @@ const WritePost = (props) => {
   const postId = props.match.params.id || "write";
   const isEdit = postId !== "write" ? true : false;
   // 수정이라면 현재 포스트의 정보들이 담김
-  let nowPost = isEdit ? postList.find((p) => p.id === postId) : null;
+  let nowPost = isEdit ? postList.find((p) => p.postId === postId) : null;
 
   // const [itemName, setItemName] = useState(nowPost ? nowPost.itemName : "");
   // const [content, setContent] = useState(nowPost ? nowPost.content : "");
@@ -71,7 +71,8 @@ const WritePost = (props) => {
   };
 
   const editPost = () => {
-    // dispatch(postActions.editPostFB(post_id, { contents }));
+    console.log(postId, inputs.content);
+    dispatch(postActions.editPostDB(postId, inputs.content));
   };
 
   // if (!isLogin) {
@@ -88,7 +89,7 @@ const WritePost = (props) => {
         {nowCategory} 입니다.
       </Text>
       <Grid margin="20px auto">
-        <Upload />
+        <Upload propsfile={inputs.itemName} />
       </Grid>
       <Grid>
         <Text margin="12px 0 0 0">이미지 미리보기</Text>

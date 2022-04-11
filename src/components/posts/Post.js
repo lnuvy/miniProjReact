@@ -2,6 +2,7 @@ import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import { Grid, Image, Text } from "../../elements";
+import { actionCreators as postActions } from "../../redux/modules/post";
 import CommentList from "./CommentList";
 import styled from "styled-components";
 
@@ -9,6 +10,7 @@ import styled from "styled-components";
 import { FaCommentAlt } from "react-icons/fa";
 import { FaHeart } from "react-icons/fa";
 import { FaRegHeart } from "react-icons/fa";
+import { history } from "../../redux/configureStore";
 
 // 게시글 하나에 대한 컴포넌트
 const Post = (props) => {
@@ -31,11 +33,8 @@ const Post = (props) => {
       <Grid width="50%" padding="10px">
         <Image src={item?.imageUrl} />
       </Grid>
-
       <h2>{item?.itemName}</h2>
-
       <h4>{item?.writer?.userId}</h4>
-
       <Grid isFlex_start>
         <Grid isFlex_end padding="10px">
           <FaCommentAlt size={24} /> &nbsp;
@@ -51,6 +50,23 @@ const Post = (props) => {
           </Text>
         </Grid>
       </Grid>
+      ``
+      <button
+        onClick={(e) => {
+          e.stopPropagation();
+          history.push(`/write/${category}/${item.postId}`);
+        }}
+      >
+        수정
+      </button>
+      <button
+        onClick={(e) => {
+          e.stopPropagation();
+          dispatch(postActions.deletePostDB(item.postId));
+        }}
+      >
+        삭제
+      </button>
     </Container>
   );
 };
