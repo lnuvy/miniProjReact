@@ -14,7 +14,6 @@ const BASE_URL = 'http://13.209.66.208'
 
 // initialState
 const initialState = {
-  token: null,
   user: null,
   is_login: false,
 }
@@ -57,13 +56,13 @@ const registerDB = (id, pwd, pwd_check, user_name, user_age) => {
       method: 'POST',
       url: `${BASE_URL}/login/signUp`,
       contentType: 'application/json',
-      data: JSON.stringify({
+      data: {
         userId: id,
         password: pwd,
         passwordCheck: pwd_check,
         userNickname: user_name,
         userAge: user_age,
-      }),
+      },
       // headers: {},
     })
       .then((res) => {
@@ -85,9 +84,10 @@ const loginDB = (id, pwd) => {
       })
       .then((res) => {
         if (res.data.token) {
+          const accessToken = res.data.token
           setToken(res.data.token)
           console.log(res.data)
-          dispatch(logIn(res.data.token))
+          dispatch(logIn(accessToken))
           history.replace('/')
         }
       })
@@ -133,16 +133,18 @@ export default handleActions(
   {
     [LOG_IN]: (state, action) =>
       produce(state, (draft) => {
-        draft.token = action.payload.token
+        localStorage.setItem('token', action.payload.user)
+        console.log(state.user)
+        draft.user = action.payload.user
         draft.is_login = true
       }),
     [SIGN_UP]: (state, action) => produce(state, (draft) => {}),
 
     [LOG_OUT]: (state, action) =>
       produce(state, (draft) => {
-        removeToken()
+        // localStorage.clear('is_login')
         draft.user = null
-        draft.token = null
+        removeToken()
         draft.is_login = false
       }),
 

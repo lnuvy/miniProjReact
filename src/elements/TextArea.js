@@ -39,7 +39,8 @@ const TextareaDiv = styled.div`
 
   & textarea:focus + label,
   textarea:not(:placeholder-shown) + label {
-    transform: translateX(5px) translateY(-20px);
+    transform: translateX(5px) translateY(-50%) translateY(-50%)
+      translateY(-25%);
     font-size: 13px;
     background-color: white;
     color: rgba(0, 0, 0, 0.6);

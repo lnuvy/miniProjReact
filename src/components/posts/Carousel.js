@@ -6,10 +6,16 @@ import { Grid, Image, Text } from "../../elements";
 import styled from "styled-components";
 
 import { topFive } from "../../shared/Dummy";
+import Post from "./Post";
 
 const Carousel = (props) => {
   const topList = topFive;
 
+  console.log(topList);
+
+  topList.sort((a, b) => b.likeCnt - a.likeCnt);
+
+  console.log(topList);
   // react-slick 설정
   const settings = {
     dots: true, // 하단 점
@@ -60,9 +66,16 @@ const Carousel = (props) => {
         padding="10px"
         width="20%"
       >
-        <Grid>{item.itemName}</Grid>
-        <Grid>
+        <Grid padding="16px">
           <Image src={item.imageUrl} />
+        </Grid>
+        <Grid isFlex_center>
+          <Text size="20px" weight={600}>
+            {item.itemName}
+          </Text>
+          <Text color="#636e72" weight={500}>
+            &nbsp;&nbsp;{item.writer.userNickname}
+          </Text>
         </Grid>
       </Grid>
     );

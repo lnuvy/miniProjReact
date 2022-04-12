@@ -24,7 +24,7 @@ const FloatButton = styled.button`
   background-color: #212121;
   color: #fff;
   box-sizing: border-box;
-  font-size: 36px;
+  font-size: 26px;
   font-weight: 800;
   position: fixed;
   bottom: 50px;
@@ -33,4 +33,5 @@ const FloatButton = styled.button`
   border: none;
   border-radius: 70%;
   right: 16px;
+  z-index: 999;
 `;
