@@ -30,6 +30,7 @@ const Ptag = styled.p`
 
   ${(props) => (props.margin ? `margin:${props.margin};` : "")}
   ${(props) => (props.center ? `text-align: center;` : "")}
+  ${(props) => (props.align ? `text-align: ${props.align};` : "")}
 `;
 
 export default Text;

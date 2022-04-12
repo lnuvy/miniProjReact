@@ -10,8 +10,12 @@ const Input = (props) => {
     value,
     autoComplete,
     height,
-    id = false,
+    id = "",
+    clickColor,
+    disabled,
   } = props;
+
+  const styles = { clickColor: clickColor, height: height };
 
   return (
     <>
@@ -22,13 +26,16 @@ const Input = (props) => {
         placeholder={placeholder}
         onChange={_onChange}
         value={value}
+        disabled={disabled}
         autoComplete={autoComplete}
+        {...styles}
       />
     </>
   );
 };
 
 Input.defaultProps = {
+  disableed: false,
   label: "",
   placeholder: "텍스트를 입력하세용",
   _onChange: () => {},
@@ -37,7 +44,8 @@ Input.defaultProps = {
   autoComplete: "on",
   height: "",
   clickColor: "",
-  id: null,
+  width: "",
+  id: "",
 };
 
 const SmallText = styled.small`
@@ -61,10 +69,10 @@ const InputField = styled.input`
 
   &:focus {
     outline: none;
-    color: #98ddca;
-    ${(props) => (props.clickColor ? `color: ${props.clickColor};` : "")};
+    border-bottom: 1px solid red;
+    ${(props) =>
+      props.clickColor ? `color: ${props.clickColor}!important;` : ""};
   }
 `;
-//focus값이나 hover값도 프롭스로 전달 하는 법이 있나......궁금
 
 export default Input;

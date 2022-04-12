@@ -25,6 +25,7 @@ Grid.defaultProps = {
   isFlex_center: false,
   isFlex_start: false,
   isFlex_end: false,
+  width: "100%",
   padding: false,
   margin: false,
   bg: false,
@@ -63,7 +64,6 @@ const GridBox = styled.div`
 
   height: 100%;
   box-sizing: border-box;
-  /* ${(props) => (props.width ? `width:${props.width};` : null)}; */
   ${(props) => (props.padding ? `padding: ${props.padding};` : null)}
   ${(props) => (props.margin ? `margin: ${props.margin};` : null)}
   ${(props) => (props.bg ? `background: ${props.bg};` : null)}

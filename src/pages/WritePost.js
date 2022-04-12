@@ -24,7 +24,6 @@ const WritePost = (props) => {
 
   // const [itemName, setItemName] = useState(nowPost ? nowPost.itemName : "");
   // const [content, setContent] = useState(nowPost ? nowPost.content : "");
-  // const [preview]
 
   const [inputs, setInputs] = useState(
     nowPost ? { itemName: nowPost.itemName, content: nowPost.content } : {}

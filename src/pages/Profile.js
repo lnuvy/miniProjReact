@@ -1,8 +1,12 @@
 import React from 'react'
 import { Grid, Input, Text, Button } from '../elements/index'
 import styled from 'styled-components'
+import { useSelector } from 'react-redux'
 
-const Profile = () => {
+const Profile = (props) => {
+  //걍 토큰 유저이름으로 가져와보기,,ㄹ
+  const user = useSelector((state) => state.user.user)
+  console.log(user)
   return (
     <>
       <Container>
@@ -13,7 +17,7 @@ const Profile = () => {
             </Text>
             <Circle></Circle>
             <Text weight="700" size="24px">
-              user_name
+              ${user}
             </Text>
             <Text>자기 소개 흠냐냐</Text>
             <Button width="200px">회원정보 수정</Button>

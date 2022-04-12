@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import { history } from "../redux/configureStore";
 import { useDispatch } from "react-redux";
 import { Grid, Input, Text, Button } from "../elements/index";
 import { actionCreators as userActions } from "../redux/modules/user";
@@ -12,20 +13,28 @@ const Register = (props) => {
   const [pwd_check, setPwdCheck] = React.useState("");
   const [user_name, setUserName] = React.useState("");
   const [user_age, setUserAge] = React.useState("10대");
+  const [submitted, setSubmitted] = React.useState(false);
+  const [pwdWarning, setPwdWarning] = React.useState(false);
+
+  // const [idConfirm, setIdConfirm] = React.useState('')
+  // const [pwdCheckConfirm, setPwdCheckConfirm] = React.useState('')
+  // const [idWarning, setIdWarColor] = React.useState('red')
+
+  // const [pwdCheckWarning, setPwdCheckWarColor] = React.useState('red')
 
   const onSubmitHandler = () => {
+    setSubmitted(true);
     if (id === "" || pwd === "" || pwd_check === "" || user_name === "") {
-      alert("빈칸을 채워주세요!");
+      console.log("빈칸을 채워주세요!");
       return;
     }
     if (pwd === pwd_check) {
       alert("가입이 정상적으로 완료되었습니다!");
       props.history.push("/login");
     } else {
-      alert("비밀번호가 일치하지 않습니다!");
+      setPwdWarning(true);
     }
 
-    console.log(user_age);
     dispatch(userActions.registerDB(id, pwd, pwd_check, user_name, user_age));
   };
 
@@ -46,57 +55,90 @@ const Register = (props) => {
         <Grid>
           <Grid margin="20px">
             <Input
-              id={id}
-              label="아이디"
+              label="ID"
+              id="userId"
               value={id}
               _onChange={(e) => {
                 setId(e.target.value);
               }}
               placeholder="아이디를 입력해주세요"
+              clickColor="#98ddca"
             />
+            {submitted && !id ? (
+              <Text align="left" size="12px" margin="0" color="#FA5E73">
+                아이디를 입력하세요!
+              </Text>
+            ) : null}
           </Grid>
           <Grid margin="20px">
             <Input
-              id={user_name}
-              label="닉네임"
+              label="Nickname"
+              id="userNickname"
               value={user_name}
               _onChange={(e) => {
                 setUserName(e.target.value);
               }}
               placeholder="닉네임을 입력해주세요"
+              clickColor="#98ddca"
             />
+            {submitted && !user_name ? (
+              <Text align="left" size="12px" margin="0" color="#FA5E73">
+                닉네임을 입력하세요!
+              </Text>
+            ) : null}
           </Grid>
           <Grid margin="20px">
             <Input
-              id={pwd}
               label="패스워드"
+              id="password"
               value={pwd}
               _onChange={(e) => {
                 setPwd(e.target.value);
               }}
-              type="password"
-              placeholder="비밀번호를 입력해주세요"
+              type="Password"
+              placeholder="영문, 숫자의 패스워드 6자리를 입력해주세요"
+              clickColor="#98ddca"
             />
+            {submitted && !pwd ? (
+              <Text align="left" size="12px" margin="0" color="#FA5E73">
+                패스워드를 입력하세요!
+              </Text>
+            ) : null}
+            {submitted && pwdWarning ? (
+              <Text align="left" size="12px" margin="0" color="#FA5E73">
+                패스워드가 일치하지 않습니다!
+              </Text>
+            ) : null}
           </Grid>
           <Grid margin="20px">
             <Input
-              id={pwd_check}
-              label="패스워드"
+              label="Password"
+              id="passwordCheck"
               value={pwd_check}
               _onChange={(e) => {
                 setPwdCheck(e.target.value);
               }}
               type="password"
-              placeholder="비밀번호를 다시 입력해주세요"
+              placeholder="패스워드를 다시 입력해주세요"
+              clickColor="#98ddca"
             />
+            {submitted && !pwd_check ? (
+              <Text align="left" size="12px" margin="0" color="#FA5E73">
+                패스워드를 다시 입력하세요!
+              </Text>
+            ) : null}
+            {submitted && pwdWarning ? (
+              <Text align="left" size="12px" margin="0" color="#FA5E73">
+                패스워드가 일치하지 않습니다!
+              </Text>
+            ) : null}
           </Grid>
           <Grid isFlex_center>
             <SmallText>나이</SmallText>
             <Select
               value={user_age}
-              onChange={(e) => {
-                setUserAge(e.target.value);
-              }}
+              id="userAge"
+              onChange={(e) => setUserAge(e.target.value)}
             >
               <option value="10대">10대</option>
               <option value="20대">20대</option>
@@ -115,6 +157,14 @@ const Register = (props) => {
               회원가입
             </Button>
           </Grid>
+          <Text
+            margin="0"
+            onClick={() => {
+              history.push("/login");
+            }}
+          >
+            뒤로가요
+          </Text>
         </Grid>
       </SignupBox>
     </Container>
@@ -122,7 +172,7 @@ const Register = (props) => {
 };
 
 const Container = styled.div`
-  margin: 150px auto;
+  margin: 50px auto;
   width: 100%;
   max-width: 1000px;
   display: flex;

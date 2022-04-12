@@ -9,10 +9,12 @@ const Login = (props) => {
   const dispatch = useDispatch();
   const [id, setId] = React.useState("");
   const [pwd, setPwd] = React.useState("");
+  const [submitted, setSubmitted] = React.useState(false);
 
   const login = () => {
+    setSubmitted(true);
     if (id === "" || pwd === "") {
-      window.alert("빈칸을 채워주세요!");
+      console.log("빈칸을 채워주세요!");
       return;
     }
     dispatch(userActions.loginDB(id, pwd));
@@ -28,6 +30,7 @@ const Login = (props) => {
           🍯꿀템
         </Text>
       </LogoBox>
+
       <LoginBox>
         <Grid flexColumn>
           <Text size="32px" weight="900">
@@ -37,7 +40,7 @@ const Login = (props) => {
           <Grid margin="20px">
             <Input
               id="id"
-              clickColor="#14B1AB"
+              clickColor="#98ddca"
               label="ID"
               value={id}
               placeholder="🔑    아이디를 입력해주세요"
@@ -45,19 +48,30 @@ const Login = (props) => {
                 setId(e.target.value);
               }}
             />
+            {submitted && !id ? (
+              <Text align="left" size="12px" margin="0" color="#FA5E73">
+                아이디를 입력하세요!
+              </Text>
+            ) : null}
           </Grid>
 
           <Grid margin="20px">
             <Input
               id="password"
-              label="password"
+              clickColor="#98ddca"
+              label="Password"
               value={pwd}
               type="password"
-              placeholder="🔒    비밀번호를 입력해주세요"
+              placeholder="🔒    패스워드를 입력해주세요"
               _onChange={(e) => {
                 setPwd(e.target.value);
               }}
             />
+            {submitted && !pwd ? (
+              <Text align="left" size="12px" margin="0" color="#FA5E73">
+                패스워드를 입력하세요!
+              </Text>
+            ) : null}
           </Grid>
           <Grid>
             <Button margin="20px" width="250px" text="로그인" _onClick={login}>
@@ -73,7 +87,7 @@ const Login = (props) => {
                   history.push("/register");
                 }}
               >
-                <u>Sign up</u>{" "}
+                <U>Sign up</U>{" "}
               </span>
               now!
             </p>
@@ -109,6 +123,12 @@ const LoginBox = styled.div`
 
 const TextBox = styled.div`
   padding: 20px;
+`;
+
+const U = styled.u`
+  &:hover {
+    color: #98ddca;
+  }
 `;
 
 export default Login;

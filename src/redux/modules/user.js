@@ -1,69 +1,54 @@
+// REDUX-ACTION & IMMER
 import { createAction, handleActions } from "redux-actions";
-import { getCookie, setCookie, deleteCookie } from "../../shared/Cookies";
 import { produce } from "immer";
+
+// AXIOS
 import axios from "axios";
+import { apis } from "../../shared/Axios";
+
+// TOKEN
+import { getToken, setToken, removeToken } from "../../shared/token";
 
 // base_url + url
-// const BASE_URL =
-//   "https://virtserver.swaggerhub.com/myteam84866/Api-Example/1.0.0";
 const BASE_URL = "http://13.209.66.208";
 
-// axios.defaults.withCredentials = true // 쿠키 데이터 전송받기
-// export const reqeust = (method, url, data) => {
-//   return axios({
-//     method,
-//     url: BASE_URL + url,
-//     data,
-//   })
-//     .then((res) => res.data)
-//     .catch((err) => console.log(err))
-// }
-
-//initialState
+// initialState
 const initialState = {
+  token: null,
   user: null,
   is_login: false,
 };
 
-const initialUser = {
-  userId: "iamuser",
-  password: "1234",
-  passwordChcek: "1234",
-  userNickname: "꿀렁",
-  userAge: "20대",
-};
-
-//actions
+// ACTION
 const LOG_IN = "LOG_IN";
 const LOG_OUT = "LOG_OUT";
 const SIGN_UP = "SIGN_UP";
 const USER_INFO = "USER_INFO";
 
-//action Creators
+//ACTION CREATORS
 const logIn = createAction(LOG_IN, (user) => ({ user }));
 const signUp = createAction(SIGN_UP, (user) => ({ user }));
 const logOut = createAction(LOG_OUT, (user) => ({ user }));
 const userInfo = createAction(USER_INFO, (user) => ({ user }));
 
-// Middle wares actions
+// MIDDLEWARE
 const loginAction = (user) => {
-  return function (dispatch, getState, { history }) {
+  return async function (dispatch, getState, { history }) {
     dispatch(logIn(user));
     history.push("/");
   };
 };
-
+//로그아웃
 const logoutAction = (user) => {
   return async function (dispatch, getStaet, { history }) {
     console.log(history);
-    localStorage.removeItem("token");
+    removeToken("token");
     dispatch(logOut(user));
-    // window.location.href = '/login'
-    history.replace("/");
+    history.replace("/login");
   };
 };
 
-//API랑 연동
+//회원가입
 const registerDB = (id, pwd, pwd_check, user_name, user_age) => {
   return async function (dispatch, getState, { history }) {
     await axios
@@ -92,10 +77,8 @@ const loginDB = (id, pwd) => {
         password: pwd,
       })
       .then((res) => {
-        console.log(res);
-        console.log(res.data);
-        console.log(res.data.token);
         const accessToken = res.data.token;
+        setToken(accessToken);
         dispatch(logIn(accessToken));
         history.push("/");
       })
@@ -139,21 +122,39 @@ const signupDB = () => {
 
 // const isLoginDB = () => {
 //   return async function (dispatch, getState, { history }) {
-//     const response = await axios.get.get(`${BASE_URL}/login/isLogin`)
-//     const data = response.data
-//     console.log(data)
-//     dispatch(logIn())
+//     console.log('here')
+//     await apis
+//       .login(id.pwd)
+//       .then((response) => {
+//         if (response.data.token) {
+//           const accessToken = response.data.token
+//           let token = window.localStorage.setItem('token', accessToken)
+//           console.log(response.data)
+//           dispatch(logIn(accessToken))
+//           history.replace('/')
+//         }
+//       })
+//       .catch(function (error) {
+//         console.log(error)
+//         window.alert('없는 회원정보입니다,,,')
+//       })
 //   }
 // }
 
-//reducer (handleActions)
+//유저정보
+const userInfoDB = () => {
+  return async function (dispatch, getState, { history }) {
+    const token = getToken;
+    console.log(token);
+    await axios.get(`${BASE_URL}/getUser`);
+  };
+};
 
+// REDUCER
 export default handleActions(
   {
     [LOG_IN]: (state, action) =>
       produce(state, (draft) => {
-        localStorage.setItem("token", action.payload.user);
-        console.log(state.user);
         draft.user = action.payload.user;
         draft.is_login = true;
       }),
@@ -162,14 +163,15 @@ export default handleActions(
     [LOG_OUT]: (state, action) =>
       produce(state, (draft) => {
         // localStorage.clear('is_login')
+        removeToken();
         draft.user = null;
         draft.is_login = false;
       }),
 
-    // [USER_INFO] : (state, action) =>
-    // produce(state, (draft) => {
-    //     draft.user = action.payload.user;
-    // }),
+    [USER_INFO]: (state, action) =>
+      produce(state, (draft) => {
+        draft.user = action.payload.user;
+      }),
   },
   initialState
 );
