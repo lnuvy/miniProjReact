@@ -4,8 +4,10 @@ import { produce } from "immer";
 import axios from "axios";
 
 // base_url + url
-const BASE_URL =
-  "https://virtserver.swaggerhub.com/myteam84866/Api-Example/1.0.0";
+// const BASE_URL =
+//   "https://virtserver.swaggerhub.com/myteam84866/Api-Example/1.0.0";
+const BASE_URL = "http://13.209.66.208";
+
 // axios.defaults.withCredentials = true // 쿠키 데이터 전송받기
 // export const reqeust = (method, url, data) => {
 //   return axios({
@@ -45,8 +47,7 @@ const userInfo = createAction(USER_INFO, (user) => ({ user }));
 
 // Middle wares actions
 const loginAction = (user) => {
-  return async function (dispatch, getState, { history }) {
-    console.log(history);
+  return function (dispatch, getState, { history }) {
     dispatch(logIn(user));
     history.push("/");
   };
@@ -58,69 +59,45 @@ const logoutAction = (user) => {
     localStorage.removeItem("token");
     dispatch(logOut(user));
     // window.location.href = '/login'
-    history.push("/login");
+    history.replace("/");
   };
 };
 
 //API랑 연동
 const registerDB = (id, pwd, pwd_check, user_name, user_age) => {
-  return function (dispatch, getState, { history }) {
-    axios
+  return async function (dispatch, getState, { history }) {
+    await axios
       .post(`${BASE_URL}/login/signUp`, {
         userId: id,
         password: pwd,
-        passwordChcek: pwd_check,
+        passwordCheck: pwd_check,
         userNickname: user_name,
         userAge: user_age,
       })
       .then(function (res) {
         console.log(res.data);
         dispatch(signUp());
+      })
+      .catch((err) => {
+        console.log("회원가입중 에러", err);
       });
   };
 };
 
-// const loginDB = (id, pwd) => {
-//   return async function (dispatch, getState, { history }) {
-//     axios
-//       .post(`${BASE_URL}/login/reqLogin`, {
-//         userID: 'id',
-//         password: 'pwd',
-//       })
-//       .then((res) => {
-//         console.log(res.data)
-//         console.log(res.data.token)
-//         const accessToken = res.data.token
-//         dispatch(logIn())
-//         history.push('/')
-//       })
-//       .catch(function (error) {
-//         console.log(error);
-//         window.alert("없는 회원정보입니다,,,");
-//       });
-//     // dispatch(logIn())
-//   };
-// };
-
-// 로그인 테스트
 const loginDB = (id, pwd) => {
   return async function (dispatch, getState, { history }) {
     await axios
-      .post("https://reqres.in/api/login", {
-        // eve.holt@reqres.in
-        // cityslicka
-        email: id,
+      .post(`${BASE_URL}/login/reqLogin`, {
+        userID: id,
         password: pwd,
       })
-      .then((response) => {
-        if (response.data.token) {
-          const accessToken = response.data.token;
-          let token = window.localStorage.setItem("token", accessToken);
-          console.log(token);
-          dispatch(logIn(accessToken));
-          history.push("/");
-          // window.location.href = '/'
-        }
+      .then((res) => {
+        console.log(res);
+        console.log(res.data);
+        console.log(res.data.token);
+        const accessToken = res.data.token;
+        dispatch(logIn(accessToken));
+        history.push("/");
       })
       .catch(function (error) {
         console.log(error);
@@ -128,6 +105,33 @@ const loginDB = (id, pwd) => {
       });
   };
 };
+
+// 로그인 테스트
+// const loginDB = (id, pwd) => {
+//   return async function (dispatch, getState, { history }) {
+//     await axios
+//       .post("https://reqres.in/api/login", {
+//         // eve.holt@reqres.in
+//         // cityslicka
+//         email: id,
+//         password: pwd,
+//       })
+//       .then((response) => {
+//         if (response.data.token) {
+//           const accessToken = response.data.token;
+//           let token = window.localStorage.setItem("token", accessToken);
+//           console.log(token);
+//           dispatch(logIn(accessToken));
+//           history.replace("/");
+//           // window.location.href = '/'
+//         }
+//       })
+//       .catch(function (error) {
+//         console.log(error);
+//         window.alert("없는 회원정보입니다,,,");
+//       });
+//   };
+// };
 
 const signupDB = () => {
   return async function (dispatch, getStaet, { history }) {};
@@ -148,7 +152,8 @@ export default handleActions(
   {
     [LOG_IN]: (state, action) =>
       produce(state, (draft) => {
-        // localStorage.setItem('is_login', 'success')
+        localStorage.setItem("token", action.payload.user);
+        console.log(state.user);
         draft.user = action.payload.user;
         draft.is_login = true;
       }),

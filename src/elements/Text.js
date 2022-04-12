@@ -2,8 +2,12 @@ import React from "react";
 import styled from "styled-components";
 
 const Text = (props) => {
-  const { children, ...styles } = props;
-  return <Ptag {...styles}>{children}</Ptag>;
+  const { children, _className, ...styles } = props;
+  return (
+    <Ptag className={_className} {...styles}>
+      {children}
+    </Ptag>
+  );
 };
 
 Text.defaultProps = {
@@ -14,6 +18,7 @@ Text.defaultProps = {
   margin: false,
   center: false,
   weight: false,
+  _className: "",
 };
 
 const Ptag = styled.p`

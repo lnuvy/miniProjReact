@@ -10,8 +10,9 @@ const Input = (props) => {
     value,
     autoComplete,
     height,
-    id = "",
+    id = false,
   } = props;
+
   return (
     <>
       <SmallText>{label}</SmallText>
@@ -36,7 +37,7 @@ Input.defaultProps = {
   autoComplete: "on",
   height: "",
   clickColor: "",
-  id: "",
+  id: null,
 };
 
 const SmallText = styled.small`

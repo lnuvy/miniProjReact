@@ -14,11 +14,11 @@ const Main = (props) => {
   return (
     <>
       <Grid>
-        <Text center weight="900" size="40px">
+        <Text center weight="900" size="40px" margin="10px">
           Best 5
         </Text>
-        <Grid bg="green">
-          <Grid width="70%" bg="#C3B9EA" margin="10px auto">
+        <Grid>
+          <Grid width="70%" bg="#e17055" margin="10px auto">
             {/* 가장 좋아요가 많은 5개 api 요청 후 여기에 뿌려짐 */}
             <Carousel />
           </Grid>
@@ -26,7 +26,7 @@ const Main = (props) => {
       </Grid>
 
       <CateBox>
-        <Text weight="900" size="40px">
+        <Text weight="900" size="40px" margin="30px 0 10px 0">
           Category
         </Text>
         <Text>다른 개발자들의 꿀템들이 궁금하다면?👇</Text>
@@ -35,7 +35,7 @@ const Main = (props) => {
             <Button
               _id="chair"
               width="150px"
-              _color="#C3E5AE"
+              bg="#C3E5AE"
               shadow
               margin="10px"
               onClick={handleClick}
@@ -45,7 +45,7 @@ const Main = (props) => {
             <Button
               _id="desk"
               width="150px"
-              _color="#C3B9EA"
+              bg="#C3B9EA"
               shadow
               margin="10px"
               onClick={handleClick}
@@ -55,7 +55,7 @@ const Main = (props) => {
             <Button
               _id="elecItem"
               width="150px"
-              _color="#F1E1A6"
+              bg="#F1E1A6"
               shadow
               margin="10px"
               onClick={handleClick}
@@ -69,7 +69,7 @@ const Main = (props) => {
               width="150px"
               shadow
               margin="10px"
-              _color="#F4BBBB"
+              bg="#F4BBBB"
               onClick={handleClick}
             >
               # 건강용품
@@ -79,7 +79,7 @@ const Main = (props) => {
               shadow
               width="150px"
               margin="10px"
-              _color="#77E4D4"
+              bg="#77E4D4"
               B590CA
               onClick={handleClick}
             >

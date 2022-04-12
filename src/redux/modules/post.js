@@ -4,8 +4,7 @@ import moment from "moment";
 import axios from "axios";
 
 // mock API base_url // BASE_URL 주소의 마지막에 /를 뺐습니다
-const BASE_URL =
-  "https://virtserver.swaggerhub.com/myteam84866/Api-Example/1.0.0";
+const BASE_URL = "http://13.209.66.208";
 
 const initialPost = {
   postId: "12345678",
@@ -41,7 +40,7 @@ const initialPost2 = {
 };
 
 const initialState = {
-  list: [initialPost, initialPost2],
+  list: [],
   isLoading: false,
 };
 
@@ -71,13 +70,13 @@ const getCategoryList = (category = null) => {
   return async function (dispatch, getState, { history }) {
     // 물어볼거 (이렇게해도되는지)
     // 이걸 추가하지 않으면 리덕스에 데이터가 있을때도 계속해서 카테고리 리스트에서 디스패치를 함
-    if (getState().post.list.length !== 0) return;
+    // if (getState().post.list.length !== 0) return;
     // 비동기작업때 로딩 true 주기
     // dispatch(loading(true));
 
     // 가독성을 위해 BASE_URL 주소의 마지막에 /을 뺐습니다
-    const response = await axios.get(`${BASE_URL}/posts/category`);
-    const data = response.data;
+    const response = await axios.get(`${BASE_URL}/posts/${category}`);
+    const data = response.data.Posts;
     dispatch(setPost(data));
   };
 };
@@ -92,7 +91,7 @@ const addPostAxios = (post = null) => {
     // 작성부분 ID 어떻게 하실건지 ? 우리가 넣어줘도 되나? 백에서 하는게 좋은가?
     const requestData = {
       // 일단 우리쪽에서 넣어주기
-      postId: new Date().getTime() + "",
+      // postId: new Date().getTime() + "",
       itemName: post.itemName,
       // userInfo,
       createdAt: moment().format("YYYY-MM-DD HH:mm:ss"),
@@ -102,15 +101,19 @@ const addPostAxios = (post = null) => {
       likeCnt: 0,
       commentCnt: 0,
     };
+
+    console.log(post.imageUrl);
+
+    // const token = getState().user.user;
     // 요청!
-    // axios
-    // .post(`/posts/${post.category}/add`, requestData)
-    // .then((res) => {
-    //   console.log("포스팅 추가 완료했습니다", res);
-    // })
-    // .catch((err) => {
-    //   console.log("포스팅 추가중 에러났네요", err);
-    // });
+    await axios
+      .post(`/posts/${post.category}/add`, requestData)
+      .then((res) => {
+        console.log("포스팅 추가 완료했습니다", res);
+      })
+      .catch((err) => {
+        console.log("포스팅 추가중 에러났네요", err);
+      });
 
     dispatch(addPost(requestData));
     history.replace(`/list/${post.category}`);
@@ -179,7 +182,8 @@ export default handleActions(
   {
     [SET_POST]: (state, action) =>
       produce(state, (draft) => {
-        // draft.list = action.payload.list;
+        console.log(action.payload.list);
+        draft.list = action.payload.list;
       }),
     [ADD_POST]: (state, action) =>
       produce(state, (draft) => {

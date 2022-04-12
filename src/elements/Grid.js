@@ -25,7 +25,6 @@ Grid.defaultProps = {
   isFlex_center: false,
   isFlex_start: false,
   isFlex_end: false,
-  width: "100%",
   padding: false,
   margin: false,
   bg: false,
@@ -39,7 +38,7 @@ Grid.defaultProps = {
 };
 
 const GridBox = styled.div`
-  ${(props) => (props._cursor ? `cursor: pointer;` : "")};
+  ${(props) => (props._cursor ? `cursor: pointer;` : null)};
   ${(props) =>
     props.isFlex
       ? `display: flex; align-items: center; justify-content: space-between;`
@@ -58,12 +57,13 @@ const GridBox = styled.div`
       : null}
   ${(props) => (props.isSticky ? `position: sticky; top: 0;` : null)};
   ${(props) =>
-    props.felxColumn ? `display: felx; flex-direction: column;` : null};
+    // 여기 오타였음
+    props.flexColumn ? `display: flex; flex-direction: column;` : null};
   ${(props) => (props.zIndexTop ? `z-index: 998;` : null)};
 
   height: 100%;
   box-sizing: border-box;
-  width: ${(props) => (props.width ? `margin: ${props.width};` : ")")};
+  /* ${(props) => (props.width ? `width:${props.width};` : null)}; */
   ${(props) => (props.padding ? `padding: ${props.padding};` : null)}
   ${(props) => (props.margin ? `margin: ${props.margin};` : null)}
   ${(props) => (props.bg ? `background: ${props.bg};` : null)}

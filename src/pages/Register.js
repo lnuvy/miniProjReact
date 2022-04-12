@@ -1,34 +1,33 @@
-import React from 'react'
-import styled from 'styled-components'
-import { useDispatch } from 'react-redux'
-import { Grid, Input, Text, Button } from '../elements/index'
-import { actionCreators as userActions } from '../redux/modules/user'
+import React from "react";
+import styled from "styled-components";
+import { useDispatch } from "react-redux";
+import { Grid, Input, Text, Button } from "../elements/index";
+import { actionCreators as userActions } from "../redux/modules/user";
 
 const Register = (props) => {
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
 
-  const [id, setId] = React.useState('')
-  const [pwd, setPwd] = React.useState('')
-  const [pwd_check, setPwdCheck] = React.useState('')
-  const [user_name, setUserName] = React.useState('')
-  const [user_age, setUserAge] = React.useState('')
+  const [id, setId] = React.useState("");
+  const [pwd, setPwd] = React.useState("");
+  const [pwd_check, setPwdCheck] = React.useState("");
+  const [user_name, setUserName] = React.useState("");
+  const [user_age, setUserAge] = React.useState("10대");
 
   const onSubmitHandler = () => {
-    console.log('welcome!')
-    if (id === '' || pwd === '' || pwd_check === '' || user_name === '') {
-      alert('빈칸을 채워주세요!')
-      return
+    if (id === "" || pwd === "" || pwd_check === "" || user_name === "") {
+      alert("빈칸을 채워주세요!");
+      return;
     }
     if (pwd === pwd_check) {
-      alert('가입이 정상적으로 완료되었습니다!')
-      props.history.push('/login')
+      alert("가입이 정상적으로 완료되었습니다!");
+      props.history.push("/login");
     } else {
-      alert('비밀번호가 일치하지 않습니다!')
+      alert("비밀번호가 일치하지 않습니다!");
     }
-    dispatch(
-      userActions.registerDB({ id, pwd, pwd_check, user_name, user_age }),
-    )
-  }
+
+    console.log(user_age);
+    dispatch(userActions.registerDB(id, pwd, pwd_check, user_name, user_age));
+  };
 
   return (
     <Container>
@@ -47,30 +46,33 @@ const Register = (props) => {
         <Grid>
           <Grid margin="20px">
             <Input
+              id={id}
               label="아이디"
               value={id}
               _onChange={(e) => {
-                setId(e.target.value)
+                setId(e.target.value);
               }}
               placeholder="아이디를 입력해주세요"
             />
           </Grid>
           <Grid margin="20px">
             <Input
+              id={user_name}
               label="닉네임"
               value={user_name}
               _onChange={(e) => {
-                setUserName(e.target.value)
+                setUserName(e.target.value);
               }}
               placeholder="닉네임을 입력해주세요"
             />
           </Grid>
           <Grid margin="20px">
             <Input
+              id={pwd}
               label="패스워드"
               value={pwd}
               _onChange={(e) => {
-                setPwd(e.target.value)
+                setPwd(e.target.value);
               }}
               type="password"
               placeholder="비밀번호를 입력해주세요"
@@ -78,10 +80,11 @@ const Register = (props) => {
           </Grid>
           <Grid margin="20px">
             <Input
+              id={pwd_check}
               label="패스워드"
               value={pwd_check}
               _onChange={(e) => {
-                setPwdCheck(e.target.value)
+                setPwdCheck(e.target.value);
               }}
               type="password"
               placeholder="비밀번호를 다시 입력해주세요"
@@ -91,12 +94,14 @@ const Register = (props) => {
             <SmallText>나이</SmallText>
             <Select
               value={user_age}
-              onChange={(e) => setUserAge(e.target.value)}
+              onChange={(e) => {
+                setUserAge(e.target.value);
+              }}
             >
-              <option value="10s">10대</option>
-              <option value="20s">20대</option>
-              <option value="30s">30대</option>
-              <option value="40s">40대</option>
+              <option value="10대">10대</option>
+              <option value="20대">20대</option>
+              <option value="30대">30대</option>
+              <option value="40대">40대</option>
             </Select>
           </Grid>
           <Grid>
@@ -113,8 +118,8 @@ const Register = (props) => {
         </Grid>
       </SignupBox>
     </Container>
-  )
-}
+  );
+};
 
 const Container = styled.div`
   margin: 150px auto;
@@ -125,11 +130,11 @@ const Container = styled.div`
   flex-direction: rows;
   justify-content: space-between;
   align-items: center;
-`
+`;
 
 const LogoBox = styled.div`
   align-items: center;
-`
+`;
 
 const SignupBox = styled.div`
   padding: 50px;
@@ -137,15 +142,15 @@ const SignupBox = styled.div`
   border-radius: 30px;
   width: 300px;
   box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
-`
+`;
 const Select = styled.select`
   width: 70%;
   padding: 5px;
   border: 1px solid #ddd;
   border-radius: 3px;
-`
+`;
 const SmallText = styled.small`
   color: #aaa;
   margin: 10px;
-`
-export default Register
+`;
+export default Register;
