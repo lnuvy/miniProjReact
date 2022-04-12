@@ -25,28 +25,12 @@ const Upload = (props) => {
     const preview = fileInput.current.files[0];
 
     reader.readAsDataURL(preview);
-    console.log(preview);
 
     reader.onloadend = () => {
       dispatch(imageActions.setPreview(reader.result));
       setFileName(preview.name);
       setSelectedFile(uploadFile);
     };
-  };
-
-  const handleSubmit = async (e) => {
-    const formData = new FormData();
-    formData.append("selectedFile", selectedFile);
-
-    // 테스트코드
-    const response = await axios({
-      method: "post",
-      url: "http://127.0.0.1:5000/upload",
-      data: formData,
-      headers: { "Content-Type": "multipart/form-data" },
-    }).catch((err) => {
-      console.log(err);
-    });
   };
 
   return (
@@ -69,7 +53,6 @@ const Upload = (props) => {
         ref={fileInput}
         // disabled={isUploading}
       />
-      <button onClick={handleSubmit}>테스트</button>
     </Grid>
   );
 };

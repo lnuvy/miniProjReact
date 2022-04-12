@@ -29,7 +29,9 @@ const Main = (props) => {
         <Text weight="900" size="40px" margin="30px 0 10px 0">
           Category
         </Text>
-        <Text>다른 개발자들의 꿀템들이 궁금하다면?👇</Text>
+        <Grid>
+          <Text>다른 개발자들의 꿀템들이 궁금하다면?👇</Text>
+        </Grid>
         <Grid>
           <Grid>
             <Button

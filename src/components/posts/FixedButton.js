@@ -19,6 +19,7 @@ const FixedButton = (props) => {
 export default FixedButton;
 
 const FloatButton = styled.button`
+  cursor: pointer;
   width: 60px;
   height: 60px;
   background-color: #212121;

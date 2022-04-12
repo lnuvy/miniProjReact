@@ -7,7 +7,7 @@ import { changeTime } from "../../shared/ChangeTime";
 const CommentList = (props) => {
   const dispatch = useDispatch();
   const commentList = useSelector((state) => state.comment.list);
-  // const user_info = useSelector((state) => state.user.user);
+  const user_info = useSelector((state) => state.user.user);
   const { postId = null } = props;
 
   useEffect(() => {

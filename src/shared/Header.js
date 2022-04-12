@@ -1,6 +1,6 @@
 import React from "react";
 import { Text, Grid, Button } from "../elements/index";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { history } from "../redux/configureStore";
 import { actionCreators as userActions } from "../redux/modules/user";
 import { MdLogout, MdOutlinePermIdentity, MdList } from "react-icons/md";
@@ -8,13 +8,18 @@ import styled from "styled-components";
 
 const Header = (props) => {
   const dispatch = useDispatch();
+
+  const { userId } = useSelector((state) => state.user.user);
+
+  console.log(userId);
+
   return (
     <Container>
       <Grid isFlex bg="#dfe6e9">
         <Grid _cursor>
           <Text
             size="50px"
-            margin="0 0 5px 0"
+            margin="0 10px 5px 10px"
             onClick={() => history.push("/")}
           >
             🐶🍯
@@ -36,7 +41,7 @@ const Header = (props) => {
             _cursor
             isFlex
             padding="15px"
-            _onClick={() => history.push("/profile/:id")}
+            _onClick={() => history.push(`/profile/${userId}`)}
           >
             <MdOutlinePermIdentity size="30" />
             <Text _className="headerText" weight="400">

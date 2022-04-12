@@ -1,12 +1,15 @@
-import React from 'react'
-import { Grid, Input, Text, Button } from '../elements/index'
-import styled from 'styled-components'
-import { useSelector } from 'react-redux'
+import React from "react";
+import { Grid, Input, Text, Button } from "../elements/index";
+import styled from "styled-components";
+import { useSelector } from "react-redux";
+import { useParams } from "react-router-dom";
 
 const Profile = (props) => {
+  const params = useParams();
+  console.log(params);
   //걍 토큰 유저이름으로 가져와보기,,ㄹ
-  const user = useSelector((state) => state.user.user)
-  console.log(user)
+  const user = useSelector((state) => state.user.user);
+  console.log(user);
   return (
     <>
       <Container>
@@ -17,7 +20,7 @@ const Profile = (props) => {
             </Text>
             <Circle></Circle>
             <Text weight="700" size="24px">
-              ${user}
+              {user.userNickname}
             </Text>
             <Text>자기 소개 흠냐냐</Text>
             <Button width="200px">회원정보 수정</Button>
@@ -31,8 +34,8 @@ const Profile = (props) => {
         </MyPostBox>
       </Container>
     </>
-  )
-}
+  );
+};
 const Circle = styled.div`
   height: 200px;
   width: 200px;
@@ -40,14 +43,14 @@ const Circle = styled.div`
   margin: 0 auto;
 
   background-color: #eee;
-`
+`;
 
 const Container = styled.div`
   margin: 0 auto;
   width: 50%;
   text-align: center;
   align-items: center;
-`
+`;
 
 const InfoBox = styled.div`
   margin: 30px auto;
@@ -57,7 +60,7 @@ const InfoBox = styled.div`
   padding: 50px;
   border-radius: 40px;
   box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
-`
+`;
 
 const MyPostBox = styled.div`
   margin: 30px auto;
@@ -65,5 +68,5 @@ const MyPostBox = styled.div`
   align-items: center;
   padding: 50px;
   border: 1px solid #eee;
-`
-export default Profile
+`;
+export default Profile;

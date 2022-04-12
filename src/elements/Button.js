@@ -2,11 +2,11 @@ import React from "react";
 import styled from "styled-components";
 
 const Button = (props) => {
-  const { children, _id, _onClick, small, ...styles } = props;
+  const { children, _id, _onClick, small, current, ...styles } = props;
 
   if (small) {
     return (
-      <SmallButton onClick={_onClick} id={_id} {...styles}>
+      <SmallButton onClick={_onClick} id={_id} {...styles} current={current}>
         {children}
       </SmallButton>
     );
@@ -31,6 +31,7 @@ Button.defaultProps = {
   shadow: false,
   small: false,
   bg: false,
+  current: false,
 };
 
 const ElButton = styled.button`
@@ -62,7 +63,13 @@ const SmallButton = styled.button`
   font-weight: 500;
   ${(props) => (props.margin ? `margin: ${props.margin};` : "")}
   ${(props) =>
-    props.shadow ? `box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;` : ""}
+    props.shadow ? `box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;` : ""} 
+       ${(props) =>
+    props.current
+      ? " transform: scale(1.1); transition: all 0.3s;"
+      : "opacity: 0.6; transform: scale(0.9); transition: all 0.3s;"} /* ${(
+    props
+  ) => (props.current ? "box-shadow: 0 0 0 1px #000 inset;" : null)} */
 `;
 
 export default Button;

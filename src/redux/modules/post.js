@@ -82,25 +82,21 @@ const getCategoryList = (category = null) => {
   };
 };
 
-const addPostAxios = (post = null) => {
-  console.log("85번 여깄음");
+const addPostDB = (post = null) => {
   return async function (dispatch, getState, { history }) {
     if (!post) return;
     // 현재 작성한 유저의 정보 먼저 가져오기
     const userInfo = getState().user.user;
-    // console.log(userInfo)
+    console.log(userInfo);
 
     const writer = {
       userId: userInfo.userId,
-      password: userInfo.userPassword,
       userNickname: userInfo.userNickname,
       userAge: userInfo.userAge,
     };
 
-    // 작성부분 ID 어떻게 하실건지 ? 우리가 넣어줘도 되나? 백에서 하는게 좋은가?
+    // postId 백에서 관리해서 우리한테 주기로함
     const requestData = {
-      // 일단 우리쪽에서 넣어주기
-      // postId: new Date().getTime() + "",
       itemName: post.itemName,
       writer: writer,
       createdAt: moment().format("YYYY-MM-DD HH:mm:ss"),
@@ -111,15 +107,12 @@ const addPostAxios = (post = null) => {
       commentCnt: 0,
     };
     // 요청!
-    await axios
-      .post(`${BASE_URL}/posts/${post.category}/add`, requestData)
-      .then((res) => {
-        dispatch(addPost(requestData));
-        console.log("포스팅 추가 완료했습니다", res);
-      })
-      .catch((err) => {
-        console.log("포스팅 추가중 에러났네요", err);
-      });
+    const response = await axios({
+      method: "POST",
+      url: `/${BASE_URL}/${post.category}/add`,
+      data: requestData,
+    });
+    console.log("axios 결과", response);
 
     history.replace(`/list/${post.category}`);
   };
@@ -227,7 +220,7 @@ export const actionCreators = {
   setPost,
   getCategoryList,
   addPost,
-  addPostAxios,
+  addPostDB,
   editPost,
   editPostDB,
   deletePost,

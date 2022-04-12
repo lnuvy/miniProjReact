@@ -16,8 +16,9 @@ Image.defaultProps = {
 };
 
 const AspectOutter = styled.div`
-  width: 100%;
+  width: 70%;
   min-width: 120px;
+  margin: 0 auto;
   /* box-shadow: 2px 2px 2px gray; */
 `;
 

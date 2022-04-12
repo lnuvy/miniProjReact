@@ -6,7 +6,6 @@ import { Grid, Image, Text } from "../../elements";
 import styled from "styled-components";
 
 import { topFive } from "../../shared/Dummy";
-import Post from "./Post";
 
 const Carousel = (props) => {
   const topList = topFive;
@@ -22,9 +21,9 @@ const Carousel = (props) => {
     autoplaySpeed: 2000, // 스크롤 넘어가는 속도
     slidesToShow: 5, // 한페이지에 보이는 객체 수
     slidesToScroll: 1, // 스크롤 넘어가는 객체 수
-    arrows: false,
-    centerMode: true,
-    centerPadding: "0px",
+    arrows: false, // 양옆의 애로우 없애기
+    // centerMode: true,
+    centerPadding: "0",
     responsive: [
       // 반응형 설정
       {

@@ -22,17 +22,12 @@ const WritePost = (props) => {
   // 수정이라면 현재 포스트의 정보들이 담김
   let nowPost = isEdit ? postList.find((p) => p.postId === postId) : null;
 
-  // const [itemName, setItemName] = useState(nowPost ? nowPost.itemName : "");
-  // const [content, setContent] = useState(nowPost ? nowPost.content : "");
-
   const [inputs, setInputs] = useState(
     nowPost ? { itemName: nowPost.itemName, content: nowPost.content } : {}
   );
 
   useEffect(() => {
-    // 새로고침 등 했을때 임시방편
     if (isEdit && !nowPost) {
-      // console.log("돌아가자");
       history.goBack();
       return;
     }
@@ -45,6 +40,7 @@ const WritePost = (props) => {
     }
   }, []);
 
+  // 제목과
   const changeValue = (e) => {
     const key = e.target.id;
     const value = e.target.value;
@@ -81,42 +77,56 @@ const WritePost = (props) => {
   // }
 
   return (
-    <Grid padding="50px" width="60%" margin="10px auto">
-      <Text margin="0" size="32px" bold>
-        {isEdit ? "게시글 수정" : "게시글 작성"}
-      </Text>
-      <Text margin="0" size="24px" bold>
-        현재 카테고리는 <CategoryIconSwitch category={nowCategory} />{" "}
-        {nowCategory} 입니다.
-      </Text>
-      <Grid margin="20px auto">
-        <Upload propsfile={inputs.itemName} />
-      </Grid>
-      <Grid>
+    <>
+      <Grid padding="50px" width="60%" margin="10px auto">
+        <Grid>
+          <Text margin="0" size="32px" bold>
+            {isEdit ? "게시글 수정" : "게시글 작성"}
+          </Text>
+        </Grid>
+        <Grid isFlex padding="0 50px">
+          <Grid>
+            <Text margin="0" size="24px" bold center color="#636e72">
+              현재 카테고리는 <CategoryIconSwitch category={nowCategory} />{" "}
+              {nowCategory}
+            </Text>
+          </Grid>
+          <Grid>
+            <Grid margin="20px auto">
+              <Upload propsfile={inputs.itemName} />
+            </Grid>
+          </Grid>
+        </Grid>
         <Text margin="12px 0 0 0">이미지 미리보기</Text>
+        <Grid padding="20px">
+          <Image
+            src={preview ? preview : "http://via.placeholder.com/400x300"}
+          />
+        </Grid>
+        <Grid>
+          <Input
+            id="itemName"
+            value={inputs.itemName}
+            _onChange={changeValue}
+          />
+        </Grid>
+        <Grid padding="15px">
+          <TextArea
+            id="content"
+            value={inputs.content}
+            _onChange={changeValue}
+            label="게시글 내용"
+          />
+        </Grid>
+        <Grid>
+          {!isEdit ? (
+            <Button _onClick={addPost}>작성</Button>
+          ) : (
+            <Button _onClick={editPost}>수정</Button>
+          )}
+        </Grid>
       </Grid>
-      <Grid padding="20px">
-        <Image src={preview ? preview : "http://via.placeholder.com/400x300"} />
-      </Grid>
-      <Grid>
-        <Input id="itemName" value={inputs.itemName} _onChange={changeValue} />
-      </Grid>
-      <Grid padding="15px">
-        <TextArea
-          id="content"
-          value={inputs.content}
-          _onChange={changeValue}
-          label="게시글 내용"
-        />
-      </Grid>
-      <Grid>
-        {!isEdit ? (
-          <Button _onClick={addPost}>작성</Button>
-        ) : (
-          <Button _onClick={editPost}>수정</Button>
-        )}
-      </Grid>
-    </Grid>
+    </>
   );
 };
 
