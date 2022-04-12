@@ -1,15 +1,15 @@
-import React from 'react'
-import Carousel from '../components/posts/Carousel'
-import { Button, Grid, Image, Text } from '../elements'
-import { history } from '../redux/configureStore'
-import styled from 'styled-components'
+import React from "react";
+import Carousel from "../components/posts/Carousel";
+import { Button, Grid, Image, Text } from "../elements";
+import { history } from "../redux/configureStore";
+import styled from "styled-components";
 
 const Main = (props) => {
   const handleClick = (e) => {
-    const categoryValue = e.target.id
-    console.log(categoryValue)
-    history.push(`/list/${categoryValue}`)
-  }
+    const categoryValue = e.target.id;
+    console.log(categoryValue);
+    history.push(`/list/${categoryValue}`);
+  };
 
   return (
     <>
@@ -89,14 +89,14 @@ const Main = (props) => {
         </Grid>
       </CateBox>
     </>
-  )
-}
+  );
+};
 
 const CateBox = styled.div`
   margin: 0 auto;
   width: 50%;
   text-align: center;
   align-items: center;
-`
+`;
 
-export default Main
+export default Main;

@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import axios from 'axios'
 import { useDispatch, useSelector } from 'react-redux'
-import { Grid, Input, Text } from '../elements'
+import { Button, Grid, Input, Text } from '../elements'
 import { FixedButton, Post } from '../components/posts'
 import { actionCreators as postActions } from '../redux/modules/post'
 import { useParams } from 'react-router-dom'
@@ -13,8 +13,14 @@ import styled from 'styled-components'
 const CategoryList = () => {
   const dispatch = useDispatch()
   const { category } = useParams()
-  console.log(category)
   const categoryList = useSelector((state) => state.post.list)
+
+  // 카테고리별 이동
+  const handleClick = (e) => {
+    const categoryValue = e.target.id
+    console.log(categoryValue)
+    history.push(`/list/${categoryValue}`)
+  }
 
   // useEffect(() => {
   //   dispatch(postActions.getCategoryList(category));
@@ -48,19 +54,81 @@ const CategoryList = () => {
     <>
       <FixedButton _onClick={() => history.push(`/write/${category}`)} />
       <Grid>
-        <ResDiv>
-          <Text bold size="24px" margin="0">
-            카테고리: {category}
+        {/* <ResDiv> */}
+        {/* <Text bold size="24px" margin="0"> */}
+        <CateBox>
+          <Text weight="900" size="40px">
+            Category
           </Text>
-          <Grid isFlex>
-            <Input
-              id="search"
-              placeholder={`#${category} 의 제목을 검색하세요...`}
-              value={query}
-              _onChange={queryChange}
-            />
+          <Text>다른 개발자들의 꿀템들이 궁금하다면?👇</Text>
+          <Grid>
+            <Grid>
+              <Button
+                _id="chair"
+                width="150px"
+                _color="#C3E5AE"
+                shadow
+                margin="10px"
+                onClick={handleClick}
+              >
+                # 의자
+              </Button>
+              <Button
+                _id="desk"
+                width="150px"
+                _color="#C3B9EA"
+                shadow
+                margin="10px"
+                onClick={handleClick}
+              >
+                # 책상
+              </Button>
+              <Button
+                _id="elecItem"
+                width="150px"
+                _color="#F1E1A6"
+                shadow
+                margin="10px"
+                onClick={handleClick}
+              >
+                # 전자기기
+              </Button>
+            </Grid>
+            <Grid>
+              <Button
+                _id="healthCare"
+                width="150px"
+                shadow
+                margin="10px"
+                _color="#F4BBBB"
+                onClick={handleClick}
+              >
+                # 건강용품
+              </Button>
+              <Button
+                _id="etc"
+                shadow
+                width="150px"
+                margin="10px"
+                _color="#77E4D4"
+                B590CA
+                onClick={handleClick}
+              >
+                # 기타
+              </Button>
+            </Grid>
           </Grid>
-        </ResDiv>
+        </CateBox>
+        {/* </Text> */}
+        <Grid isFlex>
+          <Input
+            id="search"
+            placeholder={`#${category} 의 제목을 검색하세요...`}
+            value={query}
+            _onChange={queryChange}
+          />
+        </Grid>
+        {/* </ResDiv> */}
 
         <Grid>
           {query !== ''
@@ -113,6 +181,13 @@ const ResDiv = styled.div`
   @media only screen and (min-width: 1199px) {
     width: 1199px;
   }
+`
+
+const CateBox = styled.div`
+  margin: 0 auto;
+  width: 50%;
+  text-align: center;
+  align-items: center;
 `
 
 export default CategoryList

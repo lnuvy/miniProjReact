@@ -63,14 +63,11 @@ const GridBox = styled.div`
 
   height: 100%;
   box-sizing: border-box;
-  width: ${(props) => (props.width ? `margin: ${props.width};` : ')')};
   ${(props) => (props.padding ? `padding: ${props.padding};` : null)}
   ${(props) => (props.margin ? `margin: ${props.margin};` : null)}
   ${(props) => (props.bg ? `background: ${props.bg};` : null)}
   ${(props) => (props.center ? `text-align: center;` : '')}
   ${(props) => (props.float ? `float: left` : null)}
-
-
 `
 
 export default Grid

@@ -33,7 +33,6 @@ const WritePost = (props) => {
   useEffect(() => {
     // 새로고침 등 했을때 임시방편
     if (isEdit && !nowPost) {
-      console.log('돌아가자')
       history.goBack()
       return
     }

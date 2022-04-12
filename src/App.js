@@ -15,13 +15,20 @@ import {
 import Header from './shared/Header'
 import { useDispatch } from 'react-redux'
 import { useSelector } from 'react-redux'
-import { actionCreators as postActions } from './redux/modules/post'
+import { actionCreators as userActions } from './redux/modules/user'
 
 function App() {
   const dispatch = useDispatch()
 
   // 토큰 있을때만 메인 이외의 페이지 보이기 (요렇게 하는게 맞나..?) => 따로 permit
-  const is_login = localStorage.getItem('token')
+  // const is_login = localStorage.getItem('token')
+  const is_login = useSelector((state) => state.user.is_login)
+  useEffect(() => {
+    const token = localStorage.getItem('token')
+    if (localStorage.getItem('token')) {
+      dispatch(userActions.loginAction(token))
+    }
+  }, [is_login])
 
   if (is_login) {
     return (
@@ -34,6 +41,7 @@ function App() {
           <Route path="/write/:category" exact component={WritePost} />
           <Route path="/write/:categoty/:id" exact component={WritePost} />
           <Route path="/profile/:id" exact component={Profile} />
+          <Route path="/login" exact component={Login} />
         </ConnectedRouter>
       </div>
     )
@@ -41,7 +49,7 @@ function App() {
     return (
       <div className="App">
         <ConnectedRouter history={history}>
-          <Route path="/" exact component={Login} />
+          <Route path="/login" exact component={Login} />
           <Route path="/register" exact component={Register} />
         </ConnectedRouter>
       </div>
