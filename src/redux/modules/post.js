@@ -2,6 +2,7 @@ import { createAction, handleActions } from "redux-actions";
 import { produce } from "immer";
 import moment from "moment";
 import axios from "axios";
+import user from "./user";
 
 // mock API base_url // BASE_URL 주소의 마지막에 /를 뺐습니다
 const BASE_URL = "http://13.209.66.208";
@@ -85,15 +86,22 @@ const addPostAxios = (post = null) => {
   return async function (dispatch, getState, { history }) {
     if (!post) return;
     // 현재 작성한 유저의 정보 먼저 가져오기
-    // const userInfo = getState().user.user;
+    const userInfo = getState().user.user;
     // console.log(userInfo)
+
+    const writer = {
+      userId: userInfo.userId,
+      password: userInfo.userPassword,
+      userNickname: userInfo.userNickname,
+      userAge: userInfo.userAge,
+    };
 
     // 작성부분 ID 어떻게 하실건지 ? 우리가 넣어줘도 되나? 백에서 하는게 좋은가?
     const requestData = {
       // 일단 우리쪽에서 넣어주기
       // postId: new Date().getTime() + "",
       itemName: post.itemName,
-      // userInfo,
+      writer: writer,
       createdAt: moment().format("YYYY-MM-DD HH:mm:ss"),
       content: post.content,
       imageUrl: post.imageUrl,
@@ -101,10 +109,6 @@ const addPostAxios = (post = null) => {
       likeCnt: 0,
       commentCnt: 0,
     };
-
-    console.log(post.imageUrl);
-
-    // const token = getState().user.user;
     // 요청!
     await axios
       .post(`/posts/${post.category}/add`, requestData)
