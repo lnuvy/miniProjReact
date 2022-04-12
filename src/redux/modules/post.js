@@ -50,6 +50,7 @@ const EDIT_POST = 'EDIT_POST'
 const DELETE_POST = 'DELETE_POST'
 const TOGGLE_LIKE = 'TOGGLE_LIKE'
 const LOADING = 'LOADING'
+const MY_POST = 'MY_POST'
 
 const setPost = createAction(SET_POST, (list) => ({ list }))
 const addPost = createAction(ADD_POST, (post) => ({ post }))
@@ -63,6 +64,7 @@ const toggleLike = createAction(TOGGLE_LIKE, (postId, likeCnt) => ({
   likeCnt,
 }))
 const loading = createAction(LOADING, (isLoading) => ({ isLoading }))
+const myPost = createAction(MY_POST, (list) => ({ list }))
 
 //// middlewares
 // 카테고리별 아이템을 가져오기
@@ -81,8 +83,25 @@ const getCategoryList = (category = null) => {
   }
 }
 
+//내가 쓴글 조회
+
+const getMyPostDB = (userId) => {
+  console.log(userId)
+  return async function (dispatch, getState, { history }) {
+    await axios
+      .get(`http://13.209.66.208/profile/${userId}`)
+      .then((res) => {
+        const data = res.data
+        console.log(data)
+        dispatch(myPost(data))
+      })
+      .catch((err) => {
+        console.log('내 글을 받아오지 못했어요', err)
+      })
+  }
+}
+
 const addPostAxios = (post = null) => {
-  console.log('85번 여깄음')
   return async function (dispatch, getState, { history }) {
     if (!post) return
     // 현재 작성한 유저의 정보 먼저 가져오기
@@ -137,7 +156,7 @@ const editPostDB = (postId, content) => {
     // 지금은 컨텐츠만 수정하지만 확장성을 위해 형식 맞춤
     data = { ...data, content }
 
-    axios
+    // axios
     await axios({
       method: 'PUT',
       url: `${BASE_URL}/posts/edit/${postId}`,
@@ -164,7 +183,7 @@ const deletePostDB = (postId) => {
 
     // postId 와 일치하는 댓글들 모두 지우는 프로세스 있어야함
 
-    axios
+    // axios
     await axios({
       method: 'DELETE',
       url: `${BASE_URL}/posts/delete/${postId}`,
@@ -213,6 +232,12 @@ export default handleActions(
         )
         draft.list = newList
       }),
+
+    [MY_POST]: (state, action) =>
+      produce(state, (draft) => {
+        console.log(action.payload.list)
+        draft.list = action.payload.list
+      }),
   },
   initialState,
 )
@@ -226,4 +251,5 @@ export const actionCreators = {
   editPostDB,
   deletePost,
   deletePostDB,
+  getMyPostDB,
 }

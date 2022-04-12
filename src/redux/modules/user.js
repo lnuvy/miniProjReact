@@ -4,9 +4,8 @@ import { produce } from 'immer'
 
 // AXIOS
 import axios from 'axios'
-import { apis } from '../../shared/Axios'
 
-// Local Stroage
+// local storage
 import { getToken, setData, removeData } from '../../shared/token'
 
 // base_url + url
@@ -14,8 +13,8 @@ const BASE_URL = 'http://13.209.66.208'
 
 // initialState
 const initialState = {
-  userId: null,
-
+  user: null,
+  token: null,
   is_login: false,
 }
 
@@ -23,18 +22,18 @@ const initialState = {
 const LOG_IN = 'LOG_IN'
 const LOG_OUT = 'LOG_OUT'
 const SIGN_UP = 'SIGN_UP'
-const USER_INFO = 'USER_INFO'
+const GET_USER = 'GET_USER'
 
 //ACTION CREATORS
-const logIn = createAction(LOG_IN, (user) => ({ user }))
+const logIn = createAction(LOG_IN, (token, user) => ({ token, user }))
 const signUp = createAction(SIGN_UP, (user) => ({ user }))
 const logOut = createAction(LOG_OUT, (user) => ({ user }))
-const userInfo = createAction(USER_INFO, (user) => ({ user }))
+const getUser = createAction(GET_USER, (user) => ({ user }))
 
 // MIDDLEWARE
-const loginAction = (user) => {
+const loginAction = (token, user) => {
   return async function (dispatch, getState, { history }) {
-    dispatch(logIn(user))
+    dispatch(logIn(token, user))
     history.push('/')
   }
 }
@@ -51,31 +50,25 @@ const logoutAction = (user) => {
 //회원가입
 const registerDB = (id, pwd, pwd_check, user_name, user_age) => {
   return async function (dispatch, getState, { history }) {
-    console.log(id, pwd, pwd_check, user_name, user_age)
-    console.log(BASE_URL)
-    await axios({
-      method: 'POST',
-      url: `${BASE_URL}/login/signUp`,
-      contentType: 'application/json',
-      data: {
+    await axios
+      .post(`${BASE_URL}/login/signUp`, {
         userId: id,
         password: pwd,
         passwordCheck: pwd_check,
         userNickname: user_name,
         userAge: user_age,
-      },
-      // headers: {},
-    })
-      .then((res) => {
-        console.log('회원가입 완료~~', res)
+      })
+      .then(function (res) {
+        console.log(res.data)
+        dispatch(signUp())
       })
       .catch((err) => {
-        console.log('띠용,, 에러났음', err)
+        console.log('회원가입중 에러', err)
       })
   }
 }
 
-//로그인
+// 로그인
 const loginDB = (id, pwd) => {
   return async function (dispatch, getState, { history }) {
     await axios
@@ -83,72 +76,61 @@ const loginDB = (id, pwd) => {
         userID: id,
         password: pwd,
       })
+      // 여기서 유저정보도 받아야함!
       .then((res) => {
-        if (res.data.token) {
-          const accessToken = res.data.token
-          setData(res.data.token)
-          console.log(res.data)
-          dispatch(logIn(accessToken))
-          history.replace('/')
+        console.log(res)
+
+        // const userInfo = res.data.유저데이터 담긴변수
+        // 더미
+        const userInfo = {
+          userId: 'test99',
+          userNickname: '닉네임',
+          userAge: '20대',
         }
+        const accessToken = res.data.token
+        setData({ accessToken, ...userInfo })
+        console.log(userInfo)
+        dispatch(logIn(accessToken, userInfo))
+        history.push('/')
       })
       .catch(function (error) {
         console.log(error)
-        window.alert('아이디와 패스워드를 확인해주세요!')
+        window.alert('없는 회원정보입니다,,,')
       })
   }
 }
 
-// const loginDB = (id, pwd) => {
+//유저정보
+// const getUserDB = (token) => {
 //   return async function (dispatch, getState, { history }) {
-//     console.log('here')
-//     await apis
-//       .login(id.pwd)
-//       .then((response) => {
-//         if (response.data.token) {
-//           const accessToken = response.data.token
-//           let token = window.localStorage.setItem('token', accessToken)
-//           console.log(response.data)
-//           dispatch(logIn(accessToken))
-//           history.replace('/')
-//         }
-//       })
-//       .catch(function (error) {
-//         console.log(error)
-//         window.alert('없는 회원정보입니다,,,')
-//       })
+//     const token = localStorage.getItem('token')
+//     const res = await axios.get(`${BASE_URL}/login/getUser`)
+//     const data = res.data
+//     console.log(data)
+// dispatch(getUser(data))
 //   }
 // }
-
-//유저정보
-const userInfoDB = () => {
-  return async function (dispatch, getState, { history }) {
-    const token = getToken
-    console.log(token)
-    await axios.get(`${BASE_URL}/getUser`)
-  }
-}
 
 // REDUCER
 export default handleActions(
   {
     [LOG_IN]: (state, action) =>
       produce(state, (draft) => {
-        localStorage.setItem('token', action.payload.user)
-        console.log(state.user)
         draft.user = action.payload.user
+        draft.token = action.payload.token
         draft.is_login = true
       }),
     [SIGN_UP]: (state, action) => produce(state, (draft) => {}),
 
     [LOG_OUT]: (state, action) =>
       produce(state, (draft) => {
-        // localStorage.clear('is_login')
+        removeData()
         draft.user = null
-        removeData((draft.is_login = false))
+        draft.token = null
+        draft.is_login = false
       }),
 
-    [USER_INFO]: (state, action) =>
+    [GET_USER]: (state, action) =>
       produce(state, (draft) => {
         draft.user = action.payload.user
       }),

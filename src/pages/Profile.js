@@ -1,12 +1,25 @@
 import React from 'react'
 import { Grid, Input, Text, Button } from '../elements/index'
 import styled from 'styled-components'
+import MyPost from '../components/posts/MyPost'
 import { useSelector } from 'react-redux'
+import { useParams } from 'react-router-dom'
+import { useDispatch } from 'react-redux'
+import { actionCreators as postActions } from '../redux/modules/post'
 
 const Profile = (props) => {
-  //걍 토큰 유저이름으로 가져와보기,,ㄹ
+  const dispatch = useDispatch()
   const user = useSelector((state) => state.user.user)
-  console.log(user)
+  console.log(user.userNickname)
+
+  let params = useParams()
+  console.log(params)
+  const userId = params.id
+
+  React.useEffect(() => {
+    dispatch(postActions.getMyPostDB(userId))
+  }, [])
+
   return (
     <>
       <Container>
@@ -15,12 +28,11 @@ const Profile = (props) => {
             <Text weight="900" size="30px" marign="0">
               My Profile
             </Text>
-            <Circle></Circle>
+            {/* <Circle></Circle> */}
             <Text weight="700" size="24px">
-              ${user}
+              {user.userNickname}
             </Text>
-            <Text>자기 소개 흠냐냐</Text>
-            <Button width="200px">회원정보 수정</Button>
+            <Text>{user.userAge}</Text>
           </Grid>
         </InfoBox>
 
@@ -28,23 +40,27 @@ const Profile = (props) => {
           <Text weight="700" size="30px">
             내가 쓴 글
           </Text>
+          <Grid isFlex>
+            <MyPost />
+            <MyPost />
+            <MyPost />
+          </Grid>
         </MyPostBox>
       </Container>
     </>
   )
 }
-const Circle = styled.div`
-  height: 200px;
-  width: 200px;
-  border-radius: 50%;
-  margin: 0 auto;
-
-  background-color: #eee;
-`
+// const Circle = styled.div`
+//   height: 100px;
+//   width: 100px;
+//   border-radius: 50%;
+//   margin: 0 auto;
+//   background-color: #eee;
+// `
 
 const Container = styled.div`
   margin: 0 auto;
-  width: 50%;
+  width: 80%;
   text-align: center;
   align-items: center;
 `

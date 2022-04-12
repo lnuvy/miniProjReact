@@ -18,7 +18,6 @@ Text.defaultProps = {
   margin: false,
   center: false,
   weight: false,
-  align: false,
   _className: '',
 }
 

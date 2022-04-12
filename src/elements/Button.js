@@ -72,5 +72,3 @@ const SmallButton = styled.button`
 `
 
 export default Button
-
-//브랜치 체크

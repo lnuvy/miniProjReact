@@ -89,7 +89,6 @@ const Register = (props) => {
           </Grid>
           <Grid margin="20px">
             <Input
-              id={pwd}
               label="패스워드"
               id="password"
               value={pwd}

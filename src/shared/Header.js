@@ -1,13 +1,16 @@
-import React from "react";
-import { Text, Grid, Button } from "../elements/index";
-import { useDispatch } from "react-redux";
-import { history } from "../redux/configureStore";
-import { actionCreators as userActions } from "../redux/modules/user";
-import { MdLogout, MdOutlinePermIdentity, MdList } from "react-icons/md";
-import styled from "styled-components";
+import React from 'react'
+import { Text, Grid, Button } from '../elements/index'
+import { useDispatch, useSelector } from 'react-redux'
+import { history } from '../redux/configureStore'
+import { actionCreators as userActions } from '../redux/modules/user'
+import { MdLogout, MdOutlinePermIdentity, MdList } from 'react-icons/md'
+import styled from 'styled-components'
 
 const Header = (props) => {
-  const dispatch = useDispatch();
+  const { userId } = useSelector((state) => state.user.user)
+  console.log(userId)
+
+  const dispatch = useDispatch()
   return (
     <Container>
       <Grid isFlex bg="#dfe6e9">
@@ -15,7 +18,7 @@ const Header = (props) => {
           <Text
             size="50px"
             margin="0 0 5px 0"
-            onClick={() => history.push("/")}
+            onClick={() => history.push('/')}
           >
             🐶🍯
           </Text>
@@ -25,7 +28,7 @@ const Header = (props) => {
             _cursor
             isFlex
             padding="15px"
-            _onClick={() => history.push("/list/:category")}
+            _onClick={() => history.push('/list/category')}
           >
             <MdList size="30" />
             <Text _className="headerText" weight="400">
@@ -36,7 +39,7 @@ const Header = (props) => {
             _cursor
             isFlex
             padding="15px"
-            _onClick={() => history.push("/profile/:id")}
+            _onClick={() => history.push(`/profile/${userId}`)}
           >
             <MdOutlinePermIdentity size="30" />
             <Text _className="headerText" weight="400">
@@ -48,8 +51,8 @@ const Header = (props) => {
             isFlex
             padding="15px"
             onClick={() => {
-              dispatch(userActions.logoutAction({}));
-              history.push("/login");
+              dispatch(userActions.logoutAction({}))
+              history.push('/login')
             }}
           >
             <MdLogout size="30" />
@@ -60,12 +63,12 @@ const Header = (props) => {
         </Grid>
       </Grid>
     </Container>
-  );
-};
+  )
+}
 
 const Container = styled.div`
   max-width: 1200px;
   margin: 0 auto;
-`;
+`
 
-export default Header;
+export default Header
