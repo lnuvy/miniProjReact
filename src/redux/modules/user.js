@@ -22,13 +22,13 @@ const initialState = {
 const LOG_IN = "LOG_IN";
 const LOG_OUT = "LOG_OUT";
 const SIGN_UP = "SIGN_UP";
-const USER_INFO = "USER_INFO";
+const GET_USER = "GET_USER";
 
 //ACTION CREATORS
 const logIn = createAction(LOG_IN, (token, user) => ({ token, user }));
 const signUp = createAction(SIGN_UP, (user) => ({ user }));
 const logOut = createAction(LOG_OUT, (user) => ({ user }));
-const userInfo = createAction(USER_INFO, (user) => ({ user }));
+const getUser = createAction(GET_USER, (user) => ({ user }));
 
 // MIDDLEWARE
 const loginAction = (token, user) => {
@@ -129,10 +129,10 @@ export default handleActions(
         draft.is_login = false;
       }),
 
-    // [USER_INFO]: (state, action) =>
-    //   produce(state, (draft) => {
-    //     draft.user = action.payload.user;
-    //   }),
+    [GET_USER]: (state, action) =>
+      produce(state, (draft) => {
+        draft.user = action.payload.user;
+      }),
   },
   initialState
 );

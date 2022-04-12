@@ -51,6 +51,7 @@ const EDIT_POST = "EDIT_POST";
 const DELETE_POST = "DELETE_POST";
 const TOGGLE_LIKE = "TOGGLE_LIKE";
 const LOADING = "LOADING";
+const MY_POST = "MY_POST";
 
 const setPost = createAction(SET_POST, (list) => ({ list }));
 const addPost = createAction(ADD_POST, (post) => ({ post }));
@@ -64,6 +65,7 @@ const toggleLike = createAction(TOGGLE_LIKE, (postId, likeCnt) => ({
   likeCnt,
 }));
 const loading = createAction(LOADING, (isLoading) => ({ isLoading }));
+const myPost = createAction(MY_POST, (list) => ({ list }));
 
 //// middlewares
 // 카테고리별 아이템을 가져오기
@@ -79,6 +81,24 @@ const getCategoryList = (category = null) => {
     const response = await axios.get(`${BASE_URL}/posts/${category}`);
     const data = response.data.Posts;
     dispatch(setPost(data));
+  };
+};
+
+//내가 쓴글 조회
+
+const getMyPostDB = (userId) => {
+  console.log(userId);
+  return async function (dispatch, getState, { history }) {
+    await axios
+      .get(`http://13.209.66.208/profile/${userId}`)
+      .then((res) => {
+        const data = res.data;
+        console.log(data);
+        dispatch(myPost(data));
+      })
+      .catch((err) => {
+        console.log("내 글을 받아오지 못했어요", err);
+      });
   };
 };
 
@@ -212,6 +232,12 @@ export default handleActions(
         );
         draft.list = newList;
       }),
+
+    [MY_POST]: (state, action) =>
+      produce(state, (draft) => {
+        console.log(action.payload.list);
+        draft.list = action.payload.list;
+      }),
   },
   initialState
 );
@@ -225,4 +251,5 @@ export const actionCreators = {
   editPostDB,
   deletePost,
   deletePostDB,
+  getMyPostDB,
 };
