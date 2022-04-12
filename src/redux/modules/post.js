@@ -1,68 +1,68 @@
-import { createAction, handleActions } from "redux-actions";
-import { produce } from "immer";
-import moment from "moment";
-import axios from "axios";
+import { createAction, handleActions } from 'redux-actions'
+import { produce } from 'immer'
+import moment from 'moment'
+import axios from 'axios'
 
 // mock API base_url // BASE_URL 주소의 마지막에 /를 뺐습니다
-const BASE_URL = "http://13.209.66.208";
+const BASE_URL = 'http://13.209.66.208'
 
 const initialPost = {
-  postId: "12345678",
-  itemName: "조지아 크래프트",
+  postId: '12345678',
+  itemName: '조지아 크래프트',
   writer: {
-    userId: "iamuser",
-    password: "1234",
-    userNickname: "꿀렁",
-    userAge: "20대",
+    userId: 'iamuser',
+    password: '1234',
+    userNickname: '꿀렁',
+    userAge: '20대',
   },
-  createdAt: moment().format("YYYY-MM-DD HH:mm:ss"),
-  content: "개발자들은 역시 커피죠",
-  imageUrl: "http://via.placeholder.com/400x300",
-  category: "chair",
+  createdAt: moment().format('YYYY-MM-DD HH:mm:ss'),
+  content: '개발자들은 역시 커피죠',
+  imageUrl: 'http://via.placeholder.com/400x300',
+  category: 'chair',
   likeCnt: 5,
   commentCnt: 0,
-};
+}
 const initialPost2 = {
-  postId: "12341234",
-  itemName: "아카펠라 아메리카노",
+  postId: '12341234',
+  itemName: '아카펠라 아메리카노',
   writer: {
-    userId: "nanuser",
-    password: "1234",
-    userNickname: "하이",
-    userAge: "20대",
+    userId: 'nanuser',
+    password: '1234',
+    userNickname: '하이',
+    userAge: '20대',
   },
-  createdAt: moment().format("YYYY-MM-DD HH:mm:ss"),
-  content: "조지아보다 이게 맛있음",
-  imageUrl: "http://via.placeholder.com/400x300",
-  category: "etc",
+  createdAt: moment().format('YYYY-MM-DD HH:mm:ss'),
+  content: '조지아보다 이게 맛있음',
+  imageUrl: 'http://via.placeholder.com/400x300',
+  category: 'etc',
   likeCnt: 2,
   commentCnt: 1,
-};
+}
 
 const initialState = {
   list: [],
   isLoading: false,
-};
+}
 
-const SET_POST = "SET_POST";
-const ADD_POST = "ADD_POST";
-const EDIT_POST = "EDIT_POST";
-const DELETE_POST = "DELETE_POST";
-const TOGGLE_LIKE = "TOGGLE_LIKE";
-const LOADING = "LOADING";
+const SET_POST = 'SET_POST'
+const ADD_POST = 'ADD_POST'
+const EDIT_POST = 'EDIT_POST'
+const DELETE_POST = 'DELETE_POST'
+const TOGGLE_LIKE = 'TOGGLE_LIKE'
+const LOADING = 'LOADING'
 
-const setPost = createAction(SET_POST, (list) => ({ list }));
-const addPost = createAction(ADD_POST, (post) => ({ post }));
+const setPost = createAction(SET_POST, (list) => ({ list }))
+const addPost = createAction(ADD_POST, (post) => ({ post }))
 const editPost = createAction(EDIT_POST, (postId, post) => ({
   postId,
   post,
-}));
-const deletePost = createAction(DELETE_POST, (postId) => ({ postId }));
+}))
+const deletePost = createAction(DELETE_POST, (postId) => ({ postId }))
 const toggleLike = createAction(TOGGLE_LIKE, (postId, likeCnt) => ({
   postId,
   likeCnt,
-}));
-const loading = createAction(LOADING, (isLoading) => ({ isLoading }));
+}))
+const loading = createAction(LOADING, (isLoading) => ({ isLoading }))
 
 //// middlewares
 // 카테고리별 아이템을 가져오기
@@ -75,15 +75,16 @@ const getCategoryList = (category = null) => {
     // dispatch(loading(true));
 
     // 가독성을 위해 BASE_URL 주소의 마지막에 /을 뺐습니다
-    const response = await axios.get(`${BASE_URL}/posts/${category}`);
-    const data = response.data.Posts;
-    dispatch(setPost(data));
-  };
-};
+    const response = await axios.get(`${BASE_URL}/posts/${category}`)
+    const data = response.data.Posts
+    dispatch(setPost(data))
+  }
+}
 
 const addPostAxios = (post = null) => {
+  console.log('85번 여깄음')
   return async function (dispatch, getState, { history }) {
-    if (!post) return;
+    if (!post) return
     // 현재 작성한 유저의 정보 먼저 가져오기
     // const userInfo = getState().user.user;
     // console.log(userInfo)
@@ -94,124 +95,127 @@ const addPostAxios = (post = null) => {
       // postId: new Date().getTime() + "",
       itemName: post.itemName,
       // userInfo,
-      createdAt: moment().format("YYYY-MM-DD HH:mm:ss"),
+      createdAt: moment().format('YYYY-MM-DD HH:mm:ss'),
       content: post.content,
       imageUrl: post.imageUrl,
       category: post.category,
       likeCnt: 0,
       commentCnt: 0,
-    };
+    }
 
-    console.log(post.imageUrl);
+    console.log(post.imageUrl)
 
     // const token = getState().user.user;
     // 요청!
     await axios
-      .post(`/posts/${post.category}/add`, requestData)
+      .post(`${BASE_URL}/posts/${post.category}/add`, requestData)
       .then((res) => {
-        console.log("포스팅 추가 완료했습니다", res);
+        dispatch(addPost(requestData))
+        console.log('포스팅 추가 완료했습니다', res)
       })
       .catch((err) => {
-        console.log("포스팅 추가중 에러났네요", err);
-      });
+        console.log('포스팅 추가중 에러났네요', err)
+      })
 
-    dispatch(addPost(requestData));
-    history.replace(`/list/${post.category}`);
-  };
-};
+    history.replace(`/list/${post.category}`)
+  }
+}
 
 // 당장은 글 내용물만 바꿀수있음
 const editPostDB = (postId, content) => {
   return async function (dispatch, getState, { history }) {
-    if (!postId) return;
+    console.log('here')
+    if (!postId) return
 
     // formData 로 바꿔야함
     // const preview = getState().image.preview;
 
-    const postIndex = getState().post.list.findIndex(
-      (p) => p.postId === postId
-    );
-    let data = getState().post.list[postIndex];
+    const postIndex = getState().post.list.findIndex((p) => p.postId === postId)
+    let data = getState().post.list[postIndex]
+    console.log('data')
 
     // 지금은 컨텐츠만 수정하지만 확장성을 위해 형식 맞춤
-    data = { ...data, content };
+    data = { ...data, content }
 
-    // axios
-    // await axios({
-    //   method: "PUT",
-    //   url: `/posts/edit/${postId}`,
-    //   data: { postId, content },
-    //   // headers: {},
-    // })
-    //   .then((res) => {
-    //     console.log("수정 성공", res);
-    //   })
-    //   .catch((err) => {
-    //     console.log("글 수정시 에러", err);
-    //   });
+    axios
+    await axios({
+      method: 'PUT',
+      url: `${BASE_URL}/posts/edit/${postId}`,
+      data: { postId, content },
+      // headers: {},
+    })
+      .then((res) => {
+        dispatch(editPost(postId, data))
+        console.log('수정 성공', res)
+      })
+      .catch((err) => {
+        console.log('글 수정시 에러', err)
+      })
 
-    dispatch(editPost(postId, data));
-    console.log(`${data.category}`);
-    history.replace(`/list/${data.category}/${postId}`);
-  };
-};
+    console.log(`${data.category}`)
+    history.replace(`/list/${data.category}/${postId}`)
+  }
+}
 
 const deletePostDB = (postId) => {
   return async function (dispatch, getState, { history }) {
-    if (!postId) return;
+    console.log(postId)
+    if (!postId) return
 
     // postId 와 일치하는 댓글들 모두 지우는 프로세스 있어야함
 
-    // axios
-    // await axios({
-    //   method: "DELETE",
-    //   url: `/posts/delete/${postId}`,
-    //   data: {postId},
-    // }).then((res) => {
-    //   console.log("게시글 삭제 성공", res);
-    // }).catch((err) => {
-    //   console.log("게시글 삭제 에러", err);
-    // })
+    axios
+    await axios({
+      method: 'DELETE',
+      url: `${BASE_URL}/posts/delete/${postId}`,
+      data: { postId },
+    })
+      .then((res) => {
+        console.log('게시글 삭제 성공', res)
+      })
+      .catch((err) => {
+        console.log('게시글 삭제 에러', err)
+      })
 
-    dispatch(deletePost(postId));
-    history.replace(`/`);
-  };
-};
+    dispatch(deletePost(postId))
+    history.replace(`/`)
+  }
+}
 
 export default handleActions(
   {
     [SET_POST]: (state, action) =>
       produce(state, (draft) => {
-        console.log(action.payload.list);
-        draft.list = action.payload.list;
+        console.log(action.payload.list)
+        draft.list = action.payload.list
       }),
     [ADD_POST]: (state, action) =>
       produce(state, (draft) => {
-        console.log("hi");
-        draft.list.unshift(action.payload.post);
+        console.log('hi')
+        draft.list.unshift(action.payload.post)
       }),
     [EDIT_POST]: (state, action) =>
       produce(state, (draft) => {
-        const newContent = action.payload.post.content;
+        const newContent = action.payload.post.content
         let index = draft.list.findIndex(
-          (p) => p.postId === action.payload.postId
-        );
-        console.log(state.list[index]);
+          (p) => p.postId === action.payload.postId,
+        )
+        console.log(state.list[index])
         draft.list[index] = {
           ...draft.list[index],
           content: newContent,
-        };
+        }
       }),
     [DELETE_POST]: (state, action) =>
       produce(state, (draft) => {
         let newList = draft.list.filter(
-          (l) => l.postId !== action.payload.postId
-        );
-        draft.list = newList;
+          (l) => l.postId !== action.payload.postId,
+        )
+        draft.list = newList
       }),
   },
-  initialState
-);
+  initialState,
+)
 
 export const actionCreators = {
   setPost,
@@ -222,4 +226,4 @@ export const actionCreators = {
   editPostDB,
   deletePost,
   deletePostDB,
-};
+}

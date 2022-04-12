@@ -6,15 +6,16 @@ import { produce } from 'immer'
 import axios from 'axios'
 import { apis } from '../../shared/Axios'
 
-// TOKEN
-import { getToken, setToken, removeToken } from '../../shared/token'
+// Local Stroage
+import { getToken, setData, removeData } from '../../shared/token'
 
 // base_url + url
 const BASE_URL = 'http://13.209.66.208'
 
 // initialState
 const initialState = {
-  user: null,
+  userId: null,
+
   is_login: false,
 }
 
@@ -41,7 +42,7 @@ const loginAction = (user) => {
 const logoutAction = (user) => {
   return async function (dispatch, getStaet, { history }) {
     console.log(history)
-    removeToken('token')
+    removeData('token')
     dispatch(logOut(user))
     history.replace('/login')
   }
@@ -85,7 +86,7 @@ const loginDB = (id, pwd) => {
       .then((res) => {
         if (res.data.token) {
           const accessToken = res.data.token
-          setToken(res.data.token)
+          setData(res.data.token)
           console.log(res.data)
           dispatch(logIn(accessToken))
           history.replace('/')
@@ -144,8 +145,7 @@ export default handleActions(
       produce(state, (draft) => {
         // localStorage.clear('is_login')
         draft.user = null
-        removeToken()
-        draft.is_login = false
+        removeData((draft.is_login = false))
       }),
 
     [USER_INFO]: (state, action) =>
