@@ -16,12 +16,6 @@ const Register = (props) => {
   const [submitted, setSubmitted] = React.useState(false);
   const [pwdWarning, setPwdWarning] = React.useState(false);
 
-  // const [idConfirm, setIdConfirm] = React.useState('')
-  // const [pwdCheckConfirm, setPwdCheckConfirm] = React.useState('')
-  // const [idWarning, setIdWarColor] = React.useState('red')
-
-  // const [pwdCheckWarning, setPwdCheckWarColor] = React.useState('red')
-
   const onSubmitHandler = () => {
     setSubmitted(true);
     if (id === "" || pwd === "" || pwd_check === "" || user_name === "") {
@@ -157,14 +151,16 @@ const Register = (props) => {
               회원가입
             </Button>
           </Grid>
-          <Text
-            margin="0"
-            onClick={() => {
-              history.push("/login");
-            }}
-          >
-            뒤로가요
-          </Text>
+          <Grid _cursor>
+            <Text
+              margin="0"
+              onClick={() => {
+                history.push("/login");
+              }}
+            >
+              뒤로가요
+            </Text>
+          </Grid>
         </Grid>
       </SignupBox>
     </Container>

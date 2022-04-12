@@ -57,9 +57,13 @@ const WritePost = (props) => {
       alert("내용을 입력해주세요.");
       return;
     }
-    // console.log({ ...inputs, nowCategory, preview });
+    console.log({
+      ...inputs,
+      category: nowCategory,
+      imageUrl: preview,
+    });
     dispatch(
-      postActions.addPostAxios({
+      postActions.addPostDB({
         ...inputs,
         category: nowCategory,
         imageUrl: preview,
@@ -72,21 +76,17 @@ const WritePost = (props) => {
     dispatch(postActions.editPostDB(postId, inputs.content));
   };
 
-  // if (!isLogin) {
-  //   return <Unauth />;
-  // }
-
   return (
     <>
       <Grid padding="50px" width="60%" margin="10px auto">
         <Grid>
-          <Text margin="0" size="32px" bold>
+          <Text margin="0" size="32px" weight="600">
             {isEdit ? "게시글 수정" : "게시글 작성"}
           </Text>
         </Grid>
         <Grid isFlex padding="0 50px">
           <Grid>
-            <Text margin="0" size="24px" bold center color="#636e72">
+            <Text margin="0" size="24px" weight="500" center color="#636e72">
               현재 카테고리는 <CategoryIconSwitch category={nowCategory} />{" "}
               {nowCategory}
             </Text>

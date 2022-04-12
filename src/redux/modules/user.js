@@ -71,27 +71,21 @@ const registerDB = (id, pwd, pwd_check, user_name, user_age) => {
 // 로그인
 const loginDB = (id, pwd) => {
   return async function (dispatch, getState, { history }) {
+    console.log(id, pwd);
     await axios
       .post(`${BASE_URL}/login/reqLogin`, {
-        userID: id,
+        userId: id,
         password: pwd,
       })
       // 여기서 유저정보도 받아야함!
       .then((res) => {
         console.log(res);
+        const { token, userId, userNickname, userAge } = res.data;
+        console.log(res.data.token);
 
-        // const userInfo = res.data.유저데이터 담긴변수
-        // 더미
-        const userInfo = {
-          userId: "iamuser",
-          userNickname: "닉네임",
-          userAge: "20대",
-          // qwer1234
-        };
-        const accessToken = res.data.token;
-        setData({ accessToken, ...userInfo });
-        console.log(userInfo);
-        dispatch(logIn(accessToken, userInfo));
+        setData(res.data);
+        console.log(res.data);
+        dispatch(logIn(token, { userId, userNickname, userAge }));
         history.push("/");
       })
       .catch(function (error) {

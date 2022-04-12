@@ -16,8 +16,6 @@ const CategoryList = () => {
   const { category } = useParams();
   const categoryList = useSelector((state) => state.post.list) || [];
 
-  console.log(categoryList);
-
   // axios 조회
   useEffect(() => {
     dispatch(postActions.getCategoryList(category));
@@ -58,14 +56,7 @@ const CategoryList = () => {
     <>
       <FixedButton _onClick={() => history.push(`/write/${category}`)} />
       <Grid>
-        <CateBox
-          current={category}
-          _onClick={(e) => {
-            const click = e.target.id;
-            console.log(click);
-            history.push(`/list/${click}`);
-          }}
-        />
+        <CateBox current={category} _onClick={handleClick} />
         <ResInput>
           <Input
             id="search"
@@ -98,10 +89,9 @@ const CategoryList = () => {
                 key={l.postId}
                 padding="16px"
                 _onClick={() => history.push(`/list/${category}/${l.postId}`)}
-                isFlex
+                isFlex_center
               >
-                <Text bold>{i}</Text>
-                <Post bg={category} {...l} />
+                <Post bg={l.category} {...l} />
               </Grid>
             );
           })}

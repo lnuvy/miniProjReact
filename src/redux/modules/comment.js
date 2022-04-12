@@ -4,6 +4,8 @@ import moment from "moment";
 import { actionCreators as postActions } from "./post";
 import axios from "axios";
 
+const BASE_URL = "http://13.209.66.208";
+
 const SET_COMMENT = "SET_COMMENT";
 const ADD_COMMENT = "ADD_COMMENT";
 const DELETE_COMMENT = "DELETE_COMMENT";
@@ -21,70 +23,44 @@ const deleteComment = createAction(DELETE_COMMENT, (commentId, postId) => ({
   postId,
 }));
 
-const initialComment = {
-  postId: "12341234",
-  commentId: "abcdefg",
-  userId: "iamuser",
-  nickname: "닉네임",
-  createdAt: "2022-04-10 12:00:00",
-  content: "내용입니다",
-};
 const initialState = {
-  list: { 12341234: [initialComment] },
-  // is_loading: false,
+  list: {},
 };
 
-let cnt = 0;
 const getCommentDB = (postId) => {
   return async function (dispatch, getState, { history }) {
     if (!postId) return;
 
-    // 더미
-    const list = [
-      {
-        postId: postId,
-        commentId: "abcdefgh" + cnt,
-        userId: "iamuser",
-        nickname: "닉네임",
-        createdAt: "2022-04-10 12:00:00",
-        content: "공통 댓글 더미입니다",
-      },
-    ];
-    cnt++;
-
     // axios
-    // const response = await axios.get(`/comments/${postId}/list`);
-    // const list = response.data;
-    dispatch(setComment(postId, list));
+    const response = await axios.get(`${BASE_URL}/comments/${postId}/list`);
+    console.log(response);
+    const commentList = response.data.commentPostid;
+
+    dispatch(setComment(postId, commentList));
   };
 };
 
 const addCommentDB = (postId, content) => {
   return async function (dispatch, getState, { history }) {
-    // const userInfo = getState().user.user;
-
-    console.log(postId);
+    const userInfo = getState().user.user;
 
     let newComment = {
-      // commentId: `${userInfo.userId}_${new Date().getTime()}`,
-      commentId: "abcdefg" + cnt,
-      // userId: `${userInfo.userId}`,
-      userId: "iamuserser",
-      // nickname: `${userInfo.nickname}`,
-      nickname: "더미더미",
-      postId,
+      ...userInfo,
       content,
-      createdAt: moment().format("YYYY-MM-DD HH:mm:ss"),
     };
+
+    console.log(newComment);
     // axios
-    // await axios
-    //   .post(`/comments/${postId}`, newComment)
-    //   .then((res) => {
-    //     console.log("댓글 작성 완료", res);
-    //   })
-    //   .catch((err) => {
-    //     console.log("댓글 작성 오류", err);
-    //   });
+    const response = await axios({
+      method: "post",
+      url: `${BASE_URL}/comments/${postId}`,
+      data: newComment,
+    });
+    //postId commentId userId userNickname userAge createdAt content
+    console.log("리스폰스", response);
+
+    newComment = response.data.createdComment;
+    console.log(newComment);
 
     dispatch(addComment(postId, newComment));
   };
@@ -95,18 +71,26 @@ const deleteCommentDB = (commentId, postId) => {
   return async function (dispatch, getState, { history }) {
     if (!commentId) return;
 
+    const { userId } = getState().user.user;
+
+    console.log(userId);
+
     // 해당 개시글 정보
     const postInfo = getState().post.list.filter((l) => l.postId === postId)[0];
+    console.log(postInfo);
 
-    // axios
-    // await axios
-    //   .delete(`/comments/${commentId}`)
-    //   .then((res) => {
-    //     console.log("댓글 삭제 성공", res);
-    //   })
-    //   .catch((err) => {
-    //     console.log("댓글 삭제중 에러", err);
-    //   });
+    axios({
+      method: "DELETE",
+      url: `${BASE_URL}/comments/${commentId}`,
+      data: { userId },
+    })
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+
     dispatch(deleteComment(commentId, postId));
   };
 };
@@ -115,7 +99,7 @@ export default handleActions(
   {
     [SET_COMMENT]: (state, action) =>
       produce(state, (draft) => {
-        draft.list[action.payload.postId] = action.payload.comment_list || [];
+        draft.list[action.payload.postId] = action.payload.commentList;
       }),
     [ADD_COMMENT]: (state, action) =>
       produce(state, (draft) => {
@@ -126,11 +110,10 @@ export default handleActions(
       produce(state, (draft) => {
         let path = action.payload.postId;
         console.log(path);
-        console.log(...state.list[path]);
+        console.log(state.list[path]);
         let newArr = draft.list[path].filter(
           (l) => l.commentId !== action.payload.commentId
         );
-        console.log(newArr);
         draft.list[path] = newArr;
       }),
   },

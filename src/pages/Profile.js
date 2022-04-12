@@ -1,16 +1,22 @@
 import React from "react";
 import { Grid, Input, Text, Button } from "../elements/index";
 import styled from "styled-components";
+import MyPost from "../components/posts/MyPost";
 import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
-import MyPost from "../components/posts/MyPost";
+import { useDispatch } from "react-redux";
+import { actionCreators as postActions } from "../redux/modules/post";
 
 const Profile = (props) => {
-  const params = useParams();
-  console.log(params);
-  //걍 토큰 유저이름으로 가져와보기,,ㄹ
+  const dispatch = useDispatch();
   const user = useSelector((state) => state.user.user);
-  console.log(user);
+  let params = useParams();
+  const userId = params.id;
+
+  React.useEffect(() => {
+    dispatch(postActions.getMyPostDB(userId));
+  }, []);
+
   return (
     <>
       <Container>

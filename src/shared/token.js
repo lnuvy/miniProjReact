@@ -13,11 +13,11 @@ export const getUser = () => {
 };
 
 export const setData = (data) => {
-  const { userId, userNickname, userAge, accessToken } = data;
+  const { userId, userNickname, userAge, token } = data;
   localStorage.setItem("userId", userId);
   localStorage.setItem("userNickname", userNickname);
   localStorage.setItem("userAge", userAge);
-  localStorage.setItem("token", accessToken);
+  localStorage.setItem("token", token);
 };
 
 export const removeData = () => {

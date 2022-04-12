@@ -81,15 +81,15 @@ const Login = (props) => {
 
           <TextBox>
             <p>
-              Not a Member?{" "}
+              새로 오셨나요?{" "}
               <span
                 onClick={() => {
                   history.push("/register");
                 }}
               >
-                <U>Sign up</U>{" "}
+                <U>여기서 가입</U>
               </span>
-              now!
+              하세요!
             </p>
           </TextBox>
         </Grid>
