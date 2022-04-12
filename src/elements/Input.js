@@ -69,7 +69,8 @@ const InputField = styled.input`
 
   &:focus {
     outline: none;
-    border-bottom: 1px solid red;
+    border-bottom: 2px solid #98ddca;
+    transition-duration: 0.25s;
     ${(props) =>
       props.clickColor ? `color: ${props.clickColor}!important;` : ""};
   }

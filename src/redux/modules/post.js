@@ -83,6 +83,7 @@ const getCategoryList = (category = null) => {
 };
 
 const addPostAxios = (post = null) => {
+  console.log("85번 여깄음");
   return async function (dispatch, getState, { history }) {
     if (!post) return;
     // 현재 작성한 유저의 정보 먼저 가져오기
@@ -111,15 +112,15 @@ const addPostAxios = (post = null) => {
     };
     // 요청!
     await axios
-      .post(`/posts/${post.category}/add`, requestData)
+      .post(`${BASE_URL}/posts/${post.category}/add`, requestData)
       .then((res) => {
+        dispatch(addPost(requestData));
         console.log("포스팅 추가 완료했습니다", res);
       })
       .catch((err) => {
         console.log("포스팅 추가중 에러났네요", err);
       });
 
-    dispatch(addPost(requestData));
     history.replace(`/list/${post.category}`);
   };
 };
@@ -127,6 +128,7 @@ const addPostAxios = (post = null) => {
 // 당장은 글 내용물만 바꿀수있음
 const editPostDB = (postId, content) => {
   return async function (dispatch, getState, { history }) {
+    console.log("here");
     if (!postId) return;
 
     // formData 로 바꿔야함
@@ -136,25 +138,26 @@ const editPostDB = (postId, content) => {
       (p) => p.postId === postId
     );
     let data = getState().post.list[postIndex];
+    console.log("data");
 
     // 지금은 컨텐츠만 수정하지만 확장성을 위해 형식 맞춤
     data = { ...data, content };
 
     // axios
-    // await axios({
-    //   method: "PUT",
-    //   url: `/posts/edit/${postId}`,
-    //   data: { postId, content },
-    //   // headers: {},
-    // })
-    //   .then((res) => {
-    //     console.log("수정 성공", res);
-    //   })
-    //   .catch((err) => {
-    //     console.log("글 수정시 에러", err);
-    //   });
+    await axios({
+      method: "PUT",
+      url: `${BASE_URL}/posts/edit/${postId}`,
+      data: { postId, content },
+      // headers: {},
+    })
+      .then((res) => {
+        dispatch(editPost(postId, data));
+        console.log("수정 성공", res);
+      })
+      .catch((err) => {
+        console.log("글 수정시 에러", err);
+      });
 
-    dispatch(editPost(postId, data));
     console.log(`${data.category}`);
     history.replace(`/list/${data.category}/${postId}`);
   };
@@ -162,20 +165,23 @@ const editPostDB = (postId, content) => {
 
 const deletePostDB = (postId) => {
   return async function (dispatch, getState, { history }) {
+    console.log(postId);
     if (!postId) return;
 
     // postId 와 일치하는 댓글들 모두 지우는 프로세스 있어야함
 
     // axios
-    // await axios({
-    //   method: "DELETE",
-    //   url: `/posts/delete/${postId}`,
-    //   data: {postId},
-    // }).then((res) => {
-    //   console.log("게시글 삭제 성공", res);
-    // }).catch((err) => {
-    //   console.log("게시글 삭제 에러", err);
-    // })
+    await axios({
+      method: "DELETE",
+      url: `${BASE_URL}/posts/delete/${postId}`,
+      data: { postId },
+    })
+      .then((res) => {
+        console.log("게시글 삭제 성공", res);
+      })
+      .catch((err) => {
+        console.log("게시글 삭제 에러", err);
+      });
 
     dispatch(deletePost(postId));
     history.replace(`/`);

@@ -86,6 +86,7 @@ const loginDB = (id, pwd) => {
           userId: "iamuser",
           userNickname: "닉네임",
           userAge: "20대",
+          // qwer1234
         };
         const accessToken = res.data.token;
         setData({ accessToken, ...userInfo });
