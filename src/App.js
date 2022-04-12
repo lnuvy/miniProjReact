@@ -19,6 +19,7 @@ import { useSelector } from "react-redux";
 import { actionCreators as postActions } from "./redux/modules/post";
 import { actionCreators as userActions } from "./redux/modules/user";
 import { Switch } from "react-router-dom";
+import { getToken, getUser } from "./shared/token";
 
 function App() {
   const dispatch = useDispatch();
@@ -27,9 +28,10 @@ function App() {
   const is_login = useSelector((state) => state.user.is_login);
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (localStorage.getItem("token")) {
-      dispatch(userActions.loginAction(token));
+    const token = getToken();
+    const user = getUser();
+    if (token) {
+      dispatch(userActions.loginAction(token, user));
     }
   }, [is_login]);
 

@@ -4,18 +4,17 @@ import { produce } from "immer";
 
 // AXIOS
 import axios from "axios";
-import { apis } from "../../shared/Axios";
 
-// TOKEN
-import { getToken, setToken, removeToken } from "../../shared/token";
+// local storage
+import { setData, removeData } from "../../shared/token";
 
 // base_url + url
 const BASE_URL = "http://13.209.66.208";
 
 // initialState
 const initialState = {
-  token: null,
   user: null,
+  token: null,
   is_login: false,
 };
 
@@ -26,15 +25,15 @@ const SIGN_UP = "SIGN_UP";
 const USER_INFO = "USER_INFO";
 
 //ACTION CREATORS
-const logIn = createAction(LOG_IN, (user) => ({ user }));
+const logIn = createAction(LOG_IN, (token, user) => ({ token, user }));
 const signUp = createAction(SIGN_UP, (user) => ({ user }));
 const logOut = createAction(LOG_OUT, (user) => ({ user }));
 const userInfo = createAction(USER_INFO, (user) => ({ user }));
 
 // MIDDLEWARE
-const loginAction = (user) => {
+const loginAction = (token, user) => {
   return async function (dispatch, getState, { history }) {
-    dispatch(logIn(user));
+    dispatch(logIn(token, user));
     history.push("/");
   };
 };
@@ -42,7 +41,7 @@ const loginAction = (user) => {
 const logoutAction = (user) => {
   return async function (dispatch, getStaet, { history }) {
     console.log(history);
-    removeToken("token");
+    removeData("token");
     dispatch(logOut(user));
     history.replace("/login");
   };
@@ -69,6 +68,7 @@ const registerDB = (id, pwd, pwd_check, user_name, user_age) => {
   };
 };
 
+// 로그인
 const loginDB = (id, pwd) => {
   return async function (dispatch, getState, { history }) {
     await axios
@@ -76,10 +76,21 @@ const loginDB = (id, pwd) => {
         userID: id,
         password: pwd,
       })
+      // 여기서 유저정보도 받아야함!
       .then((res) => {
+        console.log(res);
+
+        // const userInfo = res.data.유저데이터 담긴변수
+        // 더미
+        const userInfo = {
+          userId: "iamuser",
+          userNickname: "닉네임",
+          userAge: "20대",
+        };
         const accessToken = res.data.token;
-        setToken(accessToken);
-        dispatch(logIn(accessToken));
+        setData({ accessToken, ...userInfo });
+        console.log(userInfo);
+        dispatch(logIn(accessToken, userInfo));
         history.push("/");
       })
       .catch(function (error) {
@@ -89,66 +100,14 @@ const loginDB = (id, pwd) => {
   };
 };
 
-// 로그인 테스트
-// const loginDB = (id, pwd) => {
+//유저정보
+// const userInfoDB = () => {
 //   return async function (dispatch, getState, { history }) {
-//     await axios
-//       .post("https://reqres.in/api/login", {
-//         // eve.holt@reqres.in
-//         // cityslicka
-//         email: id,
-//         password: pwd,
-//       })
-//       .then((response) => {
-//         if (response.data.token) {
-//           const accessToken = response.data.token;
-//           let token = window.localStorage.setItem("token", accessToken);
-//           console.log(token);
-//           dispatch(logIn(accessToken));
-//           history.replace("/");
-//           // window.location.href = '/'
-//         }
-//       })
-//       .catch(function (error) {
-//         console.log(error);
-//         window.alert("없는 회원정보입니다,,,");
-//       });
+//     const token = getToken;
+//     console.log(token);
+//     await axios.get(`${BASE_URL}/getUser`);
 //   };
 // };
-
-const signupDB = () => {
-  return async function (dispatch, getStaet, { history }) {};
-};
-
-// const isLoginDB = () => {
-//   return async function (dispatch, getState, { history }) {
-//     console.log('here')
-//     await apis
-//       .login(id.pwd)
-//       .then((response) => {
-//         if (response.data.token) {
-//           const accessToken = response.data.token
-//           let token = window.localStorage.setItem('token', accessToken)
-//           console.log(response.data)
-//           dispatch(logIn(accessToken))
-//           history.replace('/')
-//         }
-//       })
-//       .catch(function (error) {
-//         console.log(error)
-//         window.alert('없는 회원정보입니다,,,')
-//       })
-//   }
-// }
-
-//유저정보
-const userInfoDB = () => {
-  return async function (dispatch, getState, { history }) {
-    const token = getToken;
-    console.log(token);
-    await axios.get(`${BASE_URL}/getUser`);
-  };
-};
 
 // REDUCER
 export default handleActions(
@@ -156,22 +115,23 @@ export default handleActions(
     [LOG_IN]: (state, action) =>
       produce(state, (draft) => {
         draft.user = action.payload.user;
+        draft.token = action.payload.token;
         draft.is_login = true;
       }),
     [SIGN_UP]: (state, action) => produce(state, (draft) => {}),
 
     [LOG_OUT]: (state, action) =>
       produce(state, (draft) => {
-        // localStorage.clear('is_login')
-        removeToken();
+        removeData();
         draft.user = null;
+        draft.token = null;
         draft.is_login = false;
       }),
 
-    [USER_INFO]: (state, action) =>
-      produce(state, (draft) => {
-        draft.user = action.payload.user;
-      }),
+    // [USER_INFO]: (state, action) =>
+    //   produce(state, (draft) => {
+    //     draft.user = action.payload.user;
+    //   }),
   },
   initialState
 );

@@ -11,11 +11,8 @@ import Post from "./Post";
 const Carousel = (props) => {
   const topList = topFive;
 
-  console.log(topList);
-
   topList.sort((a, b) => b.likeCnt - a.likeCnt);
 
-  console.log(topList);
   // react-slick 설정
   const settings = {
     dots: true, // 하단 점
