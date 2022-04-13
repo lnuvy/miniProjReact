@@ -35,6 +35,7 @@ const CategoryList = () => {
   const [sorted, SetSorted] = useState(false);
 
   // 검색
+  const [isTitle, setIsTitle] = useState(true);
   const [query, setQuery] = useState("");
 
   const debounce = _.debounce((k) => k, 300);
@@ -47,27 +48,52 @@ const CategoryList = () => {
   };
 
   // query 로 필터링 한 후의 리스트
-  const searchList = categoryList.filter((item) => {
-    const { itemName } = item;
-    const q = query;
-
-    return itemName.includes(q);
-  });
+  const searchList =
+    categoryList.filter((item) => {
+      const { itemName, userNickname } = item;
+      const q = query;
+      if (isTitle) {
+        return itemName.includes(q);
+      } else {
+        return userNickname.includes(q);
+      }
+    }) || [];
 
   return (
     <>
       <FixedButton _onClick={() => history.push(`/write/${category}`)} />
       <Grid>
         <CateBox current={category} _onClick={handleClick} />
-        <ResInput>
-          <Input
-            id="search"
-            placeholder={`#${category} 의 제목을 검색하세요...`}
-            value={query}
-            _onChange={queryChange}
-          />
-        </ResInput>
-
+        <Grid flexColumn>
+          <Button
+            margin="20px"
+            width="200px"
+            bg={isTitle ? "white" : "black"}
+            color={isTitle ? "black" : "white"}
+            _onClick={() => {
+              setIsTitle(!isTitle);
+            }}
+          >
+            {isTitle ? "작성자로 검색" : "제목으로 검색"}
+          </Button>
+          <ResInput>
+            {isTitle ? (
+              <Input
+                id="search"
+                placeholder={`#${category} 의 제목을 검색해보세요!`}
+                value={query}
+                _onChange={queryChange}
+              />
+            ) : (
+              <Input
+                id="search"
+                placeholder={`게시글의 작성자를 검색해보세요!`}
+                value={query}
+                _onChange={queryChange}
+              />
+            )}
+          </ResInput>
+        </Grid>
         <Grid>
           {query !== ""
             ? searchList.map((l, i) => {
@@ -75,12 +101,12 @@ const CategoryList = () => {
                   <Grid
                     key={l.postId}
                     padding="16px"
-                    bg="green"
+                    isFlex_center
                     _onClick={() =>
                       history.push(`/list/${category}/${l.postId}`)
                     }
                   >
-                    <Post {...l} />
+                    <Post bg={l.category} {...l} />
                   </Grid>
                 );
               })

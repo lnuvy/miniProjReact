@@ -12,13 +12,14 @@ import { FaRegHeart } from "react-icons/fa";
 
 import { MdOutlineModeComment } from "react-icons/md";
 
-import { topFive } from "../../shared/Dummy";
+// import { topFive } from "../../shared/Dummy";
 import CateBox from "../CateBox";
+import { history } from "../../redux/configureStore";
 
 const Carousel = (props) => {
-  const topList = topFive;
+  const { topList } = props || [];
 
-  topList.sort((a, b) => b.likeCnt - a.likeCnt);
+  // topList.sort((a, b) => b.likeCnt - a.likeCnt);
 
   // react-slick 설정
   const settings = {
@@ -61,24 +62,36 @@ const Carousel = (props) => {
     ],
   };
 
+  const handleClick = (e) => {
+    e.stopPropagation();
+    const categoryValue = e.target.id;
+    console.log(categoryValue);
+    history.push(`/list/${categoryValue}`);
+  };
+
   const topFiveUI = topList.map((item, i) => {
     return (
       <Grid
         key={item.postId}
         bg="white"
-        margin="30px auto"
+        margin="0px auto"
         padding="10px"
         width="20%"
       >
-        <Grid padding="16px">
-          <Image src={item.imageUrl} />
+        <Grid padding="0 16px 16px" _cursor>
+          <Image
+            _onClick={() => {
+              history.push(`/list/${item.category}/${item.postId}`);
+            }}
+            src={item.imageUrl}
+          />
         </Grid>
         <Grid isFlex_center>
           <Text size="20px" weight={600} margin="0">
             {item.itemName}
           </Text>
           <Text color="#636e72" weight={500} margin="0">
-            &nbsp;&nbsp;{item.writer.userNickname}
+            &nbsp;&nbsp;{item.userNickname}
           </Text>
         </Grid>
         <Grid isFlex>
@@ -96,7 +109,7 @@ const Carousel = (props) => {
               </Text>
             </Grid>
           </Grid>
-          <CateBox nowCategory={item.category} />
+          <CateBox nowCategory={item.category} _onClick={handleClick} />
         </Grid>
       </Grid>
     );

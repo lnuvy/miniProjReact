@@ -31,7 +31,6 @@ const PostBtn = styled.div`
   box-sizing: border-box;
   border: none;
   font-weight: 500;
-  border-radius: 30px;
   width: ${(props) => props.width};
   ${(props) => (props.bg ? `background: ${props.bg};` : `background: #212121;`)}
   ${(props) => (props.color ? `color: ${props.color};` : `color: #fff;`)}
@@ -39,6 +38,7 @@ const PostBtn = styled.div`
   ${(props) => (props.margin ? `margin: ${props.margin};` : "")}
   ${(props) =>
     props.shadow ? `box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;` : ""}
+    padding: ${(props) => props.padding};
 `;
 
 const CommentBtn = styled.div`
@@ -47,7 +47,7 @@ const CommentBtn = styled.div`
   box-sizing: border-box;
   border: none;
   font-weight: 500;
-  border-radius: 30px;
+  border-radius: 5px;
   width: ${(props) => props.width};
   ${(props) => (props.bg ? `background: ${props.bg};` : `background: #212121;`)}
   ${(props) => (props.color ? `color: ${props.color};` : `color: #fff;`)}
@@ -55,6 +55,7 @@ const CommentBtn = styled.div`
   ${(props) => (props.margin ? `margin: ${props.margin};` : "")}
   ${(props) =>
     props.shadow ? `box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;` : ""}
+    padding: ${(props) => props.padding};
 `;
 
 export default AuthButton;

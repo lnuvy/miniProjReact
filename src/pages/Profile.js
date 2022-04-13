@@ -12,13 +12,12 @@ const Profile = (props) => {
   let params = useParams();
   const user = useSelector((state) => state.user.user || []);
   const postList = useSelector((state) => state.post.list);
-  console.log(postList);
 
   const userId = params.id;
 
   React.useEffect(() => {
     dispatch(postActions.getMyPostDB(userId));
-  }, [list]);
+  }, []);
 
   return (
     <>
@@ -44,16 +43,21 @@ const Profile = (props) => {
             내가 쓴 글
           </Text>
           {postList ? (
-            <MyPostBox
-              onClick={() => {
-                history.push(`/list/${postList.category}/${postList.postId}`);
-              }}
-            >
-              <Grid>
-                <Image src={postList.imageUrl} />
-                <Text size="20px;">{postList.content}</Text>
-              </Grid>
-            </MyPostBox>
+            postList.map((l) => {
+              return (
+                <MyPostBox
+                  key={l.postId}
+                  onClick={() => {
+                    history.push(`/list/${l.category}/${l.postId}`);
+                  }}
+                >
+                  <Grid>
+                    <Image src={l.imageUrl} />
+                    <Text size="20px;">{l.content}</Text>
+                  </Grid>
+                </MyPostBox>
+              );
+            })
           ) : (
             <Text margin="20px" size="30px">
               텅텅...아직 쓴 글이 없어요!

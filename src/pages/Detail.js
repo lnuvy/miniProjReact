@@ -1,7 +1,9 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
+import styled from "styled-components";
 import { CommentList, CommentWrite, Post } from "../components/posts";
+import { Text } from "../elements";
 
 const Detail = (props) => {
   const dispatch = useDispatch();
@@ -27,10 +29,20 @@ const Detail = (props) => {
   return (
     <>
       <Post {...item[0]} />
-      <CommentWrite postId={id} />
-      <CommentList postId={id} />
+      <CommentWrap>
+        <Text size="24px" margin="10px 50px" weight="600">
+          CommentList
+        </Text>
+        <CommentWrite postId={id} />
+        <CommentList postId={id} />
+      </CommentWrap>
     </>
   );
 };
+
+const CommentWrap = styled.div`
+  width: 80%;
+  margin: 0 auto;
+`;
 
 export default Detail;

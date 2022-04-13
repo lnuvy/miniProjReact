@@ -37,6 +37,8 @@ Button.defaultProps = {
 const ElButton = styled.button`
   cursor: pointer;
   font-size: 18px;
+  opacity: 0.8;
+  transition: all 0.3s;
   ${(props) => (props.width ? `width: ${props.width};` : "100px")};
   ${(props) => (props.bg ? `background: ${props.bg};` : `background: #212121;`)}
   ${(props) => (props.color ? `color: ${props.color};` : `color: #fff;`)}
@@ -48,6 +50,10 @@ const ElButton = styled.button`
   ${(props) => (props.margin ? `margin: ${props.margin};` : "")}
   ${(props) =>
     props.shadow ? `box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;` : ""}
+  
+  &:hover {
+    opacity: 1;
+  }
 `;
 
 const SmallButton = styled.button`
@@ -70,6 +76,10 @@ const SmallButton = styled.button`
       : "opacity: 0.6; transform: scale(0.9); transition: all 0.3s;"} /* ${(
     props
   ) => (props.current ? "box-shadow: 0 0 0 1px #000 inset;" : null)} */
+  
+  &:hover {
+    opacity: 1;
+  }
 `;
 
 export default Button;

@@ -59,7 +59,9 @@ const GridBox = styled.div`
   ${(props) => (props.isSticky ? `position: sticky; top: 0;` : null)};
   ${(props) =>
     // 여기 오타였음
-    props.flexColumn ? `display: flex; flex-direction: column;` : null};
+    props.flexColumn
+      ? `display: flex; flex-direction: column; justify-content: center; align-items: center;`
+      : null};
   ${(props) => (props.zIndexTop ? `z-index: 998;` : null)};
 
   height: 100%;

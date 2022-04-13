@@ -19,7 +19,6 @@ const EDIT_POST = "EDIT_POST";
 const DELETE_POST = "DELETE_POST";
 const TOGGLE_LIKE = "TOGGLE_LIKE";
 const LOADING = "LOADING";
-const MY_POST = "MY_POST";
 
 const setPost = createAction(SET_POST, (list) => ({ list }));
 const addPost = createAction(ADD_POST, (post) => ({ post }));
@@ -33,9 +32,20 @@ const toggleLike = createAction(TOGGLE_LIKE, (postId, likeCnt) => ({
   likeCnt,
 }));
 const loading = createAction(LOADING, (isLoading) => ({ isLoading }));
-const myPost = createAction(MY_POST, (list) => ({ list }));
 
 //// middlewares
+// 메인에서 캐러셀에 주입되는 Best5 가져오기
+const getBestFiveItme = () => {
+  return async function (dispatch, getState, { history }) {
+    const response = await axios({
+      method: "GET",
+      url: `${BASE_URL}/mostLikePost`,
+    });
+    const bestFive = response.data.likeCnt;
+    dispatch(setPost(bestFive));
+  };
+};
+
 // 카테고리별 아이템을 가져오기
 const getCategoryList = (category = null) => {
   return async function (dispatch, getState, { history }) {
@@ -48,20 +58,36 @@ const getCategoryList = (category = null) => {
 // 내가 쓴글 조회
 const getMyPostDB = (userId) => {
   return async function (dispatch, getState, { history }) {
-    await axios
+    axios
       .get(`${BASE_URL}/profile/${userId}`)
       .then((res) => {
-        const data = res.data.post;
-        console.log(data);
-        const myData = data.filter((c) => c.userId === userId);
-        console.log(...myData);
-        dispatch(myPost(...myData));
+        const data = res.data;
+        const newArr = data.post.filter((l) => l.userId === userId);
+        dispatch(setPost(newArr));
       })
       .catch((err) => {
         console.log("내 글을 받아오지 못했어요", err);
       });
   };
 };
+
+const userPost = {};
+
+const newArr = userPost.userLike.filter((a) => {
+  return userId === a;
+});
+
+// 해당 유저의 유저아이디가 배열에 이미 있는지 , 만약 있다면 found 는 아이디값이 되고, 없으면 und
+const found = userPost.userLike.find((e) => e === userId);
+
+if (found) {
+  // 좋아요 취소
+  const 변수배열 = userPost.userLike.filter((a) => a !== userId);
+  userPost.userLike = 변수배열;
+} else {
+  // 좋아요
+  userPost.userLike.push(found);
+}
 
 const addPostDB = (post = null) => {
   return async function (dispatch, getState, { history }) {
@@ -84,14 +110,11 @@ const addPostDB = (post = null) => {
       data: data,
     })
       .then(() => {
-        // console.log(res);
-        // console.log("axios 결과", res);
+        history.push(`/list/${post.category}`);
       })
       .catch((err) => {
         console.log(err);
       });
-
-    history.push(`/list/${post.category}`);
   };
 };
 
@@ -107,6 +130,7 @@ const editPostDB = (postId, content) => {
       (p) => p.postId === postId
     );
     let data = getState().post.list[postIndex];
+    console.log(data);
 
     // 지금은 컨텐츠만 수정하지만 확장성을 위해 형식 맞춤
     data = { ...data, content };
@@ -162,12 +186,10 @@ export default handleActions(
   {
     [SET_POST]: (state, action) =>
       produce(state, (draft) => {
-        console.log(action.payload.list);
         draft.list = action.payload.list;
       }),
     [ADD_POST]: (state, action) =>
       produce(state, (draft) => {
-        console.log("hi");
         draft.list.unshift(action.payload.post);
       }),
     [EDIT_POST]: (state, action) =>
@@ -189,12 +211,6 @@ export default handleActions(
         );
         draft.list = newList;
       }),
-
-    [MY_POST]: (state, action) =>
-      produce(state, (draft) => {
-        console.log(action.payload.list);
-        draft.list = action.payload.list;
-      }),
   },
   initialState
 );
@@ -209,4 +225,5 @@ export const actionCreators = {
   deletePost,
   deletePostDB,
   getMyPostDB,
+  getBestFiveItme,
 };

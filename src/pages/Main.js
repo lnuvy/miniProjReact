@@ -1,15 +1,28 @@
-import React from 'react'
-import Carousel from '../components/posts/Carousel'
-import { Button, Grid, Image, Text } from '../elements'
-import { history } from '../redux/configureStore'
-import styled from 'styled-components'
+import React, { useEffect } from "react";
+import Carousel from "../components/posts/Carousel";
+import { Button, Grid, Image, Text } from "../elements";
+import { history } from "../redux/configureStore";
+import styled from "styled-components";
+import { useDispatch, useSelector } from "react-redux";
+import { actionCreators as postActions } from "../redux/modules/post";
 
 const Main = (props) => {
+  console.log(props);
+  const dispatch = useDispatch();
+  const topFive = useSelector((state) => state.post.list);
+
+  useEffect(() => {
+    dispatch(postActions.getBestFiveItme());
+    // 카테고리가 바뀔때마다 검색창 value 비우기
+  }, []);
+
+  console.log(topFive);
+
   const handleClick = (e) => {
-    const categoryValue = e.target.id
-    console.log(categoryValue)
-    history.push(`/list/${categoryValue}`)
-  }
+    const categoryValue = e.target.id;
+    console.log(categoryValue);
+    history.push(`/list/${categoryValue}`);
+  };
 
   return (
     <>
@@ -20,7 +33,7 @@ const Main = (props) => {
         <Grid>
           <Grid width="70%" margin="10px auto">
             {/* 가장 좋아요가 많은 5개 api 요청 후 여기에 뿌려짐 */}
-            <Carousel />
+            <Carousel topList={topFive} />
           </Grid>
         </Grid>
       </Grid>
@@ -91,14 +104,14 @@ const Main = (props) => {
         </Grid>
       </CateBox>
     </>
-  )
-}
+  );
+};
 
 const CateBox = styled.div`
   margin: 0 auto;
   width: 50%;
   text-align: center;
   align-items: center;
-`
+`;
 
-export default Main
+export default Main;

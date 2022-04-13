@@ -6,11 +6,13 @@ import { actionCreators as postActions } from "../../redux/modules/post";
 import CommentList from "./CommentList";
 import styled from "styled-components";
 import { history } from "../../redux/configureStore";
+import { changeTime } from "../../shared/ChangeTime";
 
 // Font Awesome Icon
 import { FaCommentAlt } from "react-icons/fa";
 import { FaHeart } from "react-icons/fa";
 import { FaRegHeart } from "react-icons/fa";
+import { MdOutlineModeComment } from "react-icons/md";
 
 // 게시글 하나에 대한 컴포넌트
 const Post = (props) => {
@@ -25,14 +27,13 @@ const Post = (props) => {
   const isMe = currentUser === item.userId ? true : false;
 
   const cate = {
-    chair: "#C3E5AE",
-    desk: "#C3B9EA",
-    elecItem: "#F1E1A6",
-    healthCare: "#F4BBBB",
-    etc: "#77E4D4",
+    chair: "rgba(195,229,174, 0.5)",
+    desk: "rgba(195,185,234, .5)",
+    elecItem: "rgba(241,225,166, .5)",
+    healthCare: "rgba(244,187,187, .5)",
+    etc: "rgba(119,228,212, .5)",
   };
   const cateColor = Object.entries(cate).filter((l) => l[0] === category)[0];
-  console.log(cateColor[1]);
 
   return (
     // 컨테이너
@@ -47,14 +48,22 @@ const Post = (props) => {
             }
           />
         </Grid>
-        <h2>{item?.itemName}</h2>
+        <Grid isFlex_center>
+          <Text margin="0" size="27px" weight="600">
+            {item.itemName} &nbsp;&nbsp;
+          </Text>
+          <Text color="#636e72" weight={500} margin="0">
+            {item.userNickname}
+          </Text>
+        </Grid>
+
         {id && (
           <>
-            <Grid>
+            <ContentDiv>
               <Text margin="0" size="14px">
                 {item.content}
               </Text>
-            </Grid>
+            </ContentDiv>
             <Grid isFlex>
               <AuthButton
                 isMe={isMe}
@@ -77,10 +86,10 @@ const Post = (props) => {
             </Grid>
           </>
         )}
-        <h4>{item?.writer?.userId}</h4>
+
         <Grid isFlex_start>
           <Grid isFlex_end padding="10px">
-            <FaCommentAlt size={14} /> &nbsp;
+            <MdOutlineModeComment size={14} /> &nbsp;
             <Text margin="0" size="16px">
               {item.commentCnt}개
             </Text>
@@ -92,6 +101,9 @@ const Post = (props) => {
               {item.likeCnt}개
             </Text>
           </Grid>
+          <Text center margin="0" size="14px" color="#9e9e9e" weight="500">
+            {changeTime(item.createdAt)}
+          </Text>
         </Grid>
       </InfoBox>
     </Container>
@@ -104,6 +116,7 @@ const Container = styled.div`
 
 const InfoBox = styled.div`
   background-color: ${(props) => props.category};
+  /* opacity: 0.5; */
   margin: 30px auto;
   text-align: center;
   align-items: center;
@@ -113,7 +126,15 @@ const InfoBox = styled.div`
   /* padding: 50px; */
   ${(props) => (props.isDetail ? `padding: 20px;` : `padding: 50px;`)}
   border-radius: 40px;
-  box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 16px;
+  box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+`;
+
+const ContentDiv = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 70%;
+  min-height: 70px;
 `;
 
 export default Post;
