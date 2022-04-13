@@ -1,19 +1,20 @@
 import React from "react";
-import { Grid, Input, Text, Button } from "../elements/index";
+import { Grid, Input, Text, Button, Image } from "../elements/index";
 import styled from "styled-components";
-import MyPost from "../components/posts/MyPost";
 import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { actionCreators as postActions } from "../redux/modules/post";
+import { history } from "../redux/configureStore";
 
 const Profile = (props) => {
   const dispatch = useDispatch();
-  const user = useSelector((state) => state.user.user);
   let params = useParams();
-  const userId = params.id;
+  const user = useSelector((state) => state.user.user || []);
+  const postList = useSelector((state) => state.post.list);
+  console.log(postList);
 
-  const list = useSelector((state) => state.post.list) || [];
+  const userId = params.id;
 
   React.useEffect(() => {
     dispatch(postActions.getMyPostDB(userId));
@@ -24,38 +25,45 @@ const Profile = (props) => {
       <Container>
         <InfoBox>
           <Grid>
-            <Text weight="900" size="30px" marign="0">
+            <Text weight="900" size="30px" marign="0px">
               My Profile
             </Text>
-            {/* <Circle></Circle> */}
-            <Text weight="700" size="24px">
-              {user.userNickname}
-            </Text>
-            <Text>{user.userAge}</Text>
+            <Grid isFlex_center>
+              <Text weight="700" size="24px">
+                {user.userNickname}
+              </Text>
+            </Grid>
+            <Button width="100px" bg="#C3B9EA">
+              {user.userAge}
+            </Button>
           </Grid>
         </InfoBox>
 
-        <MyPostBox>
-          <Text weight="700" size="30px">
+        <PostBox>
+          <Text weight="900" size="30px" marign="0">
             내가 쓴 글
           </Text>
-          <Grid isFlex>
-            <MyPost />
-            <MyPost />
-            <MyPost />
-          </Grid>
-        </MyPostBox>
+          {postList ? (
+            <MyPostBox
+              onClick={() => {
+                history.push(`/list/${postList.category}/${postList.postId}`);
+              }}
+            >
+              <Grid>
+                <Image src={postList.imageUrl} />
+                <Text size="20px;">{postList.content}</Text>
+              </Grid>
+            </MyPostBox>
+          ) : (
+            <Text margin="20px" size="30px">
+              텅텅...아직 쓴 글이 없어요!
+            </Text>
+          )}
+        </PostBox>
       </Container>
     </>
   );
 };
-// const Circle = styled.div`
-//   height: 100px;
-//   width: 100px;
-//   border-radius: 50%;
-//   margin: 0 auto;
-//   background-color: #eee;
-// `
 
 const Container = styled.div`
   margin: 0 auto;
@@ -73,12 +81,22 @@ const InfoBox = styled.div`
   border-radius: 40px;
   box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
 `;
-
-const MyPostBox = styled.div`
-  margin: 30px auto;
+const PostBox = styled.div`
+  margin: 10px auto;
   text-align: center;
   align-items: center;
   padding: 50px;
+`;
+
+const MyPostBox = styled.div`
+  max-width: 300px;
+  width: 100%;
+  margin: 0 auto;
+  text-align: center;
+  align-items: center;
+  padding: 20px;
   border: 1px solid #eee;
+  border-radius: 20px;
+  flex-direction: row;
 `;
 export default Profile;

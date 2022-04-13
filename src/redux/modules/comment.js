@@ -78,19 +78,15 @@ const deleteCommentDB = (commentId, postId) => {
     // 해당 개시글 정보
     const postInfo = getState().post.list.filter((l) => l.postId === postId)[0];
     console.log(postInfo);
-
-    axios({
-      method: "DELETE",
-      url: `${BASE_URL}/comments/${commentId}`,
-      data: { userId },
-    })
+    // axios
+    await axios
+      .delete(`${BASE_URL}/comments/${commentId}`)
       .then((res) => {
-        console.log(res);
+        console.log("댓글 삭제 성공", res);
       })
       .catch((err) => {
-        console.log(err);
+        console.log("댓글 삭제중 에러", err);
       });
-
     dispatch(deleteComment(commentId, postId));
   };
 };

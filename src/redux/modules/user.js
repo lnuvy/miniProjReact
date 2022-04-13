@@ -70,6 +70,7 @@ const registerDB = (id, pwd, pwd_check, user_name, user_age) => {
 
 // 로그인
 const loginDB = (id, pwd) => {
+  console.log(id, pwd);
   return async function (dispatch, getState, { history }) {
     console.log(id, pwd);
     await axios
@@ -79,12 +80,10 @@ const loginDB = (id, pwd) => {
       })
       // 여기서 유저정보도 받아야함!
       .then((res) => {
-        console.log(res);
         const { token, userId, userNickname, userAge } = res.data;
         console.log(res.data.token);
 
         setData(res.data);
-        console.log(res.data);
         dispatch(logIn(token, { userId, userNickname, userAge }));
         history.push("/");
       })
@@ -94,15 +93,6 @@ const loginDB = (id, pwd) => {
       });
   };
 };
-
-//유저정보
-// const userInfoDB = () => {
-//   return async function (dispatch, getState, { history }) {
-//     const token = getToken;
-//     console.log(token);
-//     await axios.get(`${BASE_URL}/getUser`);
-//   };
-// };
 
 // REDUCER
 export default handleActions(

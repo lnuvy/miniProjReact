@@ -113,7 +113,6 @@ const Carousel = (props) => {
 
 const Container = styled.div`
   margin: auto;
-  border: 2px solid gainsboro;
   border-radius: 3px;
   padding: 30px;
 `;

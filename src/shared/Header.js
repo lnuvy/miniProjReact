@@ -15,7 +15,7 @@ const Header = (props) => {
 
   return (
     <Container>
-      <Grid isFlex bg="#dfe6e9">
+      <Grid isFlex>
         <Grid _cursor>
           <Text
             size="50px"

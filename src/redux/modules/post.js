@@ -48,14 +48,14 @@ const getCategoryList = (category = null) => {
 // 내가 쓴글 조회
 const getMyPostDB = (userId) => {
   return async function (dispatch, getState, { history }) {
-    // 500 에러 !
-    axios
+    await axios
       .get(`${BASE_URL}/profile/${userId}`)
       .then((res) => {
-        console.log(res);
-        const data = res.data;
+        const data = res.data.post;
         console.log(data);
-        dispatch(myPost(data));
+        const myData = data.filter((c) => c.userId === userId);
+        console.log(...myData);
+        dispatch(myPost(...myData));
       })
       .catch((err) => {
         console.log("내 글을 받아오지 못했어요", err);
@@ -107,7 +107,6 @@ const editPostDB = (postId, content) => {
       (p) => p.postId === postId
     );
     let data = getState().post.list[postIndex];
-    console.log(data);
 
     // 지금은 컨텐츠만 수정하지만 확장성을 위해 형식 맞춤
     data = { ...data, content };
@@ -128,7 +127,7 @@ const editPostDB = (postId, content) => {
       });
 
     console.log(`${data.category}`);
-    history.replace(`/list/${data.category}/${postId}`);
+    history.push(`/list/${data.category}/${postId}`);
   };
 };
 
