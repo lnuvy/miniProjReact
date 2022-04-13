@@ -5,12 +5,12 @@ import { AuthButton, Grid, Image, Text } from "../../elements";
 import { actionCreators as postActions } from "../../redux/modules/post";
 import CommentList from "./CommentList";
 import styled from "styled-components";
+import { history } from "../../redux/configureStore";
 
 // Font Awesome Icon
 import { FaCommentAlt } from "react-icons/fa";
 import { FaHeart } from "react-icons/fa";
 import { FaRegHeart } from "react-icons/fa";
-import { history } from "../../redux/configureStore";
 
 // 게시글 하나에 대한 컴포넌트
 const Post = (props) => {
@@ -31,15 +31,13 @@ const Post = (props) => {
     healthCare: "#F4BBBB",
     etc: "#77E4D4",
   };
-  const cateColor = Object.entries(cate).filter((l) => {
-    console.log(l);
-    return;
-  });
+  const cateColor = Object.entries(cate).filter((l) => l[0] === category)[0];
+  console.log(cateColor[1]);
 
   return (
     // 컨테이너
-    <Container category={category}>
-      <InfoBox isDetail={id || null}>
+    <Container>
+      <InfoBox isDetail={id || null} category={cateColor[1]}>
         <Grid padding="10px">
           <Image
             src={
@@ -82,15 +80,15 @@ const Post = (props) => {
         <h4>{item?.writer?.userId}</h4>
         <Grid isFlex_start>
           <Grid isFlex_end padding="10px">
-            <FaCommentAlt size={24} /> &nbsp;
-            <Text margin="0" size="22px">
+            <FaCommentAlt size={14} /> &nbsp;
+            <Text margin="0" size="16px">
               {item.commentCnt}개
             </Text>
           </Grid>
           {/* 여기서 좋아요가 눌렸는지 아닌지 체크해야할듯? */}
           <Grid isFlex_start padding="10px">
-            <FaRegHeart size={24} /> &nbsp;
-            <Text margin="0" size="22px">
+            <FaRegHeart size={14} /> &nbsp;
+            <Text margin="0" size="16px">
               {item.likeCnt}개
             </Text>
           </Grid>
@@ -101,10 +99,11 @@ const Post = (props) => {
 };
 
 const Container = styled.div`
-  ${(props) => props}
+  /* background-color: ${(props) => props.category}; */
 `;
 
 const InfoBox = styled.div`
+  background-color: ${(props) => props.category};
   margin: 30px auto;
   text-align: center;
   align-items: center;

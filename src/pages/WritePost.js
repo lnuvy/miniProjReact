@@ -97,7 +97,9 @@ const WritePost = (props) => {
             </Grid>
           </Grid>
         </Grid>
-        <Text margin="12px 0 0 0">이미지 미리보기</Text>
+        <Text align="left" size="14px" margin="0" color="#FA5E73">
+          한번 올린 이미지는 수정이 불가능합니다!
+        </Text>
         <Grid padding="20px">
           <Image
             src={preview ? preview : "http://via.placeholder.com/400x300"}

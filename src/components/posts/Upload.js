@@ -38,9 +38,10 @@ const Upload = (props) => {
       <Input
         width="100%"
         label="사진 선택"
+        placeholder="사진 선택"
+        id="uploadInput"
         value={fileName}
-        margin="0"
-        _disabled
+        disabled
       />
       <Button width="200px" margin="0 20px">
         <label htmlFor="file">파일 찾기</label>
@@ -51,6 +52,7 @@ const Upload = (props) => {
         type="file"
         onChange={selectFile}
         ref={fileInput}
+        placeholder="사진 선택"
         // disabled={isUploading}
       />
     </Grid>

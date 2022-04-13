@@ -13,9 +13,11 @@ const Profile = (props) => {
   let params = useParams();
   const userId = params.id;
 
+  const list = useSelector((state) => state.post.list) || [];
+
   React.useEffect(() => {
     dispatch(postActions.getMyPostDB(userId));
-  }, []);
+  }, [list]);
 
   return (
     <>

@@ -5,10 +5,6 @@ import { FaPen } from "react-icons/fa";
 const FixedButton = (props) => {
   const { _onClick, children = null } = props;
 
-  // const switchIcon = (category) => {
-
-  // }
-
   return (
     <FloatButton onClick={_onClick}>
       <FaPen />

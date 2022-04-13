@@ -19,6 +19,8 @@ const CategoryList = () => {
   // axios 조회
   useEffect(() => {
     dispatch(postActions.getCategoryList(category));
+    // 카테고리가 바뀔때마다 검색창 value 비우기
+    if (query !== "") setQuery("");
   }, [category]);
 
   // 카테고리별 이동
@@ -45,12 +47,12 @@ const CategoryList = () => {
   };
 
   // query 로 필터링 한 후의 리스트
-  // const searchList = categoryList.filter((item) => {
-  //   const { itemName } = item;
-  //   const q = query;
+  const searchList = categoryList.filter((item) => {
+    const { itemName } = item;
+    const q = query;
 
-  //   return itemName.includes(q);
-  // });
+    return itemName.includes(q);
+  });
 
   return (
     <>
@@ -67,7 +69,7 @@ const CategoryList = () => {
         </ResInput>
 
         <Grid>
-          {/* {query !== ""
+          {query !== ""
             ? searchList.map((l, i) => {
                 return (
                   <Grid
@@ -81,20 +83,21 @@ const CategoryList = () => {
                     <Post {...l} />
                   </Grid>
                 );
-              }) */}
-          {/* : */}
-          {categoryList.map((l, i) => {
-            return (
-              <Grid
-                key={l.postId}
-                padding="16px"
-                _onClick={() => history.push(`/list/${category}/${l.postId}`)}
-                isFlex_center
-              >
-                <Post bg={l.category} {...l} />
-              </Grid>
-            );
-          })}
+              })
+            : categoryList.map((l, i) => {
+                return (
+                  <Grid
+                    key={l.postId}
+                    padding="16px"
+                    _onClick={() =>
+                      history.push(`/list/${category}/${l.postId}`)
+                    }
+                    isFlex_center
+                  >
+                    <Post bg={l.category} {...l} />
+                  </Grid>
+                );
+              })}
         </Grid>
       </Grid>
     </>
@@ -102,6 +105,9 @@ const CategoryList = () => {
 };
 
 const ResInput = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
   width: 60%;
   margin: 0 auto;
 `;
