@@ -1,15 +1,15 @@
-import React from "react";
-import Carousel from "../components/posts/Carousel";
-import { Button, Grid, Image, Text } from "../elements";
-import { history } from "../redux/configureStore";
-import styled from "styled-components";
+import React from 'react'
+import Carousel from '../components/posts/Carousel'
+import { Button, Grid, Image, Text } from '../elements'
+import { history } from '../redux/configureStore'
+import styled from 'styled-components'
 
 const Main = (props) => {
   const handleClick = (e) => {
-    const categoryValue = e.target.id;
-    console.log(categoryValue);
-    history.push(`/list/${categoryValue}`);
-  };
+    const categoryValue = e.target.id
+    console.log(categoryValue)
+    history.push(`/list/${categoryValue}`)
+  }
 
   return (
     <>
@@ -18,7 +18,7 @@ const Main = (props) => {
           Best 5
         </Text>
         <Grid>
-          <Grid width="70%" bg="#e17055" margin="10px auto">
+          <Grid width="70%" margin="10px auto">
             {/* 가장 좋아요가 많은 5개 api 요청 후 여기에 뿌려짐 */}
             <Carousel />
           </Grid>
@@ -29,7 +29,9 @@ const Main = (props) => {
         <Text weight="900" size="40px" margin="30px 0 10px 0">
           Category
         </Text>
-        <Text>다른 개발자들의 꿀템들이 궁금하다면?👇</Text>
+        <Grid>
+          <Text>다른 개발자들의 꿀템들이 궁금하다면?👇</Text>
+        </Grid>
         <Grid>
           <Grid>
             <Button
@@ -89,14 +91,14 @@ const Main = (props) => {
         </Grid>
       </CateBox>
     </>
-  );
-};
+  )
+}
 
 const CateBox = styled.div`
   margin: 0 auto;
   width: 50%;
   text-align: center;
   align-items: center;
-`;
+`
 
-export default Main;
+export default Main

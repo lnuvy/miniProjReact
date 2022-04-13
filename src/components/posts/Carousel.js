@@ -1,17 +1,16 @@
-import React from "react";
-import Slider from "react-slick";
-import "slick-carousel/slick/slick.css";
-import "slick-carousel/slick/slick-theme.css";
-import { Grid, Image, Text } from "../../elements";
-import styled from "styled-components";
+import React from 'react'
+import Slider from 'react-slick'
+import 'slick-carousel/slick/slick.css'
+import 'slick-carousel/slick/slick-theme.css'
+import { Grid, Image, Text } from '../../elements'
+import styled from 'styled-components'
 
-import { topFive } from "../../shared/Dummy";
-import Post from "./Post";
+import { topFive } from '../../shared/Dummy'
 
 const Carousel = (props) => {
-  const topList = topFive;
+  const topList = topFive
 
-  topList.sort((a, b) => b.likeCnt - a.likeCnt);
+  topList.sort((a, b) => b.likeCnt - a.likeCnt)
 
   // react-slick 설정
   const settings = {
@@ -22,9 +21,9 @@ const Carousel = (props) => {
     autoplaySpeed: 2000, // 스크롤 넘어가는 속도
     slidesToShow: 5, // 한페이지에 보이는 객체 수
     slidesToScroll: 1, // 스크롤 넘어가는 객체 수
-    arrows: false,
-    centerMode: true,
-    centerPadding: "0px",
+    arrows: false, // 양옆의 애로우 없애기
+    // centerMode: true,
+    centerPadding: '0',
     responsive: [
       // 반응형 설정
       {
@@ -52,7 +51,7 @@ const Carousel = (props) => {
         },
       },
     ],
-  };
+  }
 
   const topFiveUI = topList.map((item, i) => {
     return (
@@ -75,8 +74,8 @@ const Carousel = (props) => {
           </Text>
         </Grid>
       </Grid>
-    );
-  });
+    )
+  })
 
   return (
     <Container>
@@ -84,15 +83,14 @@ const Carousel = (props) => {
         <StyledSlider {...settings}>{topFiveUI}</StyledSlider>
       </Grid>
     </Container>
-  );
-};
+  )
+}
 
 const Container = styled.div`
   margin: auto;
-  border: 2px solid gainsboro;
   border-radius: 3px;
   padding: 30px;
-`;
+`
 
 const StyledSlider = styled(Slider)`
   /* .slick-track {
@@ -103,6 +101,6 @@ const StyledSlider = styled(Slider)`
     outline: none; // 슬라이드 클릭시 파란선을 제거하기 위해서 작성
     width: 100%;
   }
-`;
+`
 
-export default Carousel;
+export default Carousel

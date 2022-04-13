@@ -83,17 +83,18 @@ const getCategoryList = (category = null) => {
   }
 }
 
-//내가 쓴글 조회
-
+//내가 쓴 글 조회
 const getMyPostDB = (userId) => {
   console.log(userId)
   return async function (dispatch, getState, { history }) {
     await axios
-      .get(`http://13.209.66.208/profile/${userId}`)
+      .get(`${BASE_URL}/profile/${userId}`)
       .then((res) => {
-        const data = res.data
+        const data = res.data.post
         console.log(data)
-        dispatch(myPost(data))
+        const myData = data.filter((c) => c.userId === userId)
+        console.log(...myData)
+        dispatch(myPost(...myData))
       })
       .catch((err) => {
         console.log('내 글을 받아오지 못했어요', err)
@@ -101,41 +102,33 @@ const getMyPostDB = (userId) => {
   }
 }
 
-const addPostAxios = (post = null) => {
+const addPostDB = (post = null) => {
   return async function (dispatch, getState, { history }) {
     if (!post) return
     // 현재 작성한 유저의 정보 먼저 가져오기
-    // const userInfo = getState().user.user;
-    // console.log(userInfo)
+    const userInfo = getState().user.user
 
     // 작성부분 ID 어떻게 하실건지 ? 우리가 넣어줘도 되나? 백에서 하는게 좋은가?
-    const requestData = {
-      // 일단 우리쪽에서 넣어주기
-      // postId: new Date().getTime() + "",
+    const data = {
+      ...userInfo,
       itemName: post.itemName,
-      // userInfo,
-      createdAt: moment().format('YYYY-MM-DD HH:mm:ss'),
       content: post.content,
       imageUrl: post.imageUrl,
       category: post.category,
-      likeCnt: 0,
-      commentCnt: 0,
     }
-
+    console.log(data)
     console.log(post.imageUrl)
 
-    // const token = getState().user.user;
     // 요청!
     await axios
-      .post(`${BASE_URL}/posts/${post.category}/add`, requestData)
+      .post(`${BASE_URL}/posts/${post.category}/add`, data)
       .then((res) => {
-        dispatch(addPost(requestData))
         console.log('포스팅 추가 완료했습니다', res)
       })
       .catch((err) => {
         console.log('포스팅 추가중 에러났네요', err)
       })
-
+    dispatch(addPost(data))
     history.replace(`/list/${post.category}`)
   }
 }
@@ -158,7 +151,7 @@ const editPostDB = (postId, content) => {
 
     // axios
     await axios({
-      method: 'PUT',
+      method: 'POST',
       url: `${BASE_URL}/posts/edit/${postId}`,
       data: { postId, content },
       // headers: {},
@@ -172,22 +165,21 @@ const editPostDB = (postId, content) => {
       })
 
     console.log(`${data.category}`)
-    history.replace(`/list/${data.category}/${postId}`)
+    history.push(`/list/${data.category}/${postId}`)
   }
 }
 
-const deletePostDB = (postId) => {
+const deletePostDB = (postId, category) => {
   return async function (dispatch, getState, { history }) {
-    console.log(postId)
     if (!postId) return
-
+    const { userId } = getState().user.user
     // postId 와 일치하는 댓글들 모두 지우는 프로세스 있어야함
 
     // axios
     await axios({
       method: 'DELETE',
       url: `${BASE_URL}/posts/delete/${postId}`,
-      data: { postId },
+      data: { userId },
     })
       .then((res) => {
         console.log('게시글 삭제 성공', res)
@@ -196,8 +188,8 @@ const deletePostDB = (postId) => {
         console.log('게시글 삭제 에러', err)
       })
 
-    dispatch(deletePost(postId))
-    history.replace(`/`)
+    dispatch(deletePost(userId))
+    history.replace(`/list/${category}`)
   }
 }
 
@@ -246,7 +238,7 @@ export const actionCreators = {
   setPost,
   getCategoryList,
   addPost,
-  addPostAxios,
+  addPostDB,
   editPost,
   editPostDB,
   deletePost,

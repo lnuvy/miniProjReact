@@ -25,9 +25,8 @@ const Ptag = styled.p`
   color: ${(props) => props.color};
   /* font-size: ${(props) => props.size}; */
   ${(props) => (props.size ? `font-size: ${props.size};` : null)}
-  font-weight: ${(props) => (props.bold ? '600' : '400')};
-  ${(props) => (props.weight ? `font-weight:${props.weight};` : '400')};
-
+  ${(props) =>
+    props.weight ? `font-weight:${props.weight};` : 'font-weight: 400;'};
   ${(props) => (props.margin ? `margin:${props.margin};` : '')}
   ${(props) => (props.center ? `text-align: center;` : '')}
   ${(props) => (props.align ? `text-align: ${props.align};` : '')}

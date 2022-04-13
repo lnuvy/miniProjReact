@@ -7,17 +7,19 @@ import { MdLogout, MdOutlinePermIdentity, MdList } from 'react-icons/md'
 import styled from 'styled-components'
 
 const Header = (props) => {
+  const dispatch = useDispatch()
+
   const { userId } = useSelector((state) => state.user.user)
+
   console.log(userId)
 
-  const dispatch = useDispatch()
   return (
     <Container>
-      <Grid isFlex bg="#dfe6e9">
+      <Grid isFlex>
         <Grid _cursor>
           <Text
             size="50px"
-            margin="0 0 5px 0"
+            margin="0 10px 5px 10px"
             onClick={() => history.push('/')}
           >
             🐶🍯

@@ -6,7 +6,7 @@ import { produce } from 'immer'
 import axios from 'axios'
 
 // local storage
-import { getToken, setData, removeData } from '../../shared/token'
+import { setData, removeData } from '../../shared/token'
 
 // base_url + url
 const BASE_URL = 'http://13.209.66.208'
@@ -70,28 +70,31 @@ const registerDB = (id, pwd, pwd_check, user_name, user_age) => {
 
 // 로그인
 const loginDB = (id, pwd) => {
+  console.log(id, pwd)
   return async function (dispatch, getState, { history }) {
     await axios
       .post(`${BASE_URL}/login/reqLogin`, {
-        userID: id,
+        userId: id,
         password: pwd,
       })
       // 여기서 유저정보도 받아야함!
       .then((res) => {
-        console.log(res)
-
+        const { token, userId, userNickname, userAge } = res.data
+        console.log(res.data)
+        setData(res.data)
+        dispatch(logIn(token, { userId, userNickname, userAge }))
+        history.push('/')
         // const userInfo = res.data.유저데이터 담긴변수
         // 더미
-        const userInfo = {
-          userId: 'test99',
-          userNickname: '닉네임',
-          userAge: '20대',
-        }
-        const accessToken = res.data.token
-        setData({ accessToken, ...userInfo })
-        console.log(userInfo)
-        dispatch(logIn(accessToken, userInfo))
-        history.push('/')
+        // const userInfo = {
+        //   userId: 'test99',
+        //   userNickname: '닉네임',
+        //   userAge: '20대',
+        // }
+        // const accessToken = res.data.token
+
+        // console.log(userInfo)
+        // dispatch(logIn(accessToken, userInfo))
       })
       .catch(function (error) {
         console.log(error)

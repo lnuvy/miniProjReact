@@ -21,7 +21,7 @@ const CategoryList = () => {
   // axios 조회
   useEffect(() => {
     dispatch(postActions.getCategoryList(category))
-  }, [])
+  }, [category])
 
   // 카테고리별 이동
   const handleClick = (e) => {
@@ -59,18 +59,21 @@ const CategoryList = () => {
       <FixedButton _onClick={() => history.push(`/write/${category}`)} />
       <Grid>
         <CateBox
+          current={category}
           _onClick={(e) => {
-            console.log(e.target.id)
+            const click = e.target.id
+            console.log(click)
+            history.push(`/list/${click}`)
           }}
         />
-        {/* <ResInput> */}
-        <Input
-          id="search"
-          placeholder={`#${category} 의 제목을 검색하세요...`}
-          value={query}
-          _onChange={queryChange}
-        />
-        {/* </ResInput> */}
+        <ResInput>
+          <Input
+            id="search"
+            placeholder={`#${category} 의 제목을 검색하세요...`}
+            value={query}
+            _onChange={queryChange}
+          />
+        </ResInput>
 
         <Grid>
           {/* {query !== ""
@@ -98,7 +101,7 @@ const CategoryList = () => {
                 isFlex
               >
                 <Text bold>{i}</Text>
-                <Post {...l} />
+                <Post bg={category} {...l} />
               </Grid>
             )
           })}
@@ -107,5 +110,10 @@ const CategoryList = () => {
     </>
   )
 }
+
+const ResInput = styled.div`
+  width: 60%;
+  margin: 0 auto;
+`
 
 export default CategoryList
