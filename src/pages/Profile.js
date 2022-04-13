@@ -47,6 +47,7 @@ const Profile = (props) => {
               postList.map((post, i) => {
                 return (
                   <MyPostBox
+                    key={post.postId}
                     onClick={() => {
                       history.push(`/list/${post.category}/${post.postId}`);
                     }}

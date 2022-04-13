@@ -12,7 +12,6 @@ const Main = (props) => {
 
   useEffect(() => {
     dispatch(postActions.getBestFiveItem());
-    // 카테고리가 바뀔때마다 검색창 value 비우기
   }, []);
 
   const handleClick = (e) => {

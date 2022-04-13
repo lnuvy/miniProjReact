@@ -73,7 +73,7 @@ const SmallButton = styled.button`
        ${(props) =>
     props.current
       ? " transform: scale(1.1); transition: all 0.3s;"
-      : "opacity: 0.6; transform: scale(0.9); transition: all 0.3s;"} /* ${(
+      : "opacity: 0.7; transform: scale(0.9); transition: all 0.3s;"} /* ${(
     props
   ) => (props.current ? "box-shadow: 0 0 0 1px #000 inset;" : null)} */
   

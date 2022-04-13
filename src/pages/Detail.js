@@ -28,6 +28,7 @@ const Detail = (props) => {
 
   return (
     <>
+      {/* <div style={{ background-color: ""}}> */}
       <Post {...item[0]} />
       <CommentWrap>
         <Text size="24px" margin="10px 50px" weight="600">
@@ -36,6 +37,7 @@ const Detail = (props) => {
         <CommentWrite postId={id} />
         <CommentList postId={id} />
       </CommentWrap>
+      {/* </div> */}
     </>
   );
 };

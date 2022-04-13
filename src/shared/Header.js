@@ -14,8 +14,6 @@ const Header = (props) => {
   const { userId } = useSelector((state) => state.user.user);
   const [imgHover, setImgHover] = React.useState(false);
 
-  console.log(userId);
-
   return (
     <Container>
       <Grid isFlex>
@@ -77,7 +75,7 @@ const Logo = styled.img`
 `;
 
 const Container = styled.div`
-  padding: 0 50px;
+  padding: 0 10px;
   // max-width: 1200px;
   margin: 0 auto;
   height: 85px;
@@ -85,6 +83,18 @@ const Container = styled.div`
   box-shadow: rgba(50, 50, 93, 0.25) 0px 50px 100px -20px,
     rgba(0, 0, 0, 0.3) 0px 30px 60px -30px,
     rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset;
+
+  @media only screen and (min-width: 500px) {
+    padding: 0 30px;
+  }
+
+  @media only screen and (min-width: 700px) {
+    padding: 0 20px;
+  }
+
+  @media only screen and (min-width: 1100px) {
+    padding: 0 50px;
+  }
 `;
 
 export default Header;

@@ -33,7 +33,7 @@ const getCommentDB = (postId) => {
 
     // axios
     const response = await axios.get(`${BASE_URL}/comments/${postId}/list`);
-    console.log(response);
+    // console.log(response);
     const commentList = response.data.commentPostid;
 
     dispatch(setComment(postId, commentList));
@@ -56,7 +56,7 @@ const addCommentDB = (postId, content) => {
       data: newComment,
     });
     //postId commentId userId userNickname userAge createdAt content
-    // console.log("리스폰스", response);
+    console.log("리스폰스", response);
 
     newComment = response.data.createdComment;
 

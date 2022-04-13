@@ -15,11 +15,14 @@ import { MdOutlineModeComment } from "react-icons/md";
 // import { topFive } from "../../shared/Dummy";
 import CateBox from "../CateBox";
 import { history } from "../../redux/configureStore";
+import { useSelector } from "react-redux";
+import LikeIcon from "../LikeIcon";
 
 const Carousel = (props) => {
   const { topList } = props || [];
 
-  // topList.sort((a, b) => b.likeCnt - a.likeCnt);
+  // if (topList.length)
+  // topList.sort((a, b) => b?.userLike?.length - a?.userLike?.length);
 
   // react-slick 설정
   const settings = {
@@ -91,22 +94,13 @@ const Carousel = (props) => {
             {item.itemName}
           </Text>
           <Text color="#636e72" weight={500} margin="0">
-            &nbsp;&nbsp;{item.userNickname}
+            &nbsp;&nbsp;{item.userNickname} ({item.userAge})
           </Text>
         </Grid>
         <Grid isFlex>
           <Grid flexColumn>
             <Grid isFlex_center>
-              <MdOutlineModeComment size={14} /> &nbsp;
-              <Text margin="0" size="16px">
-                {item.commentCnt}개
-              </Text>
-            </Grid>
-            <Grid isFlex_center>
-              <FaRegHeart size={14} /> &nbsp;
-              <Text margin="0" size="16px">
-                {item.likeCnt}개
-              </Text>
+              <LikeIcon post={item} />
             </Grid>
           </Grid>
           <CateBox nowCategory={item.category} _onClick={handleClick} />

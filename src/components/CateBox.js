@@ -16,51 +16,56 @@ const CateBox = (props) => {
   };
   const category = Object.entries(cate);
 
+  const CarouselTag = category.map((c, i) => {
+    if (c[0] === nowCategory)
+      return (
+        <OneCateDiv key={`${c[0]}_${i}`}>
+          <Button
+            small
+            _id={c[0]}
+            onClick={_onClick}
+            bg={c[1]}
+            width="100px"
+            margin="10px"
+          >
+            {textArr[i]}
+          </Button>
+        </OneCateDiv>
+      );
+  });
+
   return (
-    <CateDiv>
-      <Grid>
-        {category.map((c, i) => {
-          if (nowCategory) {
-            return (
-              <OneCateDiv key={`${c[0]}_${i}`}>
-                {c[0] === nowCategory ? (
-                  <Button
-                    small
-                    _id={c[0]}
-                    onClick={_onClick}
-                    bg={c[1]}
-                    width="100px"
-                    // margin="15px 15px 0px 15px"
-                    margin="10px 10px 0"
-                    current={current === c[0]} // 현재 선택된 카테고리와 일치하면 true, 아니면 false
-                  >
-                    {textArr[i]}
-                  </Button>
-                ) : null}
-              </OneCateDiv>
-            );
-          } else
-            return (
-              <Button
-                key={c[0]}
-                small
-                _id={c[0]}
-                onClick={_onClick}
-                bg={c[1]}
-                width="100px"
-                // margin="15px 15px 0px 15px"
-                margin="10px 10px 0"
-                current={current === c[0]} // 현재 선택된 카테고리와 일치하면 true, 아니면 false
-              >
-                {textArr[i]}
-              </Button>
-            );
-        })}
-      </Grid>
-    </CateDiv>
+    <>
+      {nowCategory ? (
+        <>{CarouselTag}</>
+      ) : (
+        <CateDiv>
+          <Grid>
+            {category.map((c, i) => {
+              return (
+                <Button
+                  key={c[0]}
+                  small
+                  _id={c[0]}
+                  onClick={_onClick}
+                  bg={c[1]}
+                  width="120px"
+                  // margin="15px 15px 0px 15px"
+                  margin="10px 10px 0"
+                  current={current === c[0]} // 현재 선택된 카테고리와 일치하면 true, 아니면 false
+                >
+                  {textArr[i]}
+                </Button>
+              );
+            })}
+          </Grid>
+        </CateDiv>
+      )}
+    </>
   );
 };
 
+// 얘때문이었음... ㅡㅅㅡ 난 무슨생각으로 얘를 이렇게 만든거지
 const CateDiv = styled.div`
   margin: 0 auto;
   max-width: 450px;

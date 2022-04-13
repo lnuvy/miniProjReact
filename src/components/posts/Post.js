@@ -1,9 +1,11 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import { AuthButton, Grid, Image, Text } from "../../elements";
-import { actionCreators as postActions } from "../../redux/modules/post";
-import CommentList from "./CommentList";
+import {
+  actionCreators,
+  actionCreators as postActions,
+} from "../../redux/modules/post";
 import styled from "styled-components";
 import { history } from "../../redux/configureStore";
 import { changeTime } from "../../shared/ChangeTime";
@@ -13,6 +15,7 @@ import { FaCommentAlt } from "react-icons/fa";
 import { FaHeart } from "react-icons/fa";
 import { FaRegHeart } from "react-icons/fa";
 import { MdOutlineModeComment } from "react-icons/md";
+import axios from "axios";
 
 // 게시글 하나에 대한 컴포넌트
 const Post = (props) => {
@@ -20,8 +23,18 @@ const Post = (props) => {
   // 와이어프레임의 상세페이지에 코멘트를 제외하고는 List 와 똑같이 뿌려주면 될것같아서
   // useParmas 로 아이디 값이 있는지 확인 후 리턴값을 변경해줍니다
   const { category, id } = useParams();
-  const { ...item } = props;
+  const { _onClick, ...item } = props;
   const currentUser = useSelector((state) => state.user?.user?.userId);
+
+  const isMyLike = item?.userLike?.find((l) => l === currentUser) || null;
+
+  // 아니 생각해보니까 그냥 불러오면되잖아
+  // const commentCnt = await axios.post()
+
+  // 댓글 개수
+  useEffect(() => {
+    dispatch(postActions.getCommentCount(id));
+  }, []);
 
   // 현재 로그인한 유저가 이 게시글의 작성자인지 확인
   const isMe = currentUser === item.userId ? true : false;
@@ -37,7 +50,7 @@ const Post = (props) => {
 
   return (
     // 컨테이너
-    <Container>
+    <Container onClick={_onClick}>
       <InfoBox isDetail={id || null} category={cateColor[1]}>
         <Grid padding="10px">
           <Image
@@ -53,7 +66,7 @@ const Post = (props) => {
             {item.itemName} &nbsp;&nbsp;
           </Text>
           <Text color="#636e72" weight={500} margin="0">
-            {item.userNickname}
+            {item.userNickname} ({item.userAge})
           </Text>
         </Grid>
 
@@ -91,23 +104,35 @@ const Post = (props) => {
           </>
         )}
 
-        <Grid isFlex_start>
-          <Grid isFlex_end padding="10px">
-            <MdOutlineModeComment size={14} /> &nbsp;
-            <Text margin="0" size="16px">
-              {item.commentCnt}개
+        <Grid isFlex>
+          <Grid isFlex_start>
+            <Grid isFlex_start padding="10px">
+              <MdOutlineModeComment size={14} /> &nbsp;
+              <Text margin="0" size="16px">
+                {item.commentCnt}개
+              </Text>
+            </Grid>
+            <Grid isFlex_center padding="10px">
+              <Grid
+                _onClick={() => {
+                  dispatch(
+                    actionCreators.toggleLikeDB(item.userId, item.postId)
+                  );
+                }}
+              >
+                {isMyLike ? <FaHeart size={14} /> : <FaRegHeart size={14} />}
+              </Grid>
+              &nbsp;
+              <Text margin="0" size="16px">
+                {item?.userLike?.length}개
+              </Text>
+            </Grid>
+          </Grid>
+          <Grid>
+            <Text center margin="0" size="14px" color="#9e9e9e" weight="500">
+              {changeTime(item.createdAt)}
             </Text>
           </Grid>
-          {/* 여기서 좋아요가 눌렸는지 아닌지 체크해야할듯? */}
-          <Grid isFlex_start padding="10px">
-            <FaRegHeart size={14} /> &nbsp;
-            <Text margin="0" size="16px">
-              {item.likeCnt}개
-            </Text>
-          </Grid>
-          <Text center margin="0" size="14px" color="#9e9e9e" weight="500">
-            {changeTime(item.createdAt)}
-          </Text>
         </Grid>
       </InfoBox>
     </Container>
@@ -115,6 +140,7 @@ const Post = (props) => {
 };
 
 const Container = styled.div`
+  cursor: pointer;
   /* background-color: ${(props) => props.category}; */
 `;
 

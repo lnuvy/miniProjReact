@@ -19,6 +19,7 @@ const EDIT_POST = "EDIT_POST";
 const DELETE_POST = "DELETE_POST";
 const TOGGLE_LIKE = "TOGGLE_LIKE";
 const LOADING = "LOADING";
+const SET_CNT = "SET_CNT";
 
 const setPost = createAction(SET_POST, (list) => ({ list }));
 const addPost = createAction(ADD_POST, (post) => ({ post }));
@@ -27,11 +28,16 @@ const editPost = createAction(EDIT_POST, (postId, post) => ({
   post,
 }));
 const deletePost = createAction(DELETE_POST, (postId) => ({ postId }));
-const toggleLike = createAction(TOGGLE_LIKE, (postId, likeCnt) => ({
+const toggleLike = createAction(TOGGLE_LIKE, (postId, likeCnt, likeArr) => ({
   postId,
   likeCnt,
+  likeArr,
 }));
 const loading = createAction(LOADING, (isLoading) => ({ isLoading }));
+const commentControl = createAction(SET_CNT, (postId, commentCnt) => ({
+  postId,
+  commentCnt,
+}));
 
 //// middlewares
 // 메인에서 캐러셀에 주입되는 Best5 가져오기
@@ -43,6 +49,29 @@ const getBestFiveItem = () => {
     });
     const bestFive = response.data.likeCnt;
     dispatch(setPost(bestFive));
+  };
+};
+
+// 게시글의 댓글 개수 가져오기 .. ?
+const getCommentCount = (postId) => {
+  return async function (dispatch, getState, { history }) {
+    if (!postId) return;
+
+    await axios({
+      headers: {
+        "Content-Type": "application/json",
+      },
+      method: "POST",
+      url: `${BASE_URL}/posts/comment`,
+      data: JSON.stringify({ postId }),
+    })
+      .then((res) => {
+        const cnt = res.data;
+        dispatch(commentControl(postId, cnt));
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 };
 
@@ -84,20 +113,24 @@ const addPostDB = (post = null) => {
       imageUrl: post.imageUrl,
       category: post.category,
     };
-    console.log(data);
-    console.log(post.imageUrl);
 
-    // 요청!
-    await axios
-      .post(`${BASE_URL}/posts/${post.category}/add`, data)
-      .then((res) => {
-        console.log("포스팅 추가 완료했습니다", res);
+    await axios({
+      method: "POST",
+      url: `${BASE_URL}/posts/${post.category}/add`,
+      data: data,
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((re) => {
+        console.log("응답", re);
+
+        dispatch(addPost(data));
+        history.replace(`/list/${post.category}`);
       })
       .catch((err) => {
-        console.log("포스팅 추가중 에러났네요", err);
+        console.log(err);
       });
-    dispatch(addPost(data));
-    history.replace(`/list/${post.category}`);
   };
 };
 
@@ -165,6 +198,30 @@ const deletePostDB = (postId, category) => {
   };
 };
 
+const toggleLikeDB = (userId, postId) => {
+  return async function (dispatch, getState, { history }) {
+    const userInfo = getState().user.user;
+    const currentUser = userInfo.userId;
+
+    axios({
+      headers: {
+        "Content-Type": "application/json",
+      },
+      method: "POST",
+      url: `${BASE_URL}/posts/like`,
+      data: JSON.stringify({ userId: currentUser, postId }),
+    })
+      .then((res) => {
+        const { newLikecnt, newuserLike } = res.data;
+        console.log(newLikecnt, newuserLike);
+        dispatch(toggleLike(postId, newLikecnt, newuserLike));
+      })
+      .catch((err) => {
+        console.log("좋아요 클릭 시 에러", err);
+      });
+  };
+};
+
 export default handleActions(
   {
     [SET_POST]: (state, action) =>
@@ -194,6 +251,28 @@ export default handleActions(
         );
         draft.list = newList;
       }),
+    [TOGGLE_LIKE]: (state, action) =>
+      produce(state, (draft) => {
+        const likeArr = action.payload.likeArr;
+
+        draft.list.forEach((l, i) => {
+          if (l.postId === action.payload.postId) {
+            l.userLike = likeArr;
+          }
+        });
+      }),
+    [SET_CNT]: (state, action) =>
+      produce(state, (draft) => {
+        const { postId, commentCnt } = action.payload;
+        if (!commentCnt) return;
+
+        let newArr = draft.list.map((l) => {
+          if (l.postId === postId) {
+            l.commentCnt = commentCnt;
+          }
+          return l;
+        });
+      }),
   },
   initialState
 );
@@ -209,4 +288,6 @@ export const actionCreators = {
   deletePostDB,
   getMyPostDB,
   getBestFiveItem,
+  toggleLikeDB,
+  getCommentCount,
 };

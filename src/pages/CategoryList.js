@@ -9,6 +9,7 @@ import { history } from "../redux/configureStore";
 import _ from "lodash";
 import styled from "styled-components";
 import CateBox from "../components/CateBox";
+import { commentActions } from "../redux/modules/comment";
 
 // 카테고리 선택 후의 리스트입니다
 const CategoryList = () => {
@@ -26,7 +27,6 @@ const CategoryList = () => {
   // 카테고리별 이동
   const handleClick = (e) => {
     const categoryValue = e.target.id;
-    console.log(categoryValue);
     history.push(`/list/${categoryValue}`);
   };
 
@@ -98,29 +98,27 @@ const CategoryList = () => {
           {query !== ""
             ? searchList.map((l, i) => {
                 return (
-                  <Grid
-                    key={l.postId}
-                    padding="16px"
-                    isFlex_center
-                    _onClick={() =>
-                      history.push(`/list/${category}/${l.postId}`)
-                    }
-                  >
-                    <Post bg={l.category} {...l} />
+                  <Grid key={`${l.postId}_{i}`} padding="16px" isFlex_center>
+                    <Post
+                      _onClick={() =>
+                        history.push(`/list/${category}/${l.postId}`)
+                      }
+                      bg={l.category}
+                      {...l}
+                    />
                   </Grid>
                 );
               })
             : categoryList.map((l, i) => {
                 return (
-                  <Grid
-                    key={l.postId}
-                    padding="16px"
-                    _onClick={() =>
-                      history.push(`/list/${category}/${l.postId}`)
-                    }
-                    isFlex_center
-                  >
-                    <Post bg={l.category} {...l} />
+                  <Grid key={l.postId} padding="16px" isFlex_center>
+                    <Post
+                      _onClick={() =>
+                        history.push(`/list/${category}/${l.postId}`)
+                      }
+                      bg={l.category}
+                      {...l}
+                    />
                   </Grid>
                 );
               })}

@@ -23,12 +23,11 @@ const Register = (props) => {
       return;
     }
     if (pwd === pwd_check) {
-      alert("가입이 정상적으로 완료되었습니다!");
-      props.history.push("/login");
+      // alert("가입이 정상적으로 완료되었습니다!");
+      // props.history.push("/login");
     } else {
       setPwdWarning(true);
     }
-
     dispatch(userActions.registerDB(id, pwd, pwd_check, user_name, user_age));
   };
 
@@ -173,10 +172,6 @@ const Container = styled.div`
   max-width: 1000px;
   align-items: center;
 `;
-
-// const LogoBox = styled.div`
-//   align-items: center;
-// `
 
 const SignupBox = styled.div`
   padding: 50px;

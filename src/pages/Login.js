@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import { history } from "../redux/configureStore";
 import { Grid, Input, Text, Button } from "../elements/index";
@@ -7,32 +7,32 @@ import { actionCreators as userActions } from "../redux/modules/user";
 
 const Login = (props) => {
   const dispatch = useDispatch();
-  const [id, setId] = React.useState("");
-  const [pwd, setPwd] = React.useState("");
-  const [submitted, setSubmitted] = React.useState(false);
+  // const [id, setId] = React.useState("");
+  // const [pwd, setPwd] = React.useState("");
+
+  // 로그인 state 리팩토링
+  const [logins, setLogins] = useState({});
+  const [submitted, setSubmitted] = useState(false);
+
+  const handleChange = (e) => {
+    const id = e.target.id;
+    const value = e.target.value;
+    setLogins((values) => ({ ...values, [id]: value }));
+  };
 
   const login = () => {
-    setSubmitted(true);
-    if (id === "" || pwd === "") {
-      console.log("빈칸을 채워주세요!");
+    if (!logins.id || !logins.pwd) {
+      setSubmitted(true);
       return;
     }
-    dispatch(userActions.loginDB(id, pwd));
+    console.log(logins);
+    dispatch(userActions.loginDB(logins));
   };
 
   return (
     <Container>
-      {/* <LogoBox>
-        <Text size="50px" weight="700" margin="0">
-          🐶개발자를 위한
-        </Text>
-        <Text size="50px" weight="700" margin="0">
-          🍯꿀템
-        </Text>
-      </LogoBox> */}
-
       <LoginBox>
-        <Grid flexColumn>
+        <Grid>
           <Text size="32px" weight="900">
             Login
           </Text>
@@ -42,32 +42,30 @@ const Login = (props) => {
               id="id"
               clickColor="#98ddca"
               label="ID"
-              value={id}
+              value={logins.id}
+              width="80%"
               placeholder="🔑    아이디를 입력해주세요"
-              _onChange={(e) => {
-                setId(e.target.value);
-              }}
+              _onChange={handleChange}
             />
-            {submitted && !id ? (
+            {submitted && !logins.id && (
               <Text align="left" size="12px" margin="0" color="#FA5E73">
                 아이디를 입력하세요!
               </Text>
-            ) : null}
+            )}
           </Grid>
 
           <Grid margin="20px">
             <Input
-              id="password"
+              id="pwd"
               clickColor="#98ddca"
               label="Password"
-              value={pwd}
+              value={logins.pwd}
+              width="80%"
               type="password"
               placeholder="🔒    패스워드를 입력해주세요"
-              _onChange={(e) => {
-                setPwd(e.target.value);
-              }}
+              _onChange={handleChange}
             />
-            {submitted && !pwd ? (
+            {submitted && !logins.pwd ? (
               <Text align="left" size="12px" margin="0" color="#FA5E73">
                 패스워드를 입력하세요!
               </Text>
