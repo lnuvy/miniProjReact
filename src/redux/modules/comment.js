@@ -49,7 +49,6 @@ const addCommentDB = (postId, content) => {
       content,
     };
 
-    console.log(newComment);
     // axios
     const response = await axios({
       method: "post",
@@ -57,10 +56,9 @@ const addCommentDB = (postId, content) => {
       data: newComment,
     });
     //postId commentId userId userNickname userAge createdAt content
-    console.log("리스폰스", response);
+    // console.log("리스폰스", response);
 
     newComment = response.data.createdComment;
-    console.log(newComment);
 
     dispatch(addComment(postId, newComment));
   };
@@ -73,11 +71,8 @@ const deleteCommentDB = (commentId, postId) => {
 
     const { userId } = getState().user.user;
 
-    console.log(userId);
-
     // 해당 개시글 정보
     const postInfo = getState().post.list.filter((l) => l.postId === postId)[0];
-    console.log(postInfo);
 
     await axios({
       method: "DELETE",
@@ -103,14 +98,12 @@ export default handleActions(
       }),
     [ADD_COMMENT]: (state, action) =>
       produce(state, (draft) => {
-        console.log(state.list);
         draft.list[action.payload.postId].unshift(action.payload.comment);
       }),
     [DELETE_COMMENT]: (state, action) =>
       produce(state, (draft) => {
         let path = action.payload.postId;
-        console.log(path);
-        console.log(state.list[path]);
+
         let newArr = draft.list[path].filter(
           (l) => l.commentId !== action.payload.commentId
         );

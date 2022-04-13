@@ -10,8 +10,6 @@ const CommentList = (props) => {
   const commentList = useSelector((state) => state.comment.list);
   const user_info = useSelector((state) => state.user.user);
   const { postId = null } = props;
-  console.log(user_info);
-  console.log(commentList);
 
   useEffect(() => {
     //코멘트 정보 없을때 불러오기
@@ -29,12 +27,7 @@ const CommentList = (props) => {
       <CommentWrap>
         <Grid padding="16px">
           {commentList[postId].map((c) => {
-            // 유저검사
-            // if (c.uer_id === user_info?.uid) {
             return <CommentItem key={c.commentId} {...c} />;
-            // } else {
-            // return <CommentItem key={c.id} {...c} />;
-            // }
           })}
         </Grid>
       </CommentWrap>

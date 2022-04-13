@@ -71,24 +71,6 @@ const getMyPostDB = (userId) => {
   };
 };
 
-const userPost = {};
-
-const newArr = userPost.userLike.filter((a) => {
-  return userId === a;
-});
-
-// 해당 유저의 유저아이디가 배열에 이미 있는지 , 만약 있다면 found 는 아이디값이 되고, 없으면 und
-const found = userPost.userLike.find((e) => e === userId);
-
-if (found) {
-  // 좋아요 취소
-  const 변수배열 = userPost.userLike.filter((a) => a !== userId);
-  userPost.userLike = 변수배열;
-} else {
-  // 좋아요
-  userPost.userLike.push(found);
-}
-
 const addPostDB = (post = null) => {
   return async function (dispatch, getState, { history }) {
     if (!post) return;

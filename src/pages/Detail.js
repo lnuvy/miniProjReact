@@ -13,7 +13,7 @@ const Detail = (props) => {
   const item = useSelector((state) => state.post.list).filter(
     (l) => l.postId === id
   );
-  console.log(item);
+
   // 위에서 걸러낸
   const {
     postId,

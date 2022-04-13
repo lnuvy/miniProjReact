@@ -67,6 +67,8 @@ const Post = (props) => {
             <Grid isFlex>
               <AuthButton
                 isMe={isMe}
+                bg="#5eaba5"
+                padding="5px 0"
                 onClick={(e) => {
                   e.stopPropagation();
                   history.push(`/write/${category}/${item.postId}`);
@@ -76,6 +78,8 @@ const Post = (props) => {
               </AuthButton>
               <AuthButton
                 isMe={isMe}
+                bg="#d03333"
+                padding="5px 0"
                 onClick={(e) => {
                   e.stopPropagation();
                   dispatch(postActions.deletePostDB(item.postId, category));

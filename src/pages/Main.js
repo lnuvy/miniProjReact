@@ -7,7 +7,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { actionCreators as postActions } from "../redux/modules/post";
 
 const Main = (props) => {
-  console.log(props);
   const dispatch = useDispatch();
   const topFive = useSelector((state) => state.post.list);
 
@@ -15,8 +14,6 @@ const Main = (props) => {
     dispatch(postActions.getBestFiveItme());
     // 카테고리가 바뀔때마다 검색창 value 비우기
   }, []);
-
-  console.log(topFive);
 
   const handleClick = (e) => {
     const categoryValue = e.target.id;

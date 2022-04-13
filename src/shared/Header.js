@@ -8,11 +8,7 @@ import styled from "styled-components";
 
 const Header = (props) => {
   const dispatch = useDispatch();
-
   const { userId } = useSelector((state) => state.user.user);
-
-  console.log(userId);
-
   return (
     <Container>
       <Grid isFlex>
