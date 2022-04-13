@@ -9,13 +9,10 @@ import {
 import styled from "styled-components";
 import { history } from "../../redux/configureStore";
 import { changeTime } from "../../shared/ChangeTime";
+import LikeIcon from "../LikeIcon";
 
 // Font Awesome Icon
-import { FaCommentAlt } from "react-icons/fa";
-import { FaHeart } from "react-icons/fa";
-import { FaRegHeart } from "react-icons/fa";
 import { MdOutlineModeComment } from "react-icons/md";
-import axios from "axios";
 
 // 게시글 하나에 대한 컴포넌트
 const Post = (props) => {
@@ -26,12 +23,6 @@ const Post = (props) => {
   const { _onClick, ...item } = props;
   const currentUser = useSelector((state) => state.user?.user?.userId);
 
-  const isMyLike = item?.userLike?.find((l) => l === currentUser) || null;
-
-  // 아니 생각해보니까 그냥 불러오면되잖아
-  // const commentCnt = await axios.post()
-
-  // 댓글 개수
   useEffect(() => {
     dispatch(postActions.getCommentCount(id));
   }, []);
@@ -82,6 +73,7 @@ const Post = (props) => {
                 isMe={isMe}
                 bg="#5eaba5"
                 padding="5px 0"
+                margin="10px"
                 onClick={(e) => {
                   e.stopPropagation();
                   history.push(`/write/${category}/${item.postId}`);
@@ -93,6 +85,7 @@ const Post = (props) => {
                 isMe={isMe}
                 bg="#d03333"
                 padding="5px 0"
+                margin="10px"
                 onClick={(e) => {
                   e.stopPropagation();
                   dispatch(postActions.deletePostDB(item.postId, category));
@@ -104,7 +97,7 @@ const Post = (props) => {
           </>
         )}
 
-        <Grid isFlex>
+        <Grid isFlex padding="0 20px">
           <Grid isFlex_start>
             <Grid isFlex_start padding="10px">
               <MdOutlineModeComment size={14} /> &nbsp;
@@ -114,18 +107,16 @@ const Post = (props) => {
             </Grid>
             <Grid isFlex_center padding="10px">
               <Grid
-                _onClick={() => {
+                isFlex
+                _onClick={(e) => {
+                  e.stopPropagation();
                   dispatch(
                     actionCreators.toggleLikeDB(item.userId, item.postId)
                   );
                 }}
               >
-                {isMyLike ? <FaHeart size={14} /> : <FaRegHeart size={14} />}
+                <LikeIcon post={item} />
               </Grid>
-              &nbsp;
-              <Text margin="0" size="16px">
-                {item?.userLike?.length}개
-              </Text>
             </Grid>
           </Grid>
           <Grid>
@@ -163,7 +154,6 @@ const ContentDiv = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 70%;
   min-height: 70px;
 `;
 

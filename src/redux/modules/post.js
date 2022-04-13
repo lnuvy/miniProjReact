@@ -80,6 +80,7 @@ const getCategoryList = (category = null) => {
   return async function (dispatch, getState, { history }) {
     const response = await axios.get(`${BASE_URL}/posts/${category}`);
     const data = response.data.Posts;
+    console.log(data);
     dispatch(setPost(data));
   };
 };
@@ -137,7 +138,6 @@ const addPostDB = (post = null) => {
 // 당장은 글 내용물만 바꿀수있음
 const editPostDB = (postId, content) => {
   return async function (dispatch, getState, { history }) {
-    console.log("here");
     if (!postId) return;
 
     // formData 로 바꿔야함
@@ -272,6 +272,7 @@ export default handleActions(
           }
           return l;
         });
+        draft.list = newArr;
       }),
   },
   initialState

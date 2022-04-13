@@ -73,7 +73,6 @@ const registerDB = (id, pwd, pwd_check, user_name, user_age) => {
 
 // 로그인
 const loginDB = (dic) => {
-  console.log(dic);
   return async function (dispatch, getState, { history }) {
     const { id: userId, pwd: password } = dic;
     await axios
@@ -83,15 +82,17 @@ const loginDB = (dic) => {
       })
       // 여기서 유저정보도 받아야함!
       .then((res) => {
+        console.log(res.status);
         const { token, userId, userNickname, userAge } = res.data;
         console.log(res.data.token);
         setData(res.data);
         dispatch(logIn(token, { userId, userNickname, userAge }));
         history.push("/");
       })
-      .catch(function (error) {
-        console.log(error);
-        window.alert("없는 회원정보입니다,,,");
+      .catch((err) => {
+        // console.log(err.response);
+        const { errorMessage } = err.response.data;
+        alert(errorMessage);
       });
   };
 };

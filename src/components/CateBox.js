@@ -65,13 +65,13 @@ const CateBox = (props) => {
   );
 };
 
-// 얘때문이었음... ㅡㅅㅡ 난 무슨생각으로 얘를 이렇게 만든거지
+// 얘때문이었음...
 const CateDiv = styled.div`
-  margin: 0 auto;
-  max-width: 450px;
+  margin: 20px auto;
+  max-width: 500px;
   min-width: 120px;
-  max-height: 30vh;
-  min-height: 115px;
+  max-height: 40vh;
+  min-height: 130px;
   text-align: center;
   align-items: center;
 `;

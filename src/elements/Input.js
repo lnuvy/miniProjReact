@@ -13,9 +13,10 @@ const Input = (props) => {
     id = "",
     clickColor,
     disabled,
+    fontSize,
   } = props;
 
-  const styles = { clickColor: clickColor, height: height };
+  const styles = { clickColor: clickColor, height: height, fontSize: fontSize };
 
   return (
     <>
@@ -46,6 +47,7 @@ Input.defaultProps = {
   clickColor: "",
   width: "",
   id: "",
+  fontSize: "",
 };
 
 const SmallText = styled.small`
@@ -66,6 +68,7 @@ const InputField = styled.input`
   position: relative;
   ${(props) => (props.width ? `width: ${props.width};` : `width: 100%;`)};
   ${(props) => (props.height ? `height: ${props.height};` : `height: 30px;`)};
+  ${(props) => (props.fontSize ? `font-size: ${props.fontSize};` : null)}
 
   &:focus {
     outline: none;

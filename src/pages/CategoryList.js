@@ -9,7 +9,6 @@ import { history } from "../redux/configureStore";
 import _ from "lodash";
 import styled from "styled-components";
 import CateBox from "../components/CateBox";
-import { commentActions } from "../redux/modules/comment";
 
 // 카테고리 선택 후의 리스트입니다
 const CategoryList = () => {
@@ -20,6 +19,7 @@ const CategoryList = () => {
   // axios 조회
   useEffect(() => {
     dispatch(postActions.getCategoryList(category));
+
     // 카테고리가 바뀔때마다 검색창 value 비우기
     if (query !== "") setQuery("");
   }, [category]);
@@ -68,7 +68,7 @@ const CategoryList = () => {
           <Button
             margin="20px"
             width="200px"
-            bg={isTitle ? "white" : "black"}
+            bg={isTitle ? "#00000026" : "black"}
             color={isTitle ? "black" : "white"}
             _onClick={() => {
               setIsTitle(!isTitle);

@@ -3,8 +3,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { Button, Grid, Input } from "../../elements";
 import { imageActions } from "../../redux/modules/image";
 
-import axios from "axios";
-
 const Upload = (props) => {
   const dispatch = useDispatch();
   // const isUploading = useSelector((state) => state.image.uploading);
