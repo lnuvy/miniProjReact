@@ -72,6 +72,7 @@ const registerDB = (id, pwd, pwd_check, user_name, user_age) => {
 const loginDB = (id, pwd) => {
   console.log(id, pwd)
   return async function (dispatch, getState, { history }) {
+    console.log(id, pwd)
     await axios
       .post(`${BASE_URL}/login/reqLogin`, {
         userId: id,
@@ -79,22 +80,14 @@ const loginDB = (id, pwd) => {
       })
       // 여기서 유저정보도 받아야함!
       .then((res) => {
+        console.log(res)
         const { token, userId, userNickname, userAge } = res.data
-        console.log(res.data)
+        console.log(res.data.token)
+
         setData(res.data)
+        console.log(res.data)
         dispatch(logIn(token, { userId, userNickname, userAge }))
         history.push('/')
-        // const userInfo = res.data.유저데이터 담긴변수
-        // 더미
-        // const userInfo = {
-        //   userId: 'test99',
-        //   userNickname: '닉네임',
-        //   userAge: '20대',
-        // }
-        // const accessToken = res.data.token
-
-        // console.log(userInfo)
-        // dispatch(logIn(accessToken, userInfo))
       })
       .catch(function (error) {
         console.log(error)
@@ -104,15 +97,13 @@ const loginDB = (id, pwd) => {
 }
 
 //유저정보
-// const getUserDB = (token) => {
+// const userInfoDB = () => {
 //   return async function (dispatch, getState, { history }) {
-//     const token = localStorage.getItem('token')
-//     const res = await axios.get(`${BASE_URL}/login/getUser`)
-//     const data = res.data
-//     console.log(data)
-// dispatch(getUser(data))
-//   }
-// }
+//     const token = getToken;
+//     console.log(token);
+//     await axios.get(`${BASE_URL}/getUser`);
+//   };
+// };
 
 // REDUCER
 export default handleActions(

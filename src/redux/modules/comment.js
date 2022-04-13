@@ -4,12 +4,11 @@ import moment from 'moment'
 import { actionCreators as postActions } from './post'
 import axios from 'axios'
 
+const BASE_URL = 'http://13.209.66.208'
+
 const SET_COMMENT = 'SET_COMMENT'
 const ADD_COMMENT = 'ADD_COMMENT'
 const DELETE_COMMENT = 'DELETE_COMMENT'
-
-// base_url + url
-const BASE_URL = 'http://13.209.66.208'
 
 const setComment = createAction(SET_COMMENT, (postId, commentList) => ({
   postId,
@@ -81,18 +80,26 @@ const deleteCommentDB = (commentId, postId) => {
   return async function (dispatch, getState, { history }) {
     if (!commentId) return
 
+    const { userId } = getState().user.user
+
+    console.log(userId)
+
     // 해당 개시글 정보
     const postInfo = getState().post.list.filter((l) => l.postId === postId)[0]
     console.log(postInfo)
-    // axios
-    await axios
-      .delete(`${BASE_URL}/comments/${commentId}`)
+
+    axios({
+      method: 'DELETE',
+      url: `${BASE_URL}/comments/${commentId}`,
+      data: { userId },
+    })
       .then((res) => {
-        console.log('댓글 삭제 성공', res)
+        console.log(res)
       })
       .catch((err) => {
-        console.log('댓글 삭제중 에러', err)
+        console.log(err)
       })
+
     dispatch(deleteComment(commentId, postId))
   }
 }
@@ -102,7 +109,6 @@ export default handleActions(
     [SET_COMMENT]: (state, action) =>
       produce(state, (draft) => {
         draft.list[action.payload.postId] = action.payload.commentList
-        console.log(action.payload.commentList)
       }),
     [ADD_COMMENT]: (state, action) =>
       produce(state, (draft) => {
@@ -113,11 +119,10 @@ export default handleActions(
       produce(state, (draft) => {
         let path = action.payload.postId
         console.log(path)
-        console.log(...state.list[path])
+        console.log(state.list[path])
         let newArr = draft.list[path].filter(
           (l) => l.commentId !== action.payload.commentId,
         )
-        console.log(newArr)
         draft.list[path] = newArr
       }),
   },

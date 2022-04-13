@@ -5,7 +5,15 @@ import 'slick-carousel/slick/slick-theme.css'
 import { Grid, Image, Text } from '../../elements'
 import styled from 'styled-components'
 
+// Font Awesome Icon
+import { FaCommentAlt } from 'react-icons/fa'
+import { FaHeart } from 'react-icons/fa'
+import { FaRegHeart } from 'react-icons/fa'
+
+import { MdOutlineModeComment } from 'react-icons/md'
+
 import { topFive } from '../../shared/Dummy'
+import CateBox from '../CateBox'
 
 const Carousel = (props) => {
   const topList = topFive
@@ -66,12 +74,29 @@ const Carousel = (props) => {
           <Image src={item.imageUrl} />
         </Grid>
         <Grid isFlex_center>
-          <Text size="20px" weight={600}>
+          <Text size="20px" weight={600} margin="0">
             {item.itemName}
           </Text>
-          <Text color="#636e72" weight={500}>
+          <Text color="#636e72" weight={500} margin="0">
             &nbsp;&nbsp;{item.writer.userNickname}
           </Text>
+        </Grid>
+        <Grid isFlex>
+          <Grid flexColumn>
+            <Grid isFlex_center>
+              <MdOutlineModeComment size={14} /> &nbsp;
+              <Text margin="0" size="16px">
+                {item.commentCnt}개
+              </Text>
+            </Grid>
+            <Grid isFlex_center>
+              <FaRegHeart size={14} /> &nbsp;
+              <Text margin="0" size="16px">
+                {item.likeCnt}개
+              </Text>
+            </Grid>
+          </Grid>
+          <CateBox nowCategory={item.category} />
         </Grid>
       </Grid>
     )

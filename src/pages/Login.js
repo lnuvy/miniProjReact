@@ -22,14 +22,14 @@ const Login = (props) => {
 
   return (
     <Container>
-      <LogoBox>
+      {/* <LogoBox>
         <Text size="50px" weight="700" margin="0">
           🐶개발자를 위한
         </Text>
         <Text size="50px" weight="700" margin="0">
           🍯꿀템
         </Text>
-      </LogoBox>
+      </LogoBox> */}
 
       <LoginBox>
         <Grid flexColumn>
@@ -81,15 +81,15 @@ const Login = (props) => {
 
           <TextBox>
             <p>
-              Not a Member?{' '}
+              새로 오셨나요?{' '}
               <span
                 onClick={() => {
                   history.push('/register')
                 }}
               >
-                <U>Sign up</U>{' '}
+                <U>여기서 가입</U>
               </span>
-              now!
+              하세요!
             </p>
           </TextBox>
         </Grid>
@@ -99,19 +99,15 @@ const Login = (props) => {
 }
 
 const Container = styled.div`
-  margin: 150px auto;
+  margin: auto;
   width: 100%;
   max-width: 1000px;
-  display: flex;
-  position: relative;
-  flex-direction: rows;
-  justify-content: space-between;
   align-items: center;
 `
 
-const LogoBox = styled.div`
-  align-items: center;
-`
+// const LogoBox = styled.div`
+//   align-items: center;
+// `
 
 const LoginBox = styled.div`
   padding: 50px;

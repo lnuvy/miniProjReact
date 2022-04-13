@@ -14,12 +14,15 @@ const Main = (props) => {
   return (
     <>
       <Grid>
-        <Text center weight="900" size="40px" margin="10px">
-          Best 5
+        <Text center weight="900" size="40px" margin="60px 0 0">
+          ✨ Best 5 ✨
         </Text>
         <Grid>
-          <Grid width="70%" margin="10px auto">
+          <Grid width="70%" margin="0 auto">
             {/* 가장 좋아요가 많은 5개 api 요청 후 여기에 뿌려짐 */}
+            <Text center weight="500" size="20px">
+              현재 가장 인기 많은 꿀템들을 확인해보세요! 👀
+            </Text>
             <Carousel />
           </Grid>
         </Grid>
@@ -30,7 +33,9 @@ const Main = (props) => {
           Category
         </Text>
         <Grid>
-          <Text>다른 개발자들의 꿀템들이 궁금하다면?👇</Text>
+          <Text center weight="400" size="20px">
+            다른 개발자들의 꿀템들이 궁금하다면?👇
+          </Text>
         </Grid>
         <Grid>
           <Grid>
@@ -95,10 +100,13 @@ const Main = (props) => {
 }
 
 const CateBox = styled.div`
-  margin: 0 auto;
-  width: 50%;
+  max-width: 600px;
+  margin: 0 auto 50px;
+  // background-color: rgba(250, 248, 225, 0.5);
   text-align: center;
   align-items: center;
+  border-radius: 60%;
+  padding: 50px 50px 80px;
 `
 
 export default Main

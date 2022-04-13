@@ -34,7 +34,7 @@ Grid.defaultProps = {
   _cursor: false,
   isSticky: false,
   zIndexTop: false,
-  felxColumn: false,
+  flexColumn: false,
   float: false,
 }
 
