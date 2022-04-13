@@ -11,6 +11,8 @@ const CommentList = (props) => {
   const user_info = useSelector((state) => state.user.user);
   const { postId = null } = props;
 
+  const currentUser = useSelector((state) => state.user.user.user);
+
   useEffect(() => {
     //코멘트 정보 없을때 불러오기
     if (!commentList[postId]) {

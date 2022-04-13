@@ -1,9 +1,9 @@
 /* 폰트 임포트 */
-@import url("https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap');
 
 * {
   /* font-family: ; */
-  font-family: "Noto Sans KR", sans-serif;
+  font-family: 'Noto Sans KR', sans-serif;
 }
 
 .App {
@@ -21,4 +21,8 @@
   .headerText {
     display: none;
   }
+}
+
+li {
+  list-style: none;
 }

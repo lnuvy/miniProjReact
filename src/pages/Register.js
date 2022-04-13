@@ -34,14 +34,14 @@ const Register = (props) => {
 
   return (
     <Container>
-      <LogoBox>
+      {/* <LogoBox>
         <Text size="50px" weight="700" margin="0">
           🐶개발자를 위한
         </Text>
         <Text size="50px" weight="700" margin="0">
           🍯꿀템
         </Text>
-      </LogoBox>
+      </LogoBox> */}
       <SignupBox>
         <Text size="32px" weight="900" margin="0 0px 40px">
           Sign Up
@@ -83,7 +83,7 @@ const Register = (props) => {
           </Grid>
           <Grid margin="20px">
             <Input
-              label="패스워드"
+              label="Password"
               id="password"
               value={pwd}
               _onChange={(e) => {
@@ -168,19 +168,15 @@ const Register = (props) => {
 };
 
 const Container = styled.div`
-  margin: 50px auto;
+  margin: auto;
   width: 100%;
   max-width: 1000px;
-  display: flex;
-  position: relative;
-  flex-direction: rows;
-  justify-content: space-between;
   align-items: center;
 `;
 
-const LogoBox = styled.div`
-  align-items: center;
-`;
+// const LogoBox = styled.div`
+//   align-items: center;
+// `
 
 const SignupBox = styled.div`
   padding: 50px;

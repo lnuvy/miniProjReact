@@ -35,7 +35,7 @@ const loading = createAction(LOADING, (isLoading) => ({ isLoading }));
 
 //// middlewares
 // 메인에서 캐러셀에 주입되는 Best5 가져오기
-const getBestFiveItme = () => {
+const getBestFiveItem = () => {
   return async function (dispatch, getState, { history }) {
     const response = await axios({
       method: "GET",
@@ -84,19 +84,20 @@ const addPostDB = (post = null) => {
       imageUrl: post.imageUrl,
       category: post.category,
     };
+    console.log(data);
+    console.log(post.imageUrl);
 
     // 요청!
-    axios({
-      method: "POST",
-      url: `${BASE_URL}/posts/${post.category}/add`,
-      data: data,
-    })
-      .then(() => {
-        history.push(`/list/${post.category}`);
+    await axios
+      .post(`${BASE_URL}/posts/${post.category}/add`, data)
+      .then((res) => {
+        console.log("포스팅 추가 완료했습니다", res);
       })
       .catch((err) => {
-        console.log(err);
+        console.log("포스팅 추가중 에러났네요", err);
       });
+    dispatch(addPost(data));
+    history.replace(`/list/${post.category}`);
   };
 };
 
@@ -207,5 +208,5 @@ export const actionCreators = {
   deletePost,
   deletePostDB,
   getMyPostDB,
-  getBestFiveItme,
+  getBestFiveItem,
 };
