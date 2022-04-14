@@ -93,22 +93,22 @@ const deleteCommentDB = (commentId, postId) => {
     dispatch(deleteComment(commentId, postId))
   }
 }
-// const getCommentCnt = (postId) => {
-//   return async function (dispatch, getState, { history }) {
-//     await axios({
-//       method: 'get',
-//       url: `${BASE_URL}/posts/comment`,
-//       data: { postId },
-//       headers: { 'Content-Type': 'application/json' },
-//     })
-//       .then((res) => {
-//         console.log(res.data)
-//       })
-//       .catch((err) => {
-//         console.log('앗 에러 발생', err)
-//       })
-//   }
-// }
+const getCommentCnt = (postId) => {
+  return async function (dispatch, getState, { history }) {
+    await axios({
+      method: 'get',
+      url: `${BASE_URL}/posts/comment`,
+      data: { postId },
+      headers: { 'Content-Type': 'application/json' },
+    })
+      .then((res) => {
+        console.log(res.data)
+      })
+      .catch((err) => {
+        console.log('앗 에러 발생', err)
+      })
+  }
+}
 
 export default handleActions(
   {
@@ -129,10 +129,10 @@ export default handleActions(
         )
         draft.list[path] = newArr
       }),
-    // [COMMENT_CNT]: (state, action) =>
-    // produce(state, (draft) => {
-    //   console.log(action.payload)
-    // }),
+    [COMMENT_CNT]: (state, action) =>
+      produce(state, (draft) => {
+        console.log(action.payload)
+      }),
   },
   initialState,
 )

@@ -25,7 +25,7 @@ const Register = (props) => {
   // 유효성 검사
   const [isId, setIsId] = useState(false)
   const [isName, setIsName] = useState(false)
-  const [isPassword, setIsPwd] = useState(false)
+  const [isPwd, setIsPwd] = useState(false)
   const [isPwdConfirm, setIsPwdConfirm] = useState(false)
 
   //아이디 체크
@@ -85,13 +85,11 @@ const Register = (props) => {
       console.log('빈칸을 채워주세요!')
       return
     }
-    if ((setIsId, setIsName, setIsPwd, setIsPwdConfirm === true)) {
+    if (isId && isName && isPwd && isPwdConfirm) {
       alert('가입이 정상적으로 완료되었습니다!')
-      props.history.push('/login')
     } else {
       alert('다시 한번 확인해주세요..!')
     }
-
     dispatch(userActions.registerDB(id, pwd, pwd_check, name, user_age))
   }
 
@@ -171,7 +169,7 @@ const Register = (props) => {
                 size="12px"
                 margin="0"
                 color="#5DC2B1"
-                className={`message ${isPassword ? 'success' : 'error'}`}
+                className={`message ${isPwd ? 'success' : 'error'}`}
               >
                 {pwdMessage}
               </Text>
@@ -234,14 +232,14 @@ const Register = (props) => {
             </Button>
           </Grid>
           <Grid _cursor>
-            <Text
+            <Ptag
               margin="0"
               onClick={() => {
                 history.push('/login')
               }}
             >
-              <P>뒤로가요</P>
-            </Text>
+              뒤로가요
+            </Ptag>
           </Grid>
         </Grid>
       </FormContent>
@@ -284,7 +282,8 @@ const SmallText = styled.small`
   margin: 10px;
 `
 
-const P = styled.p`
+const Ptag = styled.p`
+  margin: 0px;
   &:hover {
     color: #98ddca;
   }

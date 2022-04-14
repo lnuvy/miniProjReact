@@ -57,6 +57,7 @@ const Post = (props) => {
           <Text color="#636e72" weight={500} margin="0">
             {item.userNickname}
           </Text>
+          <Text>{item.content}</Text>
         </Grid>
 
         {id && (
