@@ -6,6 +6,8 @@ import { useParams } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { actionCreators as postActions } from "../redux/modules/post";
 import { history } from "../redux/configureStore";
+import CateBox from "../components/CateBox";
+import LikeIcon from "../components/LikeIcon";
 
 const Profile = (props) => {
   const dispatch = useDispatch();
@@ -19,6 +21,13 @@ const Profile = (props) => {
     dispatch(postActions.getMyPostDB(userId));
   }, []);
 
+  const handleClick = (e) => {
+    e.stopPropagation();
+    const categoryValue = e.target.id;
+    console.log(categoryValue);
+    history.push(`/list/${categoryValue}`);
+  };
+
   return (
     <>
       <Container>
@@ -27,14 +36,20 @@ const Profile = (props) => {
             <Text weight="900" size="30px" margin="0px">
               My Profile
             </Text>
-            <Grid isFlex_center>
+            <Grid>
               <Text weight="700" size="24px">
-                {user.userNickname}
+                {user.userId}
               </Text>
+              <Grid isFlex_center>
+                <Text weight="600" size="22px">
+                  {user.userNickname}
+                </Text>
+                <Text weight="500" size="20px" color="#aaa">
+                  &nbsp; ({user.userAge})
+                </Text>
+              </Grid>
             </Grid>
-            <Button width="100px" bg="#C3B9EA">
-              {user.userAge}
-            </Button>
+            <Text width="100px" bg="#C3B9EA"></Text>
           </Grid>
         </InfoBox>
 
@@ -48,13 +63,24 @@ const Profile = (props) => {
                 return (
                   <MyPostBox
                     key={post.postId}
-                    onClick={() => {
+                    onClick={(e) => {
+                      e.stopPropagation();
                       history.push(`/list/${post.category}/${post.postId}`);
                     }}
                   >
                     <Grid>
                       <Image src={post.imageUrl} />
-                      <Text size="20px;">{post.content}</Text>
+                      <Grid>
+                        <Text margin="20px 0 0" size="20px" weight="500">
+                          {post.itemName}
+                        </Text>
+                        <CateBox
+                          nowCategory={post.category}
+                          _onClick={handleClick}
+                        />
+
+                        <LikeIcon post={post} />
+                      </Grid>
                     </Grid>
                   </MyPostBox>
                 );
@@ -83,7 +109,7 @@ const InfoBox = styled.div`
   text-align: center;
   align-items: center;
   max-width: 350px;
-  padding: 50px;
+  padding: 30px;
   border-radius: 40px;
   box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
 `;
@@ -101,12 +127,14 @@ const PostList = styled.div`
 `;
 
 const MyPostBox = styled.div`
+  cursor: pointer;
   text-align: center;
   align-items: center;
   padding: 20px;
-  border: 1px solid #eee;
+  box-shadow: rgba(0, 0, 0, 0.09) 0px 3px 12px;
   border-radius: 20px;
   min-height: 170px;
+  max-width: 500px;
   flex-direction: column;
 `;
 export default Profile;

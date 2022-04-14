@@ -29,7 +29,7 @@ const Main = (props) => {
         <Grid>
           <Grid width="70%" margin="0 auto">
             <Text center weight="500" size="20px">
-              현재 가장 인기 많은 꿀템들을 확인해보세요! 👀
+              현재 개발자들에게 가장 인기 많은 꿀템들을 확인해보세요! 👀
             </Text>
             <Carousel topList={topFive} />
           </Grid>

@@ -125,6 +125,10 @@ export default handleActions(
         );
         draft.list[path] = newArr;
       }),
+    // [COMMENT_CNT]: (state, action) =>
+    // produce(state, (draft) => {
+    //   console.log(action.payload)
+    // }),
   },
   initialState
 );

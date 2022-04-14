@@ -30,6 +30,8 @@ const Post = (props) => {
   // 현재 로그인한 유저가 이 게시글의 작성자인지 확인
   const isMe = currentUser === item.userId ? true : false;
 
+  const [toggleLike, setToggleLike] = React.useState(false);
+
   const cate = {
     chair: "rgba(195,229,174, 0.5)",
     desk: "rgba(195,185,234, .5)",
@@ -68,10 +70,11 @@ const Post = (props) => {
                 {item.content}
               </Text>
             </ContentDiv>
-            <Grid isFlex>
+            <Grid isFlex_end>
               <AuthButton
                 isMe={isMe}
-                bg="#5eaba5"
+                width="50px"
+                bg="#aaa"
                 padding="5px 0"
                 margin="10px"
                 onClick={(e) => {
@@ -83,7 +86,8 @@ const Post = (props) => {
               </AuthButton>
               <AuthButton
                 isMe={isMe}
-                bg="#d03333"
+                width="50px"
+                bg="#aaa"
                 padding="5px 0"
                 margin="10px"
                 onClick={(e) => {
@@ -101,9 +105,7 @@ const Post = (props) => {
           <Grid isFlex_start>
             <Grid isFlex_start padding="10px">
               <MdOutlineModeComment size={14} /> &nbsp;
-              <Text margin="0" size="16px">
-                {item.commentCnt}개
-              </Text>
+              {item.commentCnt !== 0 && `${item.commentCnt}개`}
             </Grid>
             <Grid isFlex_center padding="10px">
               <Grid
@@ -133,6 +135,7 @@ const Post = (props) => {
 const Container = styled.div`
   cursor: pointer;
   /* background-color: ${(props) => props.category}; */
+  cursor: pointer;
 `;
 
 const InfoBox = styled.div`

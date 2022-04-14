@@ -1,18 +1,18 @@
-import React from "react";
-import styled from "styled-components";
-import { FaPen } from "react-icons/fa";
+import React from 'react'
+import styled from 'styled-components'
+import { FaPen } from 'react-icons/fa'
 
 const FixedButton = (props) => {
-  const { _onClick, children = null } = props;
+  const { _onClick, children = null } = props
 
   return (
     <FloatButton onClick={_onClick}>
       <FaPen />
     </FloatButton>
-  );
-};
+  )
+}
 
-export default FixedButton;
+export default FixedButton
 
 const FloatButton = styled.button`
   cursor: pointer;
@@ -31,4 +31,11 @@ const FloatButton = styled.button`
   border-radius: 70%;
   right: 30px;
   z-index: 999;
-`;
+  transform: scale(1);
+  transition: transform 0.3s;
+
+  &:hover {
+    transform: scale(1.1);
+    transition: transform 0.3s;
+  }
+`

@@ -64,22 +64,25 @@ const CommentItem = (props) => {
   const isMe = currentUser === userId ? true : false;
 
   return (
-    <Grid isFlex>
-      <Grid isFlex_center width="40%">
-        <Text margin="0">
-          {userNickname} ({userAge})
+    <Container>
+      <Grid isFlex>
+        <Text weight="700" margin="0">
+          {userNickname}
+        </Text>
+        <Text margin="7px 0" color="#aaa">
+          ({userAge})
         </Text>
       </Grid>
       <Text margin="0px">{content}</Text>
-      <Grid isFlex width="30%" margin="0 10px">
-        <Text margin="0px">{changeTime(createdAt)}</Text>
 
+      <Grid isFlex margin="0 10px">
+        <Text margin="0px">{changeTime(createdAt)}</Text>
         <AuthButton
           isMe={isMe}
           width="auto"
           margin="4px 5px"
           padding="5px"
-          bg="#d03333"
+          bg="#aaa"
           _onClick={() => {
             dispatch(commentActions.deleteCommentDB(commentId, postId));
           }}
@@ -87,6 +90,15 @@ const CommentItem = (props) => {
           삭제
         </AuthButton>
       </Grid>
-    </Grid>
+    </Container>
   );
 };
+
+const Container = styled.div`
+  max-width: 1200px;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 5px;
+`;

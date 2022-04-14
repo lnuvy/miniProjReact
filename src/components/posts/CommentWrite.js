@@ -27,6 +27,7 @@ const CommentWrite = (props) => {
             _onChange={handleChange}
             value={comment}
             onSubmit={write}
+            padding="0 10px"
           />
           <Button
             small
