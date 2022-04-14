@@ -1,6 +1,5 @@
 import { createAction, handleActions } from "redux-actions";
 import { produce } from "immer";
-import moment from "moment";
 import { actionCreators as postActions } from "./post";
 import axios from "axios";
 
