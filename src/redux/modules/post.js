@@ -20,6 +20,7 @@ const DELETE_POST = "DELETE_POST";
 const TOGGLE_LIKE = "TOGGLE_LIKE";
 const LOADING = "LOADING";
 const SET_CNT = "SET_CNT";
+const PLUS = "PLUS";
 
 const setPost = createAction(SET_POST, (list) => ({ list }));
 const addPost = createAction(ADD_POST, (post) => ({ post }));
@@ -38,6 +39,8 @@ const commentControl = createAction(SET_CNT, (postId, commentCnt) => ({
   postId,
   commentCnt,
 }));
+
+const commentPlus = createAction(PLUS, (postId) => ({ postId }));
 
 //// middlewares
 // 메인에서 캐러셀에 주입되는 Best5 가져오기
@@ -89,7 +92,6 @@ const getCategoryList = (category = null) => {
       .then((res) => {
         console.log("/posts/:category response:", res);
         const data = res.data.Posts;
-        console.log(data);
         dispatch(setPost(data));
       })
       .catch((err) => {
@@ -295,6 +297,16 @@ export default handleActions(
         });
         draft.list = newArr;
       }),
+    [PLUS]: (state, action) =>
+      produce(state, (draft) => {
+        const { postId } = action.payload;
+
+        draft.list.forEach((p) => {
+          if (postId === p.postId) {
+            p.commentCnt = p.commentCnt + 1;
+          }
+        });
+      }),
   },
   initialState
 );
@@ -312,4 +324,5 @@ export const actionCreators = {
   getBestFiveItem,
   toggleLikeDB,
   getCommentCount,
+  commentPlus,
 };

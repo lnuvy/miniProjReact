@@ -29,6 +29,6 @@ const FloatButton = styled.button`
   vertical-align: middle;
   border: none;
   border-radius: 70%;
-  right: 16px;
+  right: 30px;
   z-index: 999;
 `;

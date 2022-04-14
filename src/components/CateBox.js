@@ -51,7 +51,7 @@ const CateBox = (props) => {
                   bg={c[1]}
                   width="120px"
                   // margin="15px 15px 0px 15px"
-                  margin="10px 10px 0"
+                  margin="15px 15px 0"
                   current={current === c[0]} // 현재 선택된 카테고리와 일치하면 true, 아니면 false
                 >
                   {textArr[i]}

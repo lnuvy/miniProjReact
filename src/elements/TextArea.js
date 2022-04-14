@@ -10,7 +10,7 @@ const TextArea = (props) => {
         id={id}
         onChange={_onChange}
         placeholder=" "
-        rows="8"
+        rows="5"
         value={value}
       />
       <label>{label}</label>

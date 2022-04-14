@@ -79,82 +79,118 @@ const WritePost = (props) => {
 
   return (
     <>
-      <Grid padding="50px" width="60%" margin="10px auto">
-        <Grid>
-          <Text margin="0" size="32px" weight="600">
-            {isEdit ? "게시글 수정" : "게시글 작성"}
-          </Text>
-        </Grid>
-
-        {isEdit ? null : (
-          <Grid isFlex padding="0 50px">
-            <Grid margin="0 20px">
-              <CategoryDiv>
-                <Text
-                  margin="0 20px"
-                  size="20px"
-                  weight="500"
-                  center
-                  color="#636e72"
-                >
-                  현재 카테고리
-                  <br />
-                  <CategoryIconSwitch category={nowCategory} /> {nowCategory}
-                </Text>
-              </CategoryDiv>
+      <WriteWrap>
+        <Grid padding="10px" margin="10px auto">
+          <Grid isFlex>
+            <Grid isFlex_center>
+              <Text margin="0" size="32px" weight="600" _className="headerText">
+                게시글
+              </Text>
+              <Text margin="0" size="32px" weight="600">
+                {isEdit ? "수정" : "작성"}
+              </Text>
             </Grid>
-            <Grid>
-              <Grid margin="20px auto">
-                <Upload propsfile={inputs.itemName} />
+            <CateResDiv>
+              <Text
+                // _className="headerText"
+                margin="0"
+                size="20px"
+                weight="500"
+                center
+                color="#636e72"
+              >
+                카테고리: &nbsp;
+                <CategoryIconSwitch category={nowCategory} /> {nowCategory}
+              </Text>
+            </CateResDiv>
+          </Grid>
+
+          {isEdit ? null : (
+            <Grid isFlex_center>
+              <Grid margin="0"></Grid>
+              <Grid>
+                <Grid margin="20px auto">
+                  <Upload propsfile={inputs.itemName} />
+                </Grid>
               </Grid>
             </Grid>
-          </Grid>
-        )}
-
-        <Text align="left" size="14px" margin="0" color="#FA5E73">
-          한번 올린 이미지는 수정이 불가능합니다!
-        </Text>
-        <Grid padding="20px">
-          <Image
-            src={preview ? preview : "http://via.placeholder.com/400x300"}
-          />
-        </Grid>
-        <ItemNameBox>
-          <Input
-            id="itemName"
-            fontSize="18px"
-            label="소개할 아이템 이름"
-            placeholder="소개할 아이템의 이름을 입력하세요..."
-            value={inputs.itemName}
-            _onChange={changeValue}
-          />
-        </ItemNameBox>
-        <Grid padding="15px">
-          <TextArea
-            id="content"
-            value={inputs.content}
-            _onChange={changeValue}
-            label="게시글 내용"
-          />
-        </Grid>
-        <Grid>
-          {!isEdit ? (
-            <Button _onClick={addPost}>작성</Button>
-          ) : (
-            <Button _onClick={editPost}>수정</Button>
           )}
+
+          <Text align="left" size="14px" margin="0" color="#FA5E73">
+            한번 올린 이미지는 수정이 불가능합니다!
+          </Text>
+          <Grid padding="20px">
+            <Image
+              src={preview ? preview : "http://via.placeholder.com/400x300"}
+            />
+          </Grid>
+          <ItemNameBox>
+            <Input
+              id="itemName"
+              fontSize="16px"
+              label="소개할 아이템 이름"
+              placeholder="소개할 아이템의 이름을 입력하세요..."
+              value={inputs.itemName}
+              _onChange={changeValue}
+            />
+          </ItemNameBox>
+          <Grid padding="15px">
+            <TextArea
+              id="content"
+              value={inputs.content}
+              _onChange={changeValue}
+              label="게시글 내용"
+            />
+          </Grid>
+          <Grid>
+            {!isEdit ? (
+              <Button margin="20px 0" _onClick={addPost}>
+                작성
+              </Button>
+            ) : (
+              <Button margin="20px 0" _onClick={editPost}>
+                수정
+              </Button>
+            )}
+
+            <Button
+              margin="5px 0"
+              bg="white"
+              color="black"
+              _onClick={() => {
+                history.goBack();
+              }}
+            >
+              뒤로가요
+            </Button>
+          </Grid>
         </Grid>
-      </Grid>
+      </WriteWrap>
     </>
   );
 };
 
-const CategoryDiv = styled.div`
-  width: 160px;
+const WriteWrap = styled.div`
+  width: 90%;
+  margin: 0 auto;
+
+  @media only screen and (min-width: 635px) {
+    width: 80%;
+  }
+  @media only screen and (min-width: 850px) {
+    width: 70%;
+  }
+  @media only screen and (min-width: 1050px) {
+    width: 70%;
+  }
+`;
+
+const CateResDiv = styled.div`
+  /* margin-left: ; */
 `;
 
 const ItemNameBox = styled.div`
-  padding: 50px;
+  padding: 30px;
   font-size: 24px;
 `;
 

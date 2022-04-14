@@ -30,12 +30,12 @@ const CategoryList = () => {
     history.push(`/list/${categoryValue}`);
   };
 
-  // 정렬
-  const [mostLike, setMostLike] = useState(true);
-  const [sorted, SetSorted] = useState(false);
+  // 최신순, 오래된 순 정렬
+  const [isOldest, setIsOldest] = useState(false);
 
   // 검색
-  const [isTitle, setIsTitle] = useState(true);
+  // const [selected, setSelected] = useState("brandnew");
+  const [search, setSearch] = useState("title");
   const [query, setQuery] = useState("");
 
   const debounce = _.debounce((k) => k, 300);
@@ -52,12 +52,28 @@ const CategoryList = () => {
     categoryList.filter((item) => {
       const { itemName, userNickname } = item;
       const q = query;
-      if (isTitle) {
+      if (search === "title") {
         return itemName.includes(q);
       } else {
         return userNickname.includes(q);
       }
     }) || [];
+
+  // const filterList = categoryList?.sort((a, b) => {
+  //   const { userLike, createdAt} = item;
+  //   const filter = selected;
+
+  //   if(filter === "mostLike") {
+
+  //   }
+
+  // })
+  // if (categoryList.length) {
+  //   const filterList = categoryList?.sort(
+  //     (a, b) => b.userLike.length - a.userLike.length
+  //   );
+  //   console.log(filterList);
+  // }
 
   return (
     <>
@@ -68,17 +84,30 @@ const CategoryList = () => {
           <Button
             margin="20px"
             width="200px"
-            bg={isTitle ? "#00000026" : "black"}
-            color={isTitle ? "black" : "white"}
+            bg={isOldest ? "#00000026" : "black"}
+            color={isOldest ? "black" : "white"}
             _onClick={() => {
-              setIsTitle(!isTitle);
+              setIsOldest(!isOldest);
             }}
           >
-            {isTitle ? "작성자로 검색" : "제목으로 검색"}
+            {isOldest ? "오래된순 입니다" : "최신순 입니다"}
           </Button>
           <ResInput>
-            {isTitle ? (
+            <Select
+              value={search}
+              id="filter"
+              onChange={(e) => {
+                console.log(e.target.value);
+                setSearch(e.target.value);
+              }}
+            >
+              {/* <option value="mostLike">좋아요 순</option> */}
+              <option value="writer">작성자로 검색</option>
+              <option value="title">제목으로 검색</option>
+            </Select>
+            {search === "title" ? (
               <Input
+                padding="0 20px"
                 id="search"
                 placeholder={`#${category} 의 제목을 검색해보세요!`}
                 value={query}
@@ -86,6 +115,7 @@ const CategoryList = () => {
               />
             ) : (
               <Input
+                padding="0 20px"
                 id="search"
                 placeholder={`게시글의 작성자를 검색해보세요!`}
                 value={query}
@@ -109,24 +139,46 @@ const CategoryList = () => {
                   </Grid>
                 );
               })
-            : categoryList.map((l, i) => {
-                return (
-                  <Grid key={l.postId} padding="16px" isFlex_center>
-                    <Post
-                      _onClick={() =>
-                        history.push(`/list/${category}/${l.postId}`)
-                      }
-                      bg={l.category}
-                      {...l}
-                    />
-                  </Grid>
-                );
+            : categoryList.map((l, i, arr) => {
+                // ㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋ
+                if (isOldest) {
+                  let filterPost = arr[arr.length - i - 1];
+                  return (
+                    <Grid key={filterPost.postId} padding="16px" isFlex_center>
+                      <Post
+                        _onClick={() =>
+                          history.push(`/list/${category}/${filterPost.postId}`)
+                        }
+                        bg={filterPost.category}
+                        {...filterPost}
+                      />
+                    </Grid>
+                  );
+                } else
+                  return (
+                    <Grid key={l.postId} padding="16px" isFlex_center>
+                      <Post
+                        _onClick={() =>
+                          history.push(`/list/${category}/${l.postId}`)
+                        }
+                        bg={l.category}
+                        {...l}
+                      />
+                    </Grid>
+                  );
               })}
         </Grid>
       </Grid>
     </>
   );
 };
+
+const Select = styled.select`
+  /* width: 70%; */
+  padding: 5px;
+  border: 1px solid #ddd;
+  border-radius: 3px;
+`;
 
 const ResInput = styled.div`
   display: flex;

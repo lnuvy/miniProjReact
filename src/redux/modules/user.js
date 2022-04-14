@@ -51,16 +51,13 @@ const logoutAction = (user) => {
 const registerDB = (id, pwd, pwd_check, user_name, user_age) => {
   return async function (dispatch, getState, { history }) {
     await axios
-      .post(
-        `${BASE_URL}/login/signUp`,
-        JSON.stringify({
-          userId: id,
-          password: pwd,
-          passwordCheck: pwd_check,
-          userNickname: user_name,
-          userAge: user_age,
-        })
-      )
+      .post(`${BASE_URL}/login/signUp`, {
+        userId: id,
+        password: pwd,
+        passwordCheck: pwd_check,
+        userNickname: user_name,
+        userAge: user_age,
+      })
       .then(function (res) {
         console.log("/login/signUp response: " + res);
         history.push("/login");

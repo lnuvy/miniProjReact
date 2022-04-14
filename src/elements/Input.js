@@ -14,9 +14,15 @@ const Input = (props) => {
     clickColor,
     disabled,
     fontSize,
+    padding,
   } = props;
 
-  const styles = { clickColor: clickColor, height: height, fontSize: fontSize };
+  const styles = {
+    clickColor: clickColor,
+    height: height,
+    fontSize: fontSize,
+    padding: padding,
+  };
 
   return (
     <>
@@ -69,6 +75,7 @@ const InputField = styled.input`
   ${(props) => (props.width ? `width: ${props.width};` : `width: 100%;`)};
   ${(props) => (props.height ? `height: ${props.height};` : `height: 30px;`)};
   ${(props) => (props.fontSize ? `font-size: ${props.fontSize};` : null)}
+  ${(props) => (props.padding ? `padding: ${props.padding};` : null)}
 
   &:focus {
     outline: none;

@@ -68,6 +68,7 @@ const addCommentDB = (postId, content) => {
         console.log("/comments/:postId res:", res);
         newComment = res.data.createdComment;
         dispatch(addComment(postId, newComment));
+        dispatch(postActions.commentPlus(postId));
       })
       .catch((err) => {
         console.log("/comments/:postId res:", err.response);

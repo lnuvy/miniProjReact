@@ -109,6 +109,13 @@ const Carousel = (props) => {
     );
   });
 
+  if (topList.length !== 5) {
+    return (
+      <Text center weight="500">
+        게시글이 충분하지않아요!
+      </Text>
+    );
+  }
   return (
     <Container>
       <Grid>
