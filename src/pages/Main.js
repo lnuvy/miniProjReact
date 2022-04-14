@@ -1,10 +1,20 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import Carousel from '../components/posts/Carousel'
 import { Button, Grid, Image, Text } from '../elements'
 import { history } from '../redux/configureStore'
 import styled from 'styled-components'
+import { useDispatch, useSelector } from 'react-redux'
+import { actionCreators as postActions } from '../redux/modules/post'
 
 const Main = (props) => {
+  const dispatch = useDispatch()
+  const topFive = useSelector((state) => state.post.list)
+
+  useEffect(() => {
+    dispatch(postActions.getBestFiveItem())
+    // 카테고리가 바뀔때마다 검색창 value 비우기
+  }, [])
+
   const handleClick = (e) => {
     const categoryValue = e.target.id
     console.log(categoryValue)
@@ -21,9 +31,9 @@ const Main = (props) => {
           <Grid width="70%" margin="0 auto">
             {/* 가장 좋아요가 많은 5개 api 요청 후 여기에 뿌려짐 */}
             <Text center weight="500" size="20px">
-              현재 가장 인기 많은 꿀템들을 확인해보세요! 👀
+              현재 개발자들에게 가장 인기 많은 꿀템들을 확인해보세요! 👀
             </Text>
-            <Carousel />
+            <Carousel topList={topFive} />
           </Grid>
         </Grid>
       </Grid>

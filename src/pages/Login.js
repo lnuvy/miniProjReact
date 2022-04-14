@@ -22,34 +22,33 @@ const Login = (props) => {
 
   return (
     <Container>
-      {/* <LogoBox>
-        <Text size="50px" weight="700" margin="0">
-          🐶개발자를 위한
+      <LogoBox>
+        <Text size="40px" weight="900" margin="30px;">
+          🐶개발자 🍯꿀템 list.
         </Text>
-        <Text size="50px" weight="700" margin="0">
+        {/* <Text size="30px" weight="900" margin="0">
           🍯꿀템
-        </Text>
-      </LogoBox> */}
-
+        </Text> */}
+      </LogoBox>
       <LoginBox>
-        <Grid flexColumn>
+        <FormContent>
           <Text size="32px" weight="900">
             Login
           </Text>
-
           <Grid margin="20px">
             <Input
               id="id"
-              clickColor="#98ddca"
+              clickColor="#5DC2B1"
               label="ID"
               value={id}
+              type="text"
               placeholder="🔑    아이디를 입력해주세요"
               _onChange={(e) => {
                 setId(e.target.value)
               }}
             />
             {submitted && !id ? (
-              <Text align="left" size="12px" margin="0" color="#FA5E73">
+              <Text align="left" size="12px" margin="0" color="#5DC2B1">
                 아이디를 입력하세요!
               </Text>
             ) : null}
@@ -58,7 +57,7 @@ const Login = (props) => {
           <Grid margin="20px">
             <Input
               id="password"
-              clickColor="#98ddca"
+              clickColor="#5DC2B1"
               label="Password"
               value={pwd}
               type="password"
@@ -68,16 +67,15 @@ const Login = (props) => {
               }}
             />
             {submitted && !pwd ? (
-              <Text align="left" size="12px" margin="0" color="#FA5E73">
+              <Text align="left" size="12px" margin="0" color="#5DC2B1">
                 패스워드를 입력하세요!
               </Text>
             ) : null}
           </Grid>
-          <Grid>
-            <Button margin="20px" width="250px" text="로그인" _onClick={login}>
-              로그인
-            </Button>
-          </Grid>
+
+          <Button margin="20px" width="250px" text="로그인" _onClick={login}>
+            로그인
+          </Button>
 
           <TextBox>
             <p>
@@ -92,28 +90,44 @@ const Login = (props) => {
               하세요!
             </p>
           </TextBox>
-        </Grid>
+        </FormContent>
       </LoginBox>
     </Container>
   )
 }
 
 const Container = styled.div`
-  margin: auto;
-  width: 100%;
-  max-width: 1000px;
-  align-items: center;
+  margin-top: 100px;
 `
 
 // const LogoBox = styled.div`
-//   align-items: center;
+//   display: flex;
 // `
 
 const LoginBox = styled.div`
-  padding: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  width: 100%;
+  min-height: 100%;
+`
+
+const LogoBox = styled.div`
+  align-items: center;
+  margin: 0 auto;
+  position: relative;
   text-align: center;
+`
+
+const FormContent = styled.div`
+  margin-bottom: 50px;
+  width: 90%;
+  padding: 20px;
+  max-width: 350px;
+  position: relative;
   border-radius: 30px;
-  width: 300px;
+  text-align: center;
   box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
 `
 

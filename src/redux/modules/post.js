@@ -27,13 +27,26 @@ const editPost = createAction(EDIT_POST, (postId, post) => ({
   post,
 }))
 const deletePost = createAction(DELETE_POST, (postId) => ({ postId }))
-const toggleLike = createAction(TOGGLE_LIKE, (postId, likeCnt) => ({
+const toggleLike = createAction(TOGGLE_LIKE, (postId, likeCnt, likeList) => ({
   postId,
   likeCnt,
+  likeList,
 }))
 const loading = createAction(LOADING, (isLoading) => ({ isLoading }))
 
 //// middlewares
+// 메인에서 캐러셀에 주입되는 Best5 가져오기
+const getBestFiveItem = () => {
+  return async function (dispatch, getState, { history }) {
+    const response = await axios({
+      method: 'GET',
+      url: `${BASE_URL}/mostLikePost`,
+    })
+    const bestFive = response.data.likeCnt
+    dispatch(setPost(bestFive))
+  }
+}
+
 // 카테고리별 아이템을 가져오기
 const getCategoryList = (category = null) => {
   return async function (dispatch, getState, { history }) {
@@ -46,13 +59,12 @@ const getCategoryList = (category = null) => {
 // 내가 쓴글 조회
 const getMyPostDB = (userId) => {
   return async function (dispatch, getState, { history }) {
-    await axios
+    axios
       .get(`${BASE_URL}/profile/${userId}`)
       .then((res) => {
-        const data = res.data.post
-        const myData = data.filter((c) => c.userId === userId)
-        console.log(myData)
-        dispatch(setPost(myData))
+        const data = res.data
+        const newArr = data.post.filter((l) => l.userId === userId)
+        dispatch(setPost(newArr))
       })
       .catch((err) => {
         console.log('내 글을 받아오지 못했어요', err)
@@ -85,7 +97,7 @@ const addPostDB = (post = null) => {
       .catch((err) => {
         console.log('포스팅 추가중 에러났네요', err)
       })
-    dispatch(addPost(data))
+    // dispatch(addPost(data))
     history.replace(`/list/${post.category}`)
   }
 }
@@ -152,11 +164,35 @@ const deletePostDB = (postId, category) => {
   }
 }
 
+//좋아요
+const toggleLikeDB = (postId, userId) => {
+  console.log(postId, userId)
+  return async function (dispatch, getState, { history }) {
+    const currentUser = getState().user.user.userId
+
+    await axios({
+      method: 'POST',
+      url: `${BASE_URL}/posts/like`,
+      data: JSON.stringify({ userId }),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+      .then((res) => {
+        const { newLikecnt, newuserLike } = res.data
+        console.log(res.data)
+        dispatch(toggleLike(userId, newLikecnt, newuserLike))
+      })
+      .catch((err) => {
+        console.log('에러에러', err)
+      })
+  }
+}
+
 export default handleActions(
   {
     [SET_POST]: (state, action) =>
       produce(state, (draft) => {
-        console.log(action.payload.list)
         draft.list = action.payload.list
       }),
     [ADD_POST]: (state, action) =>
@@ -182,6 +218,18 @@ export default handleActions(
         )
         draft.list = newList
       }),
+    [TOGGLE_LIKE]: (state, action) =>
+      produce(state, (draft) => {
+        let likeList = action.payload.likeList
+        console.log(likeList)
+
+        draft.list.forEach((l, i) => {
+          if (l.postId === action.payload.postId) {
+            l.userLike = likeList
+            console.log(likeList)
+          }
+        })
+      }),
   },
   initialState,
 )
@@ -196,4 +244,6 @@ export const actionCreators = {
   deletePost,
   deletePostDB,
   getMyPostDB,
+  getBestFiveItem,
+  toggleLikeDB,
 }

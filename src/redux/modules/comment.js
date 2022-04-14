@@ -9,6 +9,7 @@ const BASE_URL = 'http://13.209.66.208'
 const SET_COMMENT = 'SET_COMMENT'
 const ADD_COMMENT = 'ADD_COMMENT'
 const DELETE_COMMENT = 'DELETE_COMMENT'
+const COMMENT_CNT = 'COMMENT_CNT'
 
 const setComment = createAction(SET_COMMENT, (postId, commentList) => ({
   postId,
@@ -22,55 +23,47 @@ const deleteComment = createAction(DELETE_COMMENT, (commentId, postId) => ({
   commentId,
   postId,
 }))
-
-const initialComment = {
-  postId: '12341234',
-  commentId: 'abcdefg',
-  userId: 'iamuser',
-  nickname: '닉네임',
-  createdAt: '2022-04-10 12:00:00',
-  content: '내용입니다',
-}
+const commentCnt = createAction(COMMENT_CNT, (postId, commentCnt) => ({
+  postId,
+  commentCnt,
+}))
 const initialState = {
-  list: { 12341234: [initialComment] },
-  // is_loading: false,
+  list: {},
 }
 
-// let cnt = 0
 const getCommentDB = (postId) => {
   return async function (dispatch, getState, { history }) {
     if (!postId) return
+
     // axios
-    await axios({
-      method: 'get',
-      url: `${BASE_URL}/comments/${postId}/list`,
-    })
-      .then((res) => {
-        const list = res.data.commentPostid
-        console.log(list)
-        dispatch(setComment(postId, list))
-      })
-      .catch((err) => {
-        console.log('댓글 목록 못 가져옴', err)
-      })
+    const response = await axios.get(`${BASE_URL}/comments/${postId}/list`)
+    console.log(response)
+    const commentList = response.data.commentPostid
+
+    dispatch(setComment(postId, commentList))
   }
 }
 
 const addCommentDB = (postId, content) => {
   return async function (dispatch, getState, { history }) {
     const userInfo = getState().user.user
+
     let newComment = {
       ...userInfo,
       content,
     }
 
+    // axios
     const response = await axios({
       method: 'post',
       url: `${BASE_URL}/comments/${postId}`,
       data: newComment,
     })
+    //postId commentId userId userNickname userAge createdAt content
+    // console.log("리스폰스", response);
+
     newComment = response.data.createdComment
-    console.log(newComment)
+
     dispatch(addComment(postId, newComment))
   }
 }
@@ -82,13 +75,10 @@ const deleteCommentDB = (commentId, postId) => {
 
     const { userId } = getState().user.user
 
-    console.log(userId)
-
     // 해당 개시글 정보
     const postInfo = getState().post.list.filter((l) => l.postId === postId)[0]
-    console.log(postInfo)
 
-    axios({
+    await axios({
       method: 'DELETE',
       url: `${BASE_URL}/comments/${commentId}`,
       data: { userId },
@@ -103,6 +93,22 @@ const deleteCommentDB = (commentId, postId) => {
     dispatch(deleteComment(commentId, postId))
   }
 }
+// const getCommentCnt = (postId) => {
+//   return async function (dispatch, getState, { history }) {
+//     await axios({
+//       method: 'get',
+//       url: `${BASE_URL}/posts/comment`,
+//       data: { postId },
+//       headers: { 'Content-Type': 'application/json' },
+//     })
+//       .then((res) => {
+//         console.log(res.data)
+//       })
+//       .catch((err) => {
+//         console.log('앗 에러 발생', err)
+//       })
+//   }
+// }
 
 export default handleActions(
   {
@@ -112,19 +118,21 @@ export default handleActions(
       }),
     [ADD_COMMENT]: (state, action) =>
       produce(state, (draft) => {
-        console.log(state.list)
         draft.list[action.payload.postId].unshift(action.payload.comment)
       }),
     [DELETE_COMMENT]: (state, action) =>
       produce(state, (draft) => {
         let path = action.payload.postId
-        console.log(path)
-        console.log(state.list[path])
+
         let newArr = draft.list[path].filter(
           (l) => l.commentId !== action.payload.commentId,
         )
         draft.list[path] = newArr
       }),
+    // [COMMENT_CNT]: (state, action) =>
+    // produce(state, (draft) => {
+    //   console.log(action.payload)
+    // }),
   },
   initialState,
 )
@@ -136,4 +144,5 @@ export const commentActions = {
   setComment,
   addComment,
   deleteComment,
+  getCommentCnt,
 }

@@ -32,7 +32,7 @@ const Header = (props) => {
             _cursor
             isFlex
             padding="15px"
-            _onClick={() => history.push('/list/category')}
+            _onClick={() => history.push('/list/chair')}
           >
             <MdList size="30" />
             <Text _className="headerText" weight="400">

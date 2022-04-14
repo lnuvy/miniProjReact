@@ -1,38 +1,41 @@
-import React from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { useParams } from "react-router-dom";
-import { AuthButton, Grid, Image, Text } from "../../elements";
-import { actionCreators as postActions } from "../../redux/modules/post";
-import CommentList from "./CommentList";
-import styled from "styled-components";
-import { history } from "../../redux/configureStore";
+import React from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { useParams } from 'react-router-dom'
+import { AuthButton, Grid, Image, Text } from '../../elements'
+import { actionCreators as postActions } from '../../redux/modules/post'
+import CommentList from './CommentList'
+import styled from 'styled-components'
+import { history } from '../../redux/configureStore'
+import { changeTime } from '../../shared/ChangeTime'
 
 // Font Awesome Icon
-import { FaCommentAlt } from "react-icons/fa";
-import { FaHeart } from "react-icons/fa";
-import { FaRegHeart } from "react-icons/fa";
+import { FaCommentAlt } from 'react-icons/fa'
+import { FaHeart } from 'react-icons/fa'
+import { FaRegHeart } from 'react-icons/fa'
+import { MdOutlineModeComment } from 'react-icons/md'
 
 // 게시글 하나에 대한 컴포넌트
 const Post = (props) => {
-  const dispatch = useDispatch();
+  const dispatch = useDispatch()
   // 와이어프레임의 상세페이지에 코멘트를 제외하고는 List 와 똑같이 뿌려주면 될것같아서
   // useParmas 로 아이디 값이 있는지 확인 후 리턴값을 변경해줍니다
-  const { category, id } = useParams();
-  const { ...item } = props;
-  const currentUser = useSelector((state) => state.user?.user?.userId);
+  const { category, id } = useParams()
+  const { ...item } = props
+  const currentUser = useSelector((state) => state.user?.user?.userId)
 
   // 현재 로그인한 유저가 이 게시글의 작성자인지 확인
-  const isMe = currentUser === item.userId ? true : false;
+  const isMe = currentUser === item.userId ? true : false
+
+  const [toggleLike, setToggleLike] = React.useState(false)
 
   const cate = {
-    chair: "#C3E5AE",
-    desk: "#C3B9EA",
-    elecItem: "#F1E1A6",
-    healthCare: "#F4BBBB",
-    etc: "#77E4D4",
-  };
-  const cateColor = Object.entries(cate).filter((l) => l[0] === category)[0];
-  console.log(cateColor[1]);
+    chair: 'rgba(195,229,174, 0.5)',
+    desk: 'rgba(195,185,234, .5)',
+    elecItem: 'rgba(241,225,166, .5)',
+    healthCare: 'rgba(244,187,187, .5)',
+    etc: 'rgba(119,228,212, .5)',
+  }
+  const cateColor = Object.entries(cate).filter((l) => l[0] === category)[0]
 
   return (
     // 컨테이너
@@ -41,35 +44,50 @@ const Post = (props) => {
         <Grid padding="10px">
           <Image
             src={
-              item?.imageUrl === "imageUrl"
-                ? "https://hanghae-react1.s3.ap-northeast-2.amazonaws.com/%EA%B3%A0%EC%96%91%EC%9D%B4+%EC%82%AC%EC%A7%84+%EB%AA%A8%EC%9D%8C+-+(2).jpg"
+              item?.imageUrl === 'imageUrl'
+                ? 'https://hanghae-react1.s3.ap-northeast-2.amazonaws.com/%EA%B3%A0%EC%96%91%EC%9D%B4+%EC%82%AC%EC%A7%84+%EB%AA%A8%EC%9D%8C+-+(2).jpg'
                 : item?.imageUrl
             }
           />
         </Grid>
-        <h2>{item?.itemName}</h2>
+        <Grid isFlex_center>
+          <Text margin="0" size="27px" weight="600">
+            {item.itemName} &nbsp;&nbsp;
+          </Text>
+          <Text color="#636e72" weight={500} margin="0">
+            {item.userNickname}
+          </Text>
+        </Grid>
+
         {id && (
           <>
-            <Grid>
+            <ContentDiv>
               <Text margin="0" size="14px">
-                {item.content}
+                {/* {like} */}
               </Text>
-            </Grid>
-            <Grid isFlex>
+            </ContentDiv>
+            <Grid isFlex_end>
               <AuthButton
                 isMe={isMe}
+                width="50px"
+                bg="#aaa"
+                padding="5px 0"
+                margin="5px"
                 onClick={(e) => {
-                  e.stopPropagation();
-                  history.push(`/write/${category}/${item.postId}`);
+                  e.stopPropagation()
+                  history.push(`/write/${category}/${item.postId}`)
                 }}
               >
                 수정
               </AuthButton>
               <AuthButton
                 isMe={isMe}
+                width="50px"
+                bg="#aaa"
+                padding="5px 0"
                 onClick={(e) => {
-                  e.stopPropagation();
-                  dispatch(postActions.deletePostDB(item.postId, category));
+                  e.stopPropagation()
+                  dispatch(postActions.deletePostDB(item.postId, category))
                 }}
               >
                 삭제
@@ -77,33 +95,50 @@ const Post = (props) => {
             </Grid>
           </>
         )}
-        <h4>{item?.writer?.userId}</h4>
-        <Grid isFlex_start>
-          <Grid isFlex_end padding="10px">
-            <FaCommentAlt size={14} /> &nbsp;
-            <Text margin="0" size="16px">
-              {item.commentCnt}개
-            </Text>
+
+        <Grid isFlex>
+          <Grid isFlex_start>
+            <Grid isFlex_end padding="10px">
+              <MdOutlineModeComment size={14} /> &nbsp;
+              <Text margin="0" size="16px">
+                {item.commentCnt}개
+              </Text>
+            </Grid>
+            {/* 여기서 좋아요가 눌렸는지 아닌지 체크해야할듯? */}
+
+            <Grid isFlex_start padding="10px">
+              <FaRegHeart
+                size={14}
+                onClick={() =>
+                  dispatch(postActions.toggleLikeDB(currentUser, item.postId))
+                }
+              />{' '}
+              &nbsp;
+              <Text margin="0" size="16px">
+                {/* {likeCnt.newLikecnt}개 */}
+              </Text>
+            </Grid>
           </Grid>
-          {/* 여기서 좋아요가 눌렸는지 아닌지 체크해야할듯? */}
-          <Grid isFlex_start padding="10px">
-            <FaRegHeart size={14} /> &nbsp;
-            <Text margin="0" size="16px">
-              {item.likeCnt}개
+
+          <Grid>
+            <Text center margin="0" size="14px" color="#9e9e9e" weight="500">
+              {changeTime(item.createdAt)}
             </Text>
           </Grid>
         </Grid>
       </InfoBox>
     </Container>
-  );
-};
+  )
+}
 
 const Container = styled.div`
   /* background-color: ${(props) => props.category}; */
-`;
+  cursor: pointer;
+`
 
 const InfoBox = styled.div`
   background-color: ${(props) => props.category};
+  /* opacity: 0.5; */
   margin: 30px auto;
   text-align: center;
   align-items: center;
@@ -113,7 +148,15 @@ const InfoBox = styled.div`
   /* padding: 50px; */
   ${(props) => (props.isDetail ? `padding: 20px;` : `padding: 50px;`)}
   border-radius: 40px;
-  box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 16px;
-`;
+  box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+`
 
-export default Post;
+const ContentDiv = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 70%;
+  min-height: 70px;
+`
+
+export default Post

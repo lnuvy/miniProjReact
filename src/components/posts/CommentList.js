@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { Button, Grid, Text } from '../../elements'
+import styled from 'styled-components'
+import { AuthButton, Button, Grid, Text } from '../../elements'
 import { commentActions } from '../../redux/modules/comment'
 import { changeTime } from '../../shared/ChangeTime'
 
@@ -9,8 +10,6 @@ const CommentList = (props) => {
   const commentList = useSelector((state) => state.comment.list)
   const user_info = useSelector((state) => state.user.user)
   const { postId = null } = props
-  console.log(user_info)
-  console.log(commentList)
 
   const currentUser = useSelector((state) => state.user.user.user)
 
@@ -27,52 +26,80 @@ const CommentList = (props) => {
 
   return (
     <>
-      <Grid padding="16px">
-        {commentList[postId].map((c) => {
-          console.log({ ...c })
-          // 유저검사
-          // if (c.user_id === user_info?.uid) {
-          return <CommentItem is_me key={c.commentId} {...c} />
-          // } else {
-          // return <CommentItem key={c.id} {...c} />;
-          // }
-        })}
-      </Grid>
+      <CommentWrap>
+        <Grid padding="16px">
+          {commentList[postId].map((c, i) => {
+            return (
+              <Grid key={`${c.commentId}_${i}`} isFlex>
+                <CommentItem key={c.commentId} {...c} />
+              </Grid>
+            )
+          })}
+        </Grid>
+      </CommentWrap>
     </>
   )
 }
+
+const CommentWrap = styled.div`
+  width: 80%;
+  margin: 0 auto;
+`
 
 export default CommentList
 
 const CommentItem = (props) => {
   const dispatch = useDispatch()
-  const { commentId, content, createdAt, nickname, postId, userId } = props
+  const {
+    commentId,
+    content,
+    createdAt,
+    userNickname,
+    userAge,
+    postId,
+    userId,
+  } = props
+  const currentUser = useSelector((state) => state.user?.user?.userId)
+
+  const isMe = currentUser === userId ? true : false
 
   return (
-    <Grid isFlex>
-      <Grid isFlex_center width="35%">
-        <Text bold>{nickname}</Text>
+    <Container>
+      <Grid isFlex>
+        <Text weight="700" margin="0">
+          {userNickname}
+        </Text>
+        <Text margin="7px 0" color="#aaa">
+          ({userAge})
+        </Text>
       </Grid>
-      <Grid isFlex margin="0 5px">
-        <Text margin="0px">{content}</Text>
-        <Grid isFlex width="30%" margin="0 10px">
-          <Text margin="0px">{changeTime(createdAt)}</Text>
-          {/* {is_me && ( */}
-          <Button
-            width="auto"
-            margin="4px 5px"
-            padding="7px"
-            _color="#d03333"
-            _onClick={() => {
-              dispatch(commentActions.deleteCommentDB(commentId, postId))
-            }}
-          >
-            삭제
-          </Button>
 
-          {/* )} */}
-        </Grid>
+      <Text margin="0px">{content}</Text>
+
+      <Grid isFlex margin="0 10px">
+        <Text margin="0px">{changeTime(createdAt)}</Text>
+        <AuthButton
+          isMe={isMe}
+          width="auto"
+          margin="4px 5px"
+          padding="5px"
+          bg="#aaa"
+          _onClick={() => {
+            dispatch(commentActions.deleteCommentDB(commentId, postId))
+          }}
+        >
+          삭제
+        </AuthButton>
       </Grid>
-    </Grid>
+    </Container>
   )
 }
+
+const Container = styled.div`
+  max-width: 1200px;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 5px;
+`

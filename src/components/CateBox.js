@@ -14,7 +14,6 @@ const CateBox = (props) => {
     healthCare: "#F4BBBB",
     etc: "#77E4D4",
   };
-
   const category = Object.entries(cate);
 
   return (

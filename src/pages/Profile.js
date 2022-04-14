@@ -16,6 +16,14 @@ const Profile = (props) => {
 
   const userId = params.id
 
+  const cate = {
+    chair: 'rgba(195,229,174, 0.5)',
+    desk: 'rgba(195,185,234, .5)',
+    elecItem: 'rgba(241,225,166, .5)',
+    healthCare: 'rgba(244,187,187, .5)',
+    etc: 'rgba(119,228,212, .5)',
+  }
+
   React.useEffect(() => {
     dispatch(postActions.getMyPostDB(userId))
   }, [])
@@ -52,10 +60,10 @@ const Profile = (props) => {
                       history.push(`/list/${post.category}/${post.postId}`)
                     }}
                   >
-                    <Grid>
-                      <Image src={post.imageUrl} />
-                      <Text size="20px;">{post.content}</Text>
-                    </Grid>
+                    <Image src={post.imageUrl} />
+                    <Text margin="30px" size="20px;">
+                      {post.content}
+                    </Text>
                   </MyPostBox>
                 )
               })
@@ -104,9 +112,10 @@ const MyPostBox = styled.div`
   text-align: center;
   align-items: center;
   padding: 20px;
-  border: 1px solid #eee;
+  box-shadow: rgba(0, 0, 0, 0.09) 0px 3px 12px;
   border-radius: 20px;
   min-height: 170px;
+  max-width: 500px;
   flex-direction: column;
 `
 export default Profile
