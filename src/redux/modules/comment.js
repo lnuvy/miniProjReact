@@ -32,11 +32,17 @@ const getCommentDB = (postId) => {
     if (!postId) return;
 
     // axios
-    const response = await axios.get(`${BASE_URL}/comments/${postId}/list`);
+    axios
+      .get(`${BASE_URL}/comments/${postId}/list`)
+      .then((res) => {
+        console.log("/comments/:postId/list res:", res);
+        const commentList = res.data.commentPostid;
+        dispatch(setComment(postId, commentList));
+      })
+      .catch((err) => {
+        console.log("/comments/:postId/list error:", err.response);
+      });
     // console.log(response);
-    const commentList = response.data.commentPostid;
-
-    dispatch(setComment(postId, commentList));
   };
 };
 
@@ -50,17 +56,23 @@ const addCommentDB = (postId, content) => {
     };
 
     // axios
-    const response = await axios({
+    axios({
       method: "post",
       url: `${BASE_URL}/comments/${postId}`,
-      data: newComment,
-    });
+      data: JSON.stringify(newComment),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((res) => {
+        console.log("/comments/:postId res:", res);
+        newComment = res.data.createdComment;
+        dispatch(addComment(postId, newComment));
+      })
+      .catch((err) => {
+        console.log("/comments/:postId res:", err.response);
+      });
     //postId commentId userId userNickname userAge createdAt content
-    console.log("리스폰스", response);
-
-    newComment = response.data.createdComment;
-
-    dispatch(addComment(postId, newComment));
   };
 };
 
@@ -74,19 +86,23 @@ const deleteCommentDB = (commentId, postId) => {
     // 해당 개시글 정보
     const postInfo = getState().post.list.filter((l) => l.postId === postId)[0];
 
+    console.log(postId, postInfo.postId);
+
     await axios({
       method: "DELETE",
       url: `${BASE_URL}/comments/${commentId}`,
       data: { userId },
+      headers: {
+        "Content-Type": "application/json",
+      },
     })
       .then((res) => {
-        console.log(res);
+        console.log("/comments/:commentId res:", res);
+        dispatch(deleteComment(commentId, postId));
       })
       .catch((err) => {
-        console.log(err);
+        console.log("/comments/:commentId res:", err.response);
       });
-
-    dispatch(deleteComment(commentId, postId));
   };
 };
 

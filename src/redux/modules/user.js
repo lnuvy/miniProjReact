@@ -51,22 +51,24 @@ const logoutAction = (user) => {
 const registerDB = (id, pwd, pwd_check, user_name, user_age) => {
   return async function (dispatch, getState, { history }) {
     await axios
-      .post(`${BASE_URL}/login/signUp`, {
-        userId: id,
-        password: pwd,
-        passwordCheck: pwd_check,
-        userNickname: user_name,
-        userAge: user_age,
-      })
+      .post(
+        `${BASE_URL}/login/signUp`,
+        JSON.stringify({
+          userId: id,
+          password: pwd,
+          passwordCheck: pwd_check,
+          userNickname: user_name,
+          userAge: user_age,
+        })
+      )
       .then(function (res) {
-        console.log(res.data);
+        console.log("/login/signUp response: " + res);
         history.push("/login");
         dispatch(signUp());
       })
       .catch((err) => {
         alert("회원가입에 실패했어요!");
-        console.log("회원가입중 에러", err);
-        return;
+        console.log("/login/signUp response: ", err.response);
       });
   };
 };
@@ -75,14 +77,24 @@ const registerDB = (id, pwd, pwd_check, user_name, user_age) => {
 const loginDB = (dic) => {
   return async function (dispatch, getState, { history }) {
     const { id: userId, pwd: password } = dic;
+
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    };
     await axios
-      .post(`${BASE_URL}/login/reqLogin`, {
-        userId,
-        password,
-      })
+      .post(
+        `${BASE_URL}/login/reqLogin`,
+        {
+          userId,
+          password,
+        },
+        config
+      )
       // 여기서 유저정보도 받아야함!
       .then((res) => {
-        console.log(res.status);
+        console.log("/login/reqLogin response: " + res);
         const { token, userId, userNickname, userAge } = res.data;
         console.log(res.data.token);
         setData(res.data);
@@ -90,7 +102,7 @@ const loginDB = (dic) => {
         history.push("/");
       })
       .catch((err) => {
-        // console.log(err.response);
+        console.log("/login/reqLogin response: " + err.response);
         const { errorMessage } = err.response.data;
         alert(errorMessage);
       });

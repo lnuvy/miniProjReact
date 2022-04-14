@@ -8,7 +8,7 @@ const LikeIcon = (props) => {
   const { post } = props;
   const currentUser = useSelector((state) => state.user?.user?.userId);
 
-  const isMyLike = post.userLike.find((l) => l === currentUser) || null;
+  const isMyLike = post?.userLike?.find((l) => l === currentUser) || null;
 
   if (isMyLike) {
     return (

@@ -31,7 +31,6 @@ const CommentList = (props) => {
           {commentList[postId].map((c, i) => {
             return (
               <Grid key={`${c.commentId}_${i}`} isFlex>
-                <Text>{commentList[postId].length - i}</Text>
                 <CommentItem key={c.commentId} {...c} />
               </Grid>
             );

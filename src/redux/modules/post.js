@@ -43,12 +43,17 @@ const commentControl = createAction(SET_CNT, (postId, commentCnt) => ({
 // 메인에서 캐러셀에 주입되는 Best5 가져오기
 const getBestFiveItem = () => {
   return async function (dispatch, getState, { history }) {
-    const response = await axios({
+    await axios({
       method: "GET",
       url: `${BASE_URL}/mostLikePost`,
-    });
-    const bestFive = response.data.likeCnt;
-    dispatch(setPost(bestFive));
+    })
+      .then((res) => {
+        console.log("/mostLikePost response:", res);
+        dispatch(setPost(res.data.likeCnt));
+      })
+      .catch((err) => {
+        console.log("/mostLikePost response:", err.response);
+      });
   };
 };
 
@@ -66,11 +71,12 @@ const getCommentCount = (postId) => {
       data: JSON.stringify({ postId }),
     })
       .then((res) => {
+        console.log("/posts/comment response:", res);
         const cnt = res.data;
         dispatch(commentControl(postId, cnt));
       })
       .catch((err) => {
-        console.log(err);
+        console.log("/posts/comment response:", err.response);
       });
   };
 };
@@ -78,10 +84,17 @@ const getCommentCount = (postId) => {
 // 카테고리별 아이템을 가져오기
 const getCategoryList = (category = null) => {
   return async function (dispatch, getState, { history }) {
-    const response = await axios.get(`${BASE_URL}/posts/${category}`);
-    const data = response.data.Posts;
-    console.log(data);
-    dispatch(setPost(data));
+    axios
+      .get(`${BASE_URL}/posts/${category}`)
+      .then((res) => {
+        console.log("/posts/:category response:", res);
+        const data = res.data.Posts;
+        console.log(data);
+        dispatch(setPost(data));
+      })
+      .catch((err) => {
+        console.log("/posts/:category response:", err.response);
+      });
   };
 };
 
@@ -91,12 +104,13 @@ const getMyPostDB = (userId) => {
     axios
       .get(`${BASE_URL}/profile/${userId}`)
       .then((res) => {
+        console.log("/profile/:userId response:", res);
         const data = res.data;
         const newArr = data.post.filter((l) => l.userId === userId);
         dispatch(setPost(newArr));
       })
       .catch((err) => {
-        console.log("내 글을 받아오지 못했어요", err);
+        console.log("/profile/:userId response:", err.response);
       });
   };
 };
@@ -118,19 +132,22 @@ const addPostDB = (post = null) => {
     await axios({
       method: "POST",
       url: `${BASE_URL}/posts/${post.category}/add`,
-      data: data,
+      data: JSON.stringify(data),
       headers: {
         "Content-Type": "application/json",
       },
     })
-      .then((re) => {
-        console.log("응답", re);
+      .then((res) => {
+        console.log("/posts/:category/add", res);
 
-        dispatch(addPost(data));
+        const { createPosting } = res.data;
+        console.log(createPosting);
+
+        dispatch(addPost(createPosting));
         history.replace(`/list/${post.category}`);
       })
       .catch((err) => {
-        console.log(err);
+        console.log("/posts/:category/add", err.response);
       });
   };
 };
@@ -155,18 +172,21 @@ const editPostDB = (postId, content) => {
     await axios({
       method: "POST",
       url: `${BASE_URL}/posts/edit/${postId}`,
-      data: { postId, content },
+      data: JSON.stringify({ postId, content }),
+      headers: {
+        "Content-Type": "application/json",
+      },
       // headers: {},
     })
       .then((res) => {
+        console.log("/posts/edit/:postId", res);
         dispatch(editPost(postId, data));
-        console.log("수정 성공", res);
       })
       .catch((err) => {
+        console.log("/posts/edit/:postId", err.response);
         console.log("글 수정시 에러", err);
       });
 
-    console.log(`${data.category}`);
     history.push(`/list/${data.category}/${postId}`);
   };
 };
@@ -187,10 +207,10 @@ const deletePostDB = (postId, category) => {
       data: { userId },
     })
       .then((res) => {
-        console.log("게시글 삭제 성공", res);
+        console.log("/posts/delete/:postId res:", res);
       })
       .catch((err) => {
-        console.log("게시글 삭제 에러", err);
+        console.log("/posts/delete/:postId err:", err.response);
       });
 
     dispatch(deletePost(postId));
@@ -212,12 +232,13 @@ const toggleLikeDB = (userId, postId) => {
       data: JSON.stringify({ userId: currentUser, postId }),
     })
       .then((res) => {
+        console.log("/posts/like", res);
         const { newLikecnt, newuserLike } = res.data;
         console.log(newLikecnt, newuserLike);
         dispatch(toggleLike(postId, newLikecnt, newuserLike));
       })
       .catch((err) => {
-        console.log("좋아요 클릭 시 에러", err);
+        console.log("/posts/like", err.response);
       });
   };
 };
